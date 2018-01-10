@@ -27,6 +27,8 @@
 #include <boost/test/unit_test.hpp>
 
 #include <univalue.h>
+#include <iostream>
+#include "utilstrencodings.h"
 
 typedef std::vector<uint8_t> valtype;
 
@@ -77,7 +79,7 @@ BOOST_AUTO_TEST_CASE(tx_valid) {
                 COutPoint outpoint(uint256S(vinput[0].get_str()),
                                    vinput[1].get_int());
                 mapprevOutScriptPubKeys[outpoint] =
-                    ParseScript(vinput[2].get_str());
+                    ParseScript(vinput[2].get_str());	//生成script_PubKey
                 if (vinput.size() >= 4) {
                     mapprevOutValues[outpoint] = Amount(vinput[3].get_int64());
                 }
@@ -119,11 +121,59 @@ BOOST_AUTO_TEST_CASE(tx_valid) {
                                                    &tx, i, amount, txdata),
                                  &err),
                     strTest);
-                BOOST_CHECK_MESSAGE(err == SCRIPT_ERR_OK,
-                                    ScriptErrorString(err));
+                BOOST_CHECK_MESSAGE(err == SCRIPT_ERR_OK, ScriptErrorString(err));
             }
         }
     }
+}
+
+//current txid: 71dd6047c68781b9369ba6fb7a29883cc2445b928abfad78e21036c79e41d6cf
+//refrence txid: 0723ee63b7e038a81ba1df18634f3b46a02b53071deb7f8fbffecfcb87c8d01f
+BOOST_AUTO_TEST_CASE(parse_tx) {
+	std::string input_rawtx;
+	std::string refreInput_rawtx;
+	int idx;
+	int64_t amount;
+	std::cout << "Please input the raw tx string to be inspected:" << std::endl;
+	std::cin >> input_rawtx;
+	std::cout << "Please input the reference raw tx string to be inspected:" << std::endl;
+	std::cin >> refreInput_rawtx;
+	std::cout << "Please input the input index value to be inspected:" << std::endl;
+	std::cin >> idx;
+	std::cout << "Please input the input amount value to be inspected:" << std::endl;
+	std::cin >> amount;
+	//自定义测试
+	//当前交易解析交易
+	ScriptError err;
+	const std::string& rawtx = input_rawtx;
+	CDataStream stream(ParseHex(rawtx), SER_NETWORK, PROTOCOL_VERSION);
+	CTransaction tx(deserialize, stream);
+	CValidationState state;
+	bool fValid = true;
+	fValid = CheckRegularTransaction(tx, state) && state.IsValid();
+	PrecomputedTransactionData txdata(tx);
+
+	//引用交易解析
+	//第一种方式:通过对引用交易的解析过得Script_PubKey
+	const std::string& referrawtx = refreInput_rawtx;
+	CDataStream referstream(ParseHex(referrawtx), SER_NETWORK, PROTOCOL_VERSION);
+	CTransaction refertx(deserialize, referstream);
+	CValidationState referstate;
+	bool referfValid = true;
+	referfValid = CheckRegularTransaction(refertx, referstate) && referstate.IsValid();
+	PrecomputedTransactionData refertxdata(refertx);
+
+	//第二种方式:直接通过字符串解析出script_PubKey
+	//CScript Script_PubKey =	ParseScript("HASH160 0x14 0xf19a487553904aa48b3c826b8345a1c14f16eab6 EQUAL");
+
+	//std::cout << (SCRIPT_ENABLE_SIGHASH_FORKID | STANDARD_SCRIPT_VERIFY_FLAGS) << std::endl;		//88031
+	//签名验证
+	//1
+	BOOST_CHECK_MESSAGE(VerifyScript(tx.vin[idx].scriptSig, refertx.vout[idx].scriptPubKey, SCRIPT_ENABLE_SIGHASH_FORKID | STANDARD_SCRIPT_VERIFY_FLAGS, TransactionSignatureChecker(&tx, 0, Amount(amount), txdata), &err), "error");
+
+	//2
+	//BOOST_CHECK_MESSAGE(VerifyScript(tx.vin[0].scriptSig, Script_PubKey, SCRIPT_ENABLE_SIGHASH_FORKID | STANDARD_SCRIPT_VERIFY_FLAGS, TransactionSignatureChecker(&tx, 0, Amount(100000), txdata), &err), "error");
+	BOOST_CHECK_MESSAGE(err == SCRIPT_ERR_OK, ScriptErrorString(err));
 }
 
 BOOST_AUTO_TEST_CASE(tx_invalid) {
@@ -205,7 +255,7 @@ BOOST_AUTO_TEST_CASE(tx_invalid) {
                     TransactionSignatureChecker(&tx, i, amount, txdata), &err);
             }
             BOOST_CHECK_MESSAGE(!fValid, strTest);
-            BOOST_CHECK_MESSAGE(err != SCRIPT_ERR_OK, ScriptErrorString(err));
+            BOOST_CHECK_MESSAGE(err == SCRIPT_ERR_OK, ScriptErrorString(err));
         }
     }
 }
@@ -213,6 +263,7 @@ BOOST_AUTO_TEST_CASE(tx_invalid) {
 BOOST_AUTO_TEST_CASE(basic_transaction_tests) {
     // Random real transaction
     // (e2769b09e784f32f62ef849763d4f45b98e07ba658647343b915ff832b110436)
+	//一个字节的16进制，故使用uint8_t
     uint8_t ch[] = {
         0x01, 0x00, 0x00, 0x00, 0x01, 0x6b, 0xff, 0x7f, 0xcd, 0x4f, 0x85, 0x65,
         0xef, 0x40, 0x6d, 0xd5, 0xd6, 0x3d, 0x4f, 0xf9, 0x4f, 0x31, 0x8f, 0xe8,
@@ -246,6 +297,7 @@ BOOST_AUTO_TEST_CASE(basic_transaction_tests) {
 
     // Check that duplicate txins fail
     tx.vin.push_back(tx.vin[0]);
+    std::cout<< tx.vin[0].ToString();
     BOOST_CHECK_MESSAGE(!CheckRegularTransaction(tx, state) || !state.IsValid(),
                         "Transaction with duplicate txins should be invalid.");
 }
@@ -270,7 +322,7 @@ SetupDummyInputs(CBasicKeyStore &keystoreRet, CCoinsViewCache &coinsRet) {
 
     // Create some dummy input transactions
     dummyTransactions[0].vout.resize(2);
-    dummyTransactions[0].vout[0].nValue = 11 * CENT;
+    dummyTransactions[0].vout[0].nValue = 11 * CENT;	//CENT: 1/100
     dummyTransactions[0].vout[0].scriptPubKey
         << ToByteVector(key[0].GetPubKey()) << OP_CHECKSIG;
     dummyTransactions[0].vout[1].nValue = 50 * CENT;

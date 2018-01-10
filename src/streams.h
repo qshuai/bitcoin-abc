@@ -127,6 +127,7 @@ private:
  * templates. Fills with data in linear time; some stringstream implementations
  * take N^2 time.
  */
+
 class CDataStream {
 protected:
     typedef CSerializeData vector_type;

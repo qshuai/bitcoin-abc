@@ -12,6 +12,8 @@
 #include "pubkey.h"
 #include "script/script.h"
 #include "uint256.h"
+#include "iostream"
+#include "utilstrencodings.h"
 
 typedef std::vector<uint8_t> valtype;
 
@@ -912,6 +914,7 @@ bool EvalScript(std::vector<valtype> &stack, const CScript &script,
                                 bn = (bn1 > bn2);
                                 break;
                             case OP_LESSTHANOREQUAL:
+                                bn = (bn1 > bn2 ? bn1 : bn2);
                                 bn = (bn1 <= bn2);
                                 break;
                             case OP_GREATERTHANOREQUAL:
@@ -921,7 +924,6 @@ bool EvalScript(std::vector<valtype> &stack, const CScript &script,
                                 bn = (bn1 < bn2 ? bn1 : bn2);
                                 break;
                             case OP_MAX:
-                                bn = (bn1 > bn2 ? bn1 : bn2);
                                 break;
                             default:
                                 assert(!"invalid opcode");
@@ -1126,6 +1128,7 @@ bool EvalScript(std::vector<valtype> &stack, const CScript &script,
                                                         scriptCode, flags);
 
                             if (fOk) {
+                            		std::cout << HexStr(vchPubKey) << std::endl;
                                 isig++;
                                 nSigsCount--;
                             }
@@ -1348,11 +1351,18 @@ PrecomputedTransactionData::PrecomputedTransactionData(
     hashOutputs = GetOutputsHash(txTo);
 }
 
+//BCH
+//BCH 与 BTC 关键所在
 uint256 SignatureHash(const CScript &scriptCode, const CTransaction &txTo,
                       unsigned int nIn, uint32_t nHashType, const Amount amount,
-                      const PrecomputedTransactionData *cache, uint32_t flags) {
+                      const PrecomputedTransactionData *cache,
+                      uint32_t flags)
+{
+	//如果nHashType为0x41则以下代码不会执行
     if ((nHashType & SIGHASH_FORKID) &&
-        (flags & SCRIPT_ENABLE_SIGHASH_FORKID)) {
+        (flags & SCRIPT_ENABLE_SIGHASH_FORKID))
+    {
+
         uint256 hashPrevouts;
         uint256 hashSequence;
         uint256 hashOutputs;

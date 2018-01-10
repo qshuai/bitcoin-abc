@@ -114,3 +114,14 @@ contrib/devtools/split-debug.sh
 
 # vagrant
 .vagrant
+
+split_words.md
+.cproject
+.idea/
+.project
+.settings/
+cmake-build-debug/
+compile_commands.json
+src/parseTx.cpp
+src/test/data/findPubKey.json
+rc/test/data/split_words.md
