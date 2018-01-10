@@ -256,7 +256,8 @@ static UniValue generatetoaddress(const Config &config,
                            "Error: Invalid address");
     }
 
-    std::shared_ptr<CReserveScript> coinbaseScript(new CReserveScript());
+    std::shared_ptr<CReserveScript> coinbaseScript =
+        std::make_shared<CReserveScript>();
     coinbaseScript->reserveScript = GetScriptForDestination(destination);
 
     return generateBlocks(config, coinbaseScript, nGenerate, nMaxTries, false);
@@ -841,8 +842,8 @@ public:
         : hash(hashIn), found(false), state() {}
 
 protected:
-    virtual void BlockChecked(const CBlock &block,
-                              const CValidationState &stateIn) override {
+    void BlockChecked(const CBlock &block,
+                      const CValidationState &stateIn) override {
         if (block.GetHash() != hash) {
             return;
         }

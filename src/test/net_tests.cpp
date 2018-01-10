@@ -1,11 +1,11 @@
 // Copyright (c) 2012-2016 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#include "net.h"
 #include "addrman.h"
 #include "chainparams.h"
 #include "config.h"
 #include "hash.h"
+#include "net.h"
 #include "netbase.h"
 #include "serialize.h"
 #include "streams.h"
@@ -195,7 +195,7 @@ BOOST_AUTO_TEST_CASE(test_userAgentLength) {
 
     BOOST_CHECK_EQUAL(userAgent(config).size(), MAX_SUBVERSION_LENGTH);
     BOOST_CHECK_EQUAL(userAgent(config),
-                      "/Bitcoin ABC:0.16.2(EB8.0; very very very very very "
+                      "/Bitcoin ABC:0.16.3(EB8.0; very very very very very "
                       "very very very very very very very very very very very "
                       "very very very very very very very very very very very "
                       "very very very very very very very very very very very "

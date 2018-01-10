@@ -164,8 +164,8 @@ void CWallet::DeriveNewChildKey(CKeyMetadata &metadata, CKey &secret) {
         // childIndex | BIP32_HARDENED_KEY_LIMIT = derive childIndex in hardened
         // child-index-range
         // example: 1 | BIP32_HARDENED_KEY_LIMIT == 0x80000001 == 2147483649
-        externalChainChildKey.Derive(childKey, hdChain.nExternalChainCounter |
-                                                   BIP32_HARDENED_KEY_LIMIT);
+        externalChainChildKey.Derive(
+            childKey, hdChain.nExternalChainCounter | BIP32_HARDENED_KEY_LIMIT);
         metadata.hdKeypath =
             "m/0'/0'/" + std::to_string(hdChain.nExternalChainCounter) + "'";
         metadata.hdMasterKeyID = hdChain.masterKeyID;
@@ -2976,7 +2976,7 @@ bool CWallet::CreateTransaction(const std::vector<CRecipient> &vecSend,
                         TransactionSignatureCreator(
                             this, &txNewConst, nIn,
                             coin.first->tx->vout[coin.second].nValue,
-                            sigHashType.getRawSigHashType()),
+                            sigHashType),
                         scriptPubKey, sigdata)) {
                     strFailReason = _("Signing transaction failed");
                     return false;
@@ -3166,11 +3166,16 @@ DBErrors CWallet::ZapSelectTx(std::vector<uint256> &vHashIn,
         return DB_LOAD_OK;
     }
 
+    AssertLockHeld(cs_wallet); // mapWallet
+    vchDefaultKey = CPubKey();
     DBErrors nZapSelectTxRet =
-        CWalletDB(strWalletFile, "cr+").ZapSelectTx(this, vHashIn, vHashOut);
+        CWalletDB(strWalletFile, "cr+").ZapSelectTx(vHashIn, vHashOut);
+    for (uint256 hash : vHashOut) {
+        mapWallet.erase(hash);
+    }
+
     if (nZapSelectTxRet == DB_NEED_REWRITE) {
         if (CDB::Rewrite(strWalletFile, "\x04pool")) {
-            LOCK(cs_wallet);
             setKeyPool.clear();
             // Note: can't top-up keypool here, because wallet is locked. User
             // will be prompted to unlock wallet the next operation that
@@ -3192,8 +3197,9 @@ DBErrors CWallet::ZapWalletTx(std::vector<CWalletTx> &vWtx) {
         return DB_LOAD_OK;
     }
 
+    vchDefaultKey = CPubKey();
     DBErrors nZapWalletTxRet =
-        CWalletDB(strWalletFile, "cr+").ZapWalletTx(this, vWtx);
+        CWalletDB(strWalletFile, "cr+").ZapWalletTx(vWtx);
     if (nZapWalletTxRet == DB_NEED_REWRITE) {
         if (CDB::Rewrite(strWalletFile, "\x04pool")) {
             LOCK(cs_wallet);
@@ -3702,7 +3708,7 @@ void CWallet::UpdatedTransaction(const uint256 &hashTx) {
 }
 
 void CWallet::GetScriptForMining(std::shared_ptr<CReserveScript> &script) {
-    std::shared_ptr<CReserveKey> rKey(new CReserveKey(this));
+    std::shared_ptr<CReserveKey> rKey = std::make_shared<CReserveKey>(this);
     CPubKey pubkey;
     if (!rKey->GetReservedKey(pubkey)) {
         return;

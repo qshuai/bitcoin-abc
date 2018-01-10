@@ -398,7 +398,7 @@ void CreateCreditAndSpend(const CKeyStore &keystore, const CScript &outscript,
     inputm.vout[0].nValue = Amount(1);
     inputm.vout[0].scriptPubKey = CScript();
     bool ret = SignSignature(keystore, *output, inputm, 0,
-                             SIGHASH_ALL | SIGHASH_FORKID);
+                             SigHashType().withForkId(true));
     BOOST_CHECK_EQUAL(ret, success);
     CDataStream ssin(SER_NETWORK, PROTOCOL_VERSION);
     ssin << inputm;
@@ -639,8 +639,8 @@ BOOST_AUTO_TEST_CASE(test_IsStandard) {
     // Data payload can be encoded in any way...
     t.vout[0].scriptPubKey = CScript() << OP_RETURN << ParseHex("");
     BOOST_CHECK(IsStandardTx(t, reason));
-    t.vout[0].scriptPubKey = CScript() << OP_RETURN << ParseHex("00")
-                                       << ParseHex("01");
+    t.vout[0].scriptPubKey = CScript()
+                             << OP_RETURN << ParseHex("00") << ParseHex("01");
     BOOST_CHECK(IsStandardTx(t, reason));
     // OP_RESERVED *is* considered to be a PUSHDATA type opcode by IsPushOnly()!
     t.vout[0].scriptPubKey = CScript() << OP_RETURN << OP_RESERVED << -1 << 0

@@ -1198,6 +1198,7 @@ bool IsInitialBlockDownload() {
         return true;
     if (chainActive.Tip()->GetBlockTime() < (GetTime() - nMaxTipAge))
         return true;
+    LogPrintf("Leaving InitialBlockDownload (latching to false)\n");
     latchToFalse.store(true, std::memory_order_relaxed);
     return false;
 }
@@ -1353,13 +1354,10 @@ void UpdateCoins(const CTransaction &tx, CCoinsViewCache &inputs, int nHeight) {
 
 bool CScriptCheck::operator()() {
     const CScript &scriptSig = ptxTo->vin[nIn].scriptSig;
-    if (!VerifyScript(scriptSig, scriptPubKey, nFlags,
-                      CachingTransactionSignatureChecker(ptxTo, nIn, amount,
-                                                         cacheStore, txdata),
-                      &error)) {
-        return false;
-    }
-    return true;
+    return VerifyScript(scriptSig, scriptPubKey, nFlags,
+                        CachingTransactionSignatureChecker(ptxTo, nIn, amount,
+                                                           cacheStore, txdata),
+                        &error);
 }
 
 int GetSpendHeight(const CCoinsViewCache &inputs) {
@@ -2326,8 +2324,8 @@ static bool FlushStateToDisk(CValidationState &state, FlushStateMode mode,
             nLastSetChain = nNow;
         }
     } catch (const std::runtime_error &e) {
-        return AbortNode(state, std::string("System error while flushing: ") +
-                                    e.what());
+        return AbortNode(
+            state, std::string("System error while flushing: ") + e.what());
     }
     return true;
 }
@@ -2824,8 +2822,9 @@ bool ActivateBestChain(const Config &config, CValidationState &state,
 
                 // Whether we have anything to do at all.
                 if (pindexMostWork == nullptr ||
-                    pindexMostWork == chainActive.Tip())
+                    pindexMostWork == chainActive.Tip()) {
                     return true;
+                }
 
                 bool fInvalidFound = false;
                 std::shared_ptr<const CBlock> nullBlockPtr;
@@ -2836,8 +2835,9 @@ bool ActivateBestChain(const Config &config, CValidationState &state,
                                     pindexMostWork->GetBlockHash()
                             ? pblock
                             : nullBlockPtr,
-                        fInvalidFound, connectTrace))
+                        fInvalidFound, connectTrace)) {
                     return false;
+                }
 
                 if (fInvalidFound) {
                     // Wipe cache, we may need another branch now.
@@ -2856,9 +2856,10 @@ bool ActivateBestChain(const Config &config, CValidationState &state,
             for (const auto &pair : connectTrace.blocksConnected) {
                 assert(pair.second);
                 const CBlock &block = *(pair.second);
-                for (unsigned int i = 0; i < block.vtx.size(); i++)
+                for (size_t i = 0; i < block.vtx.size(); i++) {
                     GetMainSignals().SyncTransaction(*block.vtx[i], pair.first,
                                                      i);
+                }
             }
         }
         // When we reach this point, we switched to a new tip (stored in
@@ -2880,6 +2881,12 @@ bool ActivateBestChain(const Config &config, CValidationState &state,
     // Write changes periodically to disk, after relay.
     if (!FlushStateToDisk(state, FLUSH_STATE_PERIODIC)) {
         return false;
+    }
+
+    int nStopAtHeight = GetArg("-stopatheight", DEFAULT_STOPATHEIGHT);
+    if (nStopAtHeight && pindexNewTip &&
+        pindexNewTip->nHeight >= nStopAtHeight) {
+        StartShutdown();
     }
 
     return true;
@@ -3331,14 +3338,17 @@ static bool CheckIndexAgainstCheckpoint(const CBlockIndex *pindexPrev,
     }
 
     int nHeight = pindexPrev->nHeight + 1;
-    // Don't accept any forks from the main chain prior to last checkpoint
+    // Don't accept any forks from the main chain prior to last checkpoint.
+    // GetLastCheckpoint finds the last checkpoint in MapCheckpoints that's in
+    // our MapBlockIndex.
     CBlockIndex *pcheckpoint =
         Checkpoints::GetLastCheckpoint(chainparams.Checkpoints());
     if (pcheckpoint && nHeight < pcheckpoint->nHeight) {
         return state.DoS(
             100,
             error("%s: forked chain older than last checkpoint (height %d)",
-                  __func__, nHeight));
+                  __func__, nHeight),
+            REJECT_CHECKPOINT, "bad-fork-prior-to-checkpoint");
     }
 
     return true;
@@ -3526,8 +3536,9 @@ static bool AcceptBlockHeader(const Config &config, const CBlockHeader &block,
         BlockMap::iterator mi = mapBlockIndex.find(block.hashPrevBlock);
         if (mi == mapBlockIndex.end()) {
             return state.DoS(10, error("%s: prev block not found", __func__), 0,
-                             "bad-prevblk");
+                             "prev-blk-not-found");
         }
+
         pindexPrev = (*mi).second;
         if (pindexPrev->nStatus & BLOCK_FAILED_MASK) {
             return state.DoS(100, error("%s: prev block invalid", __func__),
@@ -4269,10 +4280,11 @@ bool CVerifyDB::VerifyDB(const Config &config, CCoinsView *coinsview,
             boost::this_thread::interruption_point();
             uiInterface.ShowProgress(
                 _("Verifying blocks..."),
-                std::max(
-                    1, std::min(99, 100 - (int)(((double)(chainActive.Height() -
-                                                          pindex->nHeight)) /
-                                                (double)nCheckDepth * 50))));
+                std::max(1,
+                         std::min(99,
+                                  100 - (int)(((double)(chainActive.Height() -
+                                                        pindex->nHeight)) /
+                                              (double)nCheckDepth * 50))));
             pindex = chainActive.Next(pindex);
             CBlock block;
             if (!ReadBlockFromDisk(block, pindex, config)) {

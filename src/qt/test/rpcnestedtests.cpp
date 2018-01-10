@@ -6,7 +6,6 @@
 
 #include "chainparams.h"
 #include "config.h"
-#include "config.h"
 #include "consensus/validation.h"
 #include "fs.h"
 #include "rpc/register.h"
@@ -210,9 +209,13 @@ void RPCNestedTests::rpcNestedTests() {
         std::runtime_error);
 #endif
 
+    UnloadBlockIndex();
     delete pcoinsTip;
+    pcoinsTip = nullptr;
     delete pcoinsdbview;
+    pcoinsdbview = nullptr;
     delete pblocktree;
+    pblocktree = nullptr;
 
     fs::remove_all(fs::path(path));
 }

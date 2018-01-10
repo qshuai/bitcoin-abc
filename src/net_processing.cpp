@@ -514,10 +514,11 @@ void MaybeSetPeerAsAnnouncingHeaderAndIDs(NodeId nodeid, CConnman &connman) {
             lNodesAnnouncingHeaderAndIDs.pop_front();
         }
         fAnnounceUsingCMPCTBLOCK = true;
-        connman.PushMessage(pfrom, CNetMsgMaker(pfrom->GetSendVersion())
-                                       .Make(NetMsgType::SENDCMPCT,
-                                             fAnnounceUsingCMPCTBLOCK,
-                                             nCMPCTBLOCKVersion));
+        connman.PushMessage(pfrom,
+                            CNetMsgMaker(pfrom->GetSendVersion())
+                                .Make(NetMsgType::SENDCMPCT,
+                                      fAnnounceUsingCMPCTBLOCK,
+                                      nCMPCTBLOCKVersion));
         lNodesAnnouncingHeaderAndIDs.push_back(pfrom->GetId());
         return true;
     });
@@ -720,7 +721,7 @@ void AddToCompactExtraTransactions(const CTransactionRef &tx) {
     }
 
     vExtraTxnForCompact[vExtraTxnForCompactIt] =
-        std::make_pair(tx->GetHash(), tx);
+        std::make_pair(tx->GetId(), tx);
     vExtraTxnForCompactIt = (vExtraTxnForCompactIt + 1) % max_extra_txn;
 }
 
@@ -1017,9 +1018,10 @@ void PeerLogicValidation::BlockChecked(const CBlock &block,
 
     int nDoS = 0;
     if (state.IsInvalid(nDoS)) {
-        if (it != mapBlockSource.end() && State(it->second.first)) {
-            // Blocks are never rejected with internal reject codes.
-            assert(state.GetRejectCode() < REJECT_INTERNAL);
+        // Don't send reject message with code 0 or an internal reject code.
+        if (it != mapBlockSource.end() && State(it->second.first) &&
+            state.GetRejectCode() > 0 &&
+            state.GetRejectCode() < REJECT_INTERNAL) {
             CBlockReject reject = {
                 uint8_t(state.GetRejectCode()),
                 state.GetRejectReason().substr(0, MAX_REJECT_MESSAGE_LENGTH),
@@ -1249,8 +1251,9 @@ static void ProcessGetData(const Config &config, CNode *pfrom,
                         }
                         if (sendMerkleBlock) {
                             connman.PushMessage(
-                                pfrom, msgMaker.Make(NetMsgType::MERKLEBLOCK,
-                                                     merkleBlock));
+                                pfrom,
+                                msgMaker.Make(NetMsgType::MERKLEBLOCK,
+                                              merkleBlock));
                             // CMerkleBlock just contains hashes, so also push
                             // any transactions in the block the client did not
                             // see. This avoids hurting performance by
@@ -1284,13 +1287,15 @@ static void ProcessGetData(const Config &config, CNode *pfrom,
                                 chainActive.Height() - MAX_CMPCTBLOCK_DEPTH) {
                             CBlockHeaderAndShortTxIDs cmpctblock(block);
                             connman.PushMessage(
-                                pfrom, msgMaker.Make(nSendFlags,
-                                                     NetMsgType::CMPCTBLOCK,
-                                                     cmpctblock));
+                                pfrom,
+                                msgMaker.Make(nSendFlags,
+                                              NetMsgType::CMPCTBLOCK,
+                                              cmpctblock));
                         } else {
-                            connman.PushMessage(
-                                pfrom, msgMaker.Make(nSendFlags,
-                                                     NetMsgType::BLOCK, block));
+                            connman.PushMessage(pfrom,
+                                                msgMaker.Make(nSendFlags,
+                                                              NetMsgType::BLOCK,
+                                                              block));
                         }
                     }
 
@@ -1325,9 +1330,10 @@ static void ProcessGetData(const Config &config, CNode *pfrom,
                     // a MEMPOOL request.
                     if (txinfo.tx &&
                         txinfo.nTime <= pfrom->timeLastMempoolReq) {
-                        connman.PushMessage(pfrom, msgMaker.Make(nSendFlags,
-                                                                 NetMsgType::TX,
-                                                                 *txinfo.tx));
+                        connman.PushMessage(pfrom,
+                                            msgMaker.Make(nSendFlags,
+                                                          NetMsgType::TX,
+                                                          *txinfo.tx));
                         push = true;
                     }
                 }
@@ -1667,9 +1673,10 @@ static bool ProcessMessage(const Config &config, CNode *pfrom,
             // as well, because they may wish to request compact blocks from us.
             bool fAnnounceUsingCMPCTBLOCK = false;
             uint64_t nCMPCTBLOCKVersion = 1;
-            connman.PushMessage(pfrom, msgMaker.Make(NetMsgType::SENDCMPCT,
-                                                     fAnnounceUsingCMPCTBLOCK,
-                                                     nCMPCTBLOCKVersion));
+            connman.PushMessage(pfrom,
+                                msgMaker.Make(NetMsgType::SENDCMPCT,
+                                              fAnnounceUsingCMPCTBLOCK,
+                                              nCMPCTBLOCKVersion));
         }
         pfrom->fSuccessfullyConnected = true;
     }
@@ -2249,15 +2256,17 @@ static bool ProcessMessage(const Config &config, CNode *pfrom,
         if (state.IsInvalid(nDoS)) {
             LogPrint(
                 BCLog::MEMPOOLREJ, "%s from peer=%d was not accepted: %s\n",
-                tx.GetId().ToString(), pfrom->id, FormatStateMessage(state));
+                tx.GetHash().ToString(), pfrom->id, FormatStateMessage(state));
             // Never send AcceptToMemoryPool's internal codes over P2P.
-            if (state.GetRejectCode() < REJECT_INTERNAL) {
+            if (state.GetRejectCode() > 0 &&
+                state.GetRejectCode() < REJECT_INTERNAL) {
                 connman.PushMessage(
-                    pfrom, msgMaker.Make(NetMsgType::REJECT, strCommand,
-                                         uint8_t(state.GetRejectCode()),
-                                         state.GetRejectReason().substr(
-                                             0, MAX_REJECT_MESSAGE_LENGTH),
-                                         inv.hash));
+                    pfrom,
+                    msgMaker.Make(NetMsgType::REJECT, strCommand,
+                                  uint8_t(state.GetRejectCode()),
+                                  state.GetRejectReason().substr(
+                                      0, MAX_REJECT_MESSAGE_LENGTH),
+                                  inv.hash));
             }
             if (nDoS > 0) {
                 Misbehaving(pfrom, nDoS, state.GetRejectReason());
@@ -2532,9 +2541,8 @@ static bool ProcessMessage(const Config &config, CNode *pfrom,
             LOCK(cs_main);
 
             std::map<uint256,
-                     std::pair<NodeId,
-                               std::list<QueuedBlock>::iterator>>::iterator it =
-                mapBlocksInFlight.find(resp.blockhash);
+                     std::pair<NodeId, std::list<QueuedBlock>::iterator>>::
+                iterator it = mapBlocksInFlight.find(resp.blockhash);
             if (it == mapBlocksInFlight.end() ||
                 !it->second.second->partialBlock ||
                 it->second.first != pfrom->GetId()) {
@@ -2652,10 +2660,11 @@ static bool ProcessMessage(const Config &config, CNode *pfrom,
                     mapBlockIndex.end() &&
                 nCount < MAX_BLOCKS_TO_ANNOUNCE) {
                 nodestate->nUnconnectingHeaders++;
-                connman.PushMessage(pfrom, msgMaker.Make(NetMsgType::GETHEADERS,
-                                                         chainActive.GetLocator(
-                                                             pindexBestHeader),
-                                                         uint256()));
+                connman.PushMessage(
+                    pfrom,
+                    msgMaker.Make(NetMsgType::GETHEADERS,
+                                  chainActive.GetLocator(pindexBestHeader),
+                                  uint256()));
                 LogPrint(BCLog::NET, "received header %s: missing prev block "
                                      "%s, sending getheaders (%d) to end "
                                      "(peer=%d, nUnconnectingHeaders=%d)\n",
@@ -2725,9 +2734,10 @@ static bool ProcessMessage(const Config &config, CNode *pfrom,
                     "more getheaders (%d) to end to peer=%d (startheight:%d)\n",
                     pindexLast->nHeight, pfrom->id, pfrom->nStartingHeight);
                 connman.PushMessage(
-                    pfrom, msgMaker.Make(NetMsgType::GETHEADERS,
-                                         chainActive.GetLocator(pindexLast),
-                                         uint256()));
+                    pfrom,
+                    msgMaker.Make(NetMsgType::GETHEADERS,
+                                  chainActive.GetLocator(pindexLast),
+                                  uint256()));
             }
 
             bool fCanDirectFetch = CanDirectFetch(chainparams.GetConsensus());
@@ -3052,10 +3062,11 @@ static bool SendRejectsAndCheckIfBanned(CNode *pnode, CConnman &connman) {
 
     for (const CBlockReject &reject : state.rejects) {
         connman.PushMessage(
-            pnode, CNetMsgMaker(INIT_PROTO_VERSION)
-                       .Make(NetMsgType::REJECT, (std::string)NetMsgType::BLOCK,
-                             reject.chRejectCode, reject.strRejectReason,
-                             reject.hashBlock));
+            pnode,
+            CNetMsgMaker(INIT_PROTO_VERSION)
+                .Make(NetMsgType::REJECT, (std::string)NetMsgType::BLOCK,
+                      reject.chRejectCode, reject.strRejectReason,
+                      reject.hashBlock));
     }
     state.rejects.clear();
 
@@ -3180,10 +3191,11 @@ bool ProcessMessages(const Config &config, CNode *pfrom, CConnman &connman,
             fMoreWork = true;
         }
     } catch (const std::ios_base::failure &e) {
-        connman.PushMessage(
-            pfrom, CNetMsgMaker(INIT_PROTO_VERSION)
-                       .Make(NetMsgType::REJECT, strCommand, REJECT_MALFORMED,
-                             std::string("error parsing message")));
+        connman.PushMessage(pfrom,
+                            CNetMsgMaker(INIT_PROTO_VERSION)
+                                .Make(NetMsgType::REJECT, strCommand,
+                                      REJECT_MALFORMED,
+                                      std::string("error parsing message")));
         if (strstr(e.what(), "end of data")) {
             // Allow exceptions from under-length message on vRecv
             LogPrintf(
@@ -3473,9 +3485,10 @@ bool SendMessages(const Config &config, CNode *pto, CConnman &connman,
                     bool ret = ReadBlockFromDisk(block, pBestIndex, config);
                     assert(ret);
                     CBlockHeaderAndShortTxIDs cmpctblock(block);
-                    connman.PushMessage(
-                        pto, msgMaker.Make(nSendFlags, NetMsgType::CMPCTBLOCK,
-                                           cmpctblock));
+                    connman.PushMessage(pto,
+                                        msgMaker.Make(nSendFlags,
+                                                      NetMsgType::CMPCTBLOCK,
+                                                      cmpctblock));
                 }
                 state.pindexBestHeaderSent = pBestIndex;
             } else if (state.fPreferHeaders) {
@@ -3733,8 +3746,9 @@ bool SendMessages(const Config &config, CNode *pto, CConnman &connman,
         state.nBlocksInFlight < MAX_BLOCKS_IN_TRANSIT_PER_PEER) {
         std::vector<const CBlockIndex *> vToDownload;
         NodeId staller = -1;
-        FindNextBlocksToDownload(pto->GetId(), MAX_BLOCKS_IN_TRANSIT_PER_PEER -
-                                                   state.nBlocksInFlight,
+        FindNextBlocksToDownload(pto->GetId(),
+                                 MAX_BLOCKS_IN_TRANSIT_PER_PEER -
+                                     state.nBlocksInFlight,
                                  vToDownload, staller, consensusParams);
         for (const CBlockIndex *pindex : vToDownload) {
             uint32_t nFetchFlags =
