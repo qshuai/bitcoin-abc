@@ -1,36 +1,21 @@
-Bitcoin ABC
-===========
+### TOOL:verify which pubkey keys contribute to multisig
 
-https://bitcoinabc.org
+#### Notice:
 
-What is Bitcoin Cash?
----------------------
+- just support BCH multisig verify
+- you shoud input current rawtx string, reference rawtx string, vin index and the current vin ammount
+- you must ensure your input correctly
 
-[Bitcoin Cash](https://www.bitcoincash.org/) is an experimental digital currency
-that enables instant payments to anyone, anywhere in the world. It uses peer-to-peer
-technology to operate with no central authority: managing transactions and issuing
-money are carried out collectively by the network. Bitcoin Cash is a descendant of
-Bitcoin. It became a separate currency from the version supported by Bitcoin Core
-when the two split on August 1, 2017. Bitcoin Cash and the Bitcoin Core version of
-Bitcoin share the same transaction history up until the split.
+#### Usages:
 
-What is Bitcoin ABC?
---------------------
+- install all bitcoin-abc dependencies [official link](https://github.com/Bitcoin-ABC/bitcoin-abc/blob/master/doc/) 
+- cd this repository path
+- ./autogen.sh
+- ./configyre
+- make
+- cd src/test
+- ./test_bitcoin --run_test=transaction_tests/parse_tx
 
-Bitcoin ABC is the name of open-source software which enables the use of Bitcoin Cash.
-It is a fork of the [Bitcoin Core](https://bitcoincore.org) software project.
+#### Bugs:
 
-License
--------
-
-Bitcoin ABC is released under the terms of the MIT license. See [COPYING](COPYING) for more
-information or see https://opensource.org/licenses/MIT.
-
-Development Process
--------------------
-
-This Github repository contains only source code of releases.
-
-Bitcoin ABC development takes place at https://reviews.bitcoinabc.org/
-
-If you would like to contribute, please read [CONTRIBUTING](CONTRIBUTING.md)
+- There is a bytes length limit on macOS platform
