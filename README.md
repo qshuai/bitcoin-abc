@@ -18,4 +18,4 @@
 
 #### Bugs:
 
-- There is a bytes length limit on macOS platform
+- There is a bytes length limit(up to 1024 bytes) on macOS platform in command line
