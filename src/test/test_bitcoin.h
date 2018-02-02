@@ -12,6 +12,7 @@
 #include "random.h"
 #include "txdb.h"
 #include "txmempool.h"
+#include "../random.h"
 
 #include <boost/thread.hpp>
 

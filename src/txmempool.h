@@ -30,7 +30,7 @@ class CBlockIndex;
 class Config;
 
 inline double AllowFreeThreshold() {
-    return COIN.GetSatoshis() * 144 / 250;
+    return COIN.GetSatoshis() * 144 / 250;		// 144和250代表什么？
 }
 
 inline bool AllowFree(double dPriority) {
@@ -39,7 +39,8 @@ inline bool AllowFree(double dPriority) {
 }
 
 /**
- * Fake height value used in Coins to signify they are only in the memory
+ * Fake height value used in Coins to signify they are only in the me
+ * mory
  * pool(since 0.8)
  */
 static const uint32_t MEMPOOL_HEIGHT = 0x7FFFFFFF;

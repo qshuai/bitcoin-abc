@@ -176,22 +176,22 @@ public:
     const uint256 *phashBlock;
 
     //! pointer to the index of the predecessor of this block
-    CBlockIndex *pprev;
+    CBlockIndex *pprev;		// 父级
 
     //! pointer to the index of some further predecessor of this block
-    CBlockIndex *pskip;
+    CBlockIndex *pskip;		// 爷爷级
 
     //! height of the entry in the chain. The genesis block has height 0
-    int nHeight;
+    int nHeight;				// 区块高度
 
     //! Which # file this block is stored in (blk?????.dat)
-    int nFile;
+    int nFile;				// 区块文件
 
     //! Byte offset within blk?????.dat where this block's data is stored
-    unsigned int nDataPos;
+    unsigned int nDataPos;	// 区块文件位移
 
     //! Byte offset within rev?????.dat where this block's undo data is stored
-    unsigned int nUndoPos;
+    unsigned int nUndoPos;	// 恢复文件索引
 
     //! (memory only) Total amount of work (expected number of hashes) in the
     //! chain up to and including this block
@@ -200,7 +200,7 @@ public:
     //! Number of transactions in this block.
     //! Note: in a potential headers-first mode, this number cannot be relied
     //! upon
-    unsigned int nTx;
+    unsigned int nTx;		// 区块中的交易数量
 
     //! (memory only) Number of transactions in the chain up to and including
     //! this block.
@@ -210,7 +210,7 @@ public:
     unsigned int nChainTx;
 
     //! Verification status of this block. See enum BlockStatus
-    uint32_t nStatus;
+    uint32_t nStatus;		// 区块验证状态
 
     //! block header
     int32_t nVersion;

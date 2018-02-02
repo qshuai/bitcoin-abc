@@ -8,6 +8,7 @@
 
 #include "crypto/common.h"
 #include "prevector.h"
+#include "../prevector.h"
 
 #include <cassert>
 #include <climits>
@@ -17,6 +18,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <boost/concept_check.hpp>
 
 // Maximum number of bytes pushable to the stack
 static const unsigned int MAX_SCRIPT_ELEMENT_SIZE = 520;
@@ -603,8 +605,7 @@ public:
      * entering the UTXO set.
      */
     bool IsUnspendable() const {
-        return (size() > 0 && *begin() == OP_RETURN) ||
-               (size() > MAX_SCRIPT_SIZE);
+        return (size() > 0 && *begin() == OP_RETURN) || (size() > MAX_SCRIPT_SIZE);
     }
 
     void clear() {
