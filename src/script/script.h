@@ -8,6 +8,7 @@
 
 #include "crypto/common.h"
 #include "prevector.h"
+#include "../prevector.h"
 
 #include <cassert>
 #include <climits>

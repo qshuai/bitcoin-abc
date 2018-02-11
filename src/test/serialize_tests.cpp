@@ -6,6 +6,13 @@
 #include "hash.h"
 #include "streams.h"
 #include "test/test_bitcoin.h"
+#include "test_bitcoin.h"
+#include "../primitives/transaction.h"
+#include "../serialize.h"
+#include "../streams.h"
+#include "../uint256.h"
+#include "../hash.h"
+#include "../utilstrencodings.h"
 
 #include <cstdint>
 #include <limits>

@@ -1,0 +1,3 @@
+/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/CMakeFiles/bitcoin_abc.dir

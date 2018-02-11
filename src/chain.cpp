@@ -88,25 +88,26 @@ static inline int GetSkipHeight(int height) {
 
     // Determine which height to jump back to. Any number strictly lower than
     // height is acceptable, but the following expression seems to perform well
-    // in simulations (max 110 steps to go back up to 2**18 blocks).
-    return (height & 1) ? InvertLowestOne(InvertLowestOne(height - 1)) + 1
-                        : InvertLowestOne(height);
+    // in simulations (max 110 steps to go back up to 2**18 blocks).这里的2**18表示覆盖的块，而不是块的高度
+    return (height & 1) ? InvertLowestOne(InvertLowestOne(height - 1)) + 1 : InvertLowestOne(height);
 }
 
+// 获取指定高度的区块索引
 CBlockIndex *CBlockIndex::GetAncestor(int height) {
+    // 给定的区块高度(故应该低于当前区块高度)
     if (height > nHeight || height < 0) {
         return nullptr;
     }
 
+    // 游标
     CBlockIndex *pindexWalk = this;
     int heightWalk = nHeight;
     while (heightWalk > height) {
         int heightSkip = GetSkipHeight(heightWalk);
         int heightSkipPrev = GetSkipHeight(heightWalk - 1);
         if (pindexWalk->pskip != nullptr &&
-            (heightSkip == height || (heightSkip > height &&
-                                      !(heightSkipPrev < heightSkip - 2 &&
-                                        heightSkipPrev >= height)))) {
+            (heightSkip == height || (heightSkip > height && !(heightSkipPrev < heightSkip - 2 && heightSkipPrev >= height)))) {
+
             // Only follow pskip if pprev->pskip isn't better than pskip->pprev.
             pindexWalk = pindexWalk->pskip;
             heightWalk = heightSkip;

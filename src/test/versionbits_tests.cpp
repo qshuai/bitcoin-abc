@@ -9,6 +9,10 @@
 #include "test/test_bitcoin.h"
 #include "test/test_random.h"
 #include "validation.h"
+#include "../chainparamsbase.h"
+#include "../versionbits.h"
+#include "test_random.h"
+#include "test_bitcoin.h"
 
 #include <boost/test/unit_test.hpp>
 
@@ -31,10 +35,13 @@ public:
     int64_t EndTime(const Consensus::Params &params) const {
         return TestTime(20000);
     }
-    int Period(const Consensus::Params &params) const { return 1000; }
-    int Threshold(const Consensus::Params &params) const { return 900; }
-    bool Condition(const CBlockIndex *pindex,
-                   const Consensus::Params &params) const {
+    int Period(const Consensus::Params &params) const {
+        return 1000;
+    }
+    int Threshold(const Consensus::Params &params) const {
+        return 900;
+    }
+    bool Condition(const CBlockIndex *pindex, const Consensus::Params &params) const {
         return (pindex->nVersion & 0x100);
     }
 
@@ -80,8 +87,7 @@ public:
 
     ~VersionBitsTester() { Reset(); }
 
-    VersionBitsTester &Mine(unsigned int height, int32_t nTime,
-                            int32_t nVersion) {
+    VersionBitsTester &Mine(unsigned int height, int32_t nTime, int32_t nVersion) {
         while (vpblock.size() < height) {
             CBlockIndex *pindex = new CBlockIndex();
             pindex->nHeight = vpblock.size();
@@ -97,10 +103,7 @@ public:
     VersionBitsTester &TestStateSinceHeight(int height) {
         for (int i = 0; i < CHECKERS; i++) {
             if ((insecure_rand() & ((1 << i) - 1)) == 0) {
-                BOOST_CHECK_MESSAGE(
-                    checker[i].GetStateSinceHeightFor(
-                        vpblock.empty() ? nullptr : vpblock.back()) == height,
-                    strprintf("Test %i for StateSinceHeight", num));
+                BOOST_CHECK_MESSAGE(checker[i].GetStateSinceHeightFor(vpblock.empty() ? nullptr : vpblock.back()) == height, strprintf("Test %i for StateSinceHeight", num));
             }
         }
         num++;
@@ -111,10 +114,7 @@ public:
         for (int i = 0; i < CHECKERS; i++) {
             if ((insecure_rand() & ((1 << i) - 1)) == 0) {
                 BOOST_CHECK_MESSAGE(
-                    checker[i].GetStateFor(vpblock.empty() ? nullptr
-                                                           : vpblock.back()) ==
-                        THRESHOLD_DEFINED,
-                    strprintf("Test %i for DEFINED", num));
+                    checker[i].GetStateFor(vpblock.empty() ? nullptr : vpblock.back()) == THRESHOLD_DEFINED, strprintf("Test %i for DEFINED", num));
             }
         }
         num++;
@@ -138,10 +138,7 @@ public:
     VersionBitsTester &TestLockedIn() {
         for (int i = 0; i < CHECKERS; i++) {
             if ((insecure_rand() & ((1 << i) - 1)) == 0) {
-                BOOST_CHECK_MESSAGE(
-                    checker[i].GetStateFor(vpblock.empty() ? nullptr
-                                                           : vpblock.back()) ==
-                        THRESHOLD_LOCKED_IN,
+                BOOST_CHECK_MESSAGE(checker[i].GetStateFor(vpblock.empty() ? nullptr : vpblock.back()) == THRESHOLD_LOCKED_IN,
                     strprintf("Test %i for LOCKED_IN", num));
             }
         }

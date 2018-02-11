@@ -7,6 +7,7 @@
 #define BITCOIN_TEST_RANDOM_H
 
 #include "random.h"
+#include "../random.h"
 
 extern uint256 insecure_rand_seed;
 extern FastRandomContext insecure_rand_ctx;

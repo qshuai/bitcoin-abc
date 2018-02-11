@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config>
+    <source_groups>
+        <source_group_4ce9d1e7-a246-489e-bc7a-2b4dac4499d1>
+            <build_file_path>
+                <compilation_db_path>compile_commands.json</compilation_db_path>
+            </build_file_path>
+            <name>C/C++ from Compilation Database</name>
+            <should_apply_anonymous_typedef_transformation>1</should_apply_anonymous_typedef_transformation>
+            <source_paths>
+                <source_path>src</source_path>
+            </source_paths>
+            <type>C/C++ from Compilation Database</type>
+        </source_group_4ce9d1e7-a246-489e-bc7a-2b4dac4499d1>
+    </source_groups>
+    <version>4</version>
+</config>

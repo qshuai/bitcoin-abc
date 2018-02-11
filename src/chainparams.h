@@ -94,7 +94,7 @@ public:
 protected:
     CChainParams() {}
 
-    Consensus::Params consensus;
+    Consensus::Params consensus;        // 包装了param类
     CMessageHeader::MessageStartChars pchMessageStart;
     CMessageHeader::MessageStartChars pchCashMessageStart;
     int nDefaultPort;

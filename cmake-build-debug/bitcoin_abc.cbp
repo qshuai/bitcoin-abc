@@ -1,0 +1,2303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="bitcoin_abc"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="bitcoin_abc">
+				<Option output="/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/bitcoin_abc" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 bitcoin_abc"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="bitcoin_abc/fast">
+				<Option output="/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/bitcoin_abc" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 bitcoin_abc/fast"/>
+					<CompileFile command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j4 -f &quot;/Users/scrapup/cpp/bitcoin-abc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/addrdb.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/addrdb.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/addrman.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/addrman.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/amount.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/amount.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/arith_uint256.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/arith_uint256.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/base58.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/base58.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bench/Examples.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bench/base58.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bench/bench.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bench/bench.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bench/bench_bitcoin.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bench/ccoins_caching.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bench/checkblock.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bench/checkqueue.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bench/coin_selection.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bench/crypto_hash.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bench/data/block413567.raw.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bench/lockedpool.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bench/mempool_eviction.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bench/perf.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bench/perf.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bench/rollingbloom.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bitcoin-cli.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bitcoin-tx.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bitcoind.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/blockencodings.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/blockencodings.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bloom.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/bloom.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/cashaddr.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/cashaddr.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/chain.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/chain.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/chainparams.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/chainparams.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/chainparamsbase.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/chainparamsbase.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/chainparamsseeds.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/checkpoints.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/checkpoints.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/checkqueue.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/clientversion.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/clientversion.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/coins.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/coins.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/compat.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/compat/byteswap.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/compat/endian.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/compat/glibc_compat.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/compat/glibc_sanity.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/compat/glibcxx_sanity.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/compat/sanity.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/compat/strnlen.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/compressor.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/compressor.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/config.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/config.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/config/bitcoin-config.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/consensus/consensus.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/consensus/merkle.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/consensus/merkle.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/consensus/params.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/consensus/validation.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/core_io.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/core_memusage.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/core_read.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/core_write.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/aes.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/aes.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/chacha20.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/chacha20.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/common.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/ctaes/bench.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/ctaes/ctaes.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/ctaes/ctaes.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/ctaes/test.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/hmac_sha256.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/hmac_sha256.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/hmac_sha512.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/hmac_sha512.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/ripemd160.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/ripemd160.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/sha1.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/sha1.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/sha256.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/sha256.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/sha512.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/crypto/sha512.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/cuckoocache.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/dbwrapper.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/dbwrapper.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/globals.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/globals.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/hash.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/hash.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/httprpc.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/httprpc.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/httpserver.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/httpserver.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/indirectmap.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/init.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/init.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/key.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/key.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/keystore.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/keystore.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/autocompact_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/builder.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/builder.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/c.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/c_test.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/corruption_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/db_bench.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/db_impl.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/db_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/db_iter.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/db_iter.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/db_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/dbformat.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/dbformat.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/dbformat_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/dumpfile.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/fault_injection_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/filename.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/filename.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/filename_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/leveldbutil.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/log_format.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/log_reader.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/log_reader.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/log_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/log_writer.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/log_writer.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/memtable.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/memtable.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/recovery_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/repair.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/skiplist.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/skiplist_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/snapshot.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/table_cache.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/table_cache.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/version_edit.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/version_edit.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/version_edit_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/version_set.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/version_set.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/version_set_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/write_batch.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/write_batch_internal.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/db/write_batch_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/doc/bench/db_bench_sqlite3.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/doc/bench/db_bench_tree_db.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/helpers/memenv/memenv.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/helpers/memenv/memenv.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/helpers/memenv/memenv_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/include/leveldb/c.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/include/leveldb/cache.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/include/leveldb/comparator.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/include/leveldb/db.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/include/leveldb/dumpfile.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/include/leveldb/env.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/include/leveldb/filter_policy.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/include/leveldb/iterator.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/include/leveldb/options.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/include/leveldb/slice.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/include/leveldb/status.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/include/leveldb/table.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/include/leveldb/table_builder.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/include/leveldb/write_batch.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/issues/issue178_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/issues/issue200_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/port/atomic_pointer.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/port/port.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/port/port_example.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/port/port_posix.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/port/port_posix.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/port/port_posix_sse.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/port/port_win.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/port/port_win.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/port/thread_annotations.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/port/win/stdint.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/block.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/block.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/block_builder.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/block_builder.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/filter_block.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/filter_block.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/filter_block_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/format.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/format.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/iterator.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/iterator_wrapper.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/merger.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/merger.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/table.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/table_builder.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/table_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/two_level_iterator.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/table/two_level_iterator.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/arena.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/arena.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/arena_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/bloom.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/bloom_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/cache.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/cache_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/coding.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/coding.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/coding_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/comparator.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/crc32c.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/crc32c.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/crc32c_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/env.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/env_posix.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/env_posix_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/env_posix_test_helper.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/env_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/env_win.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/filter_policy.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/hash.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/hash.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/hash_test.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/histogram.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/histogram.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/logging.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/logging.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/mutexlock.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/options.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/posix_logger.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/random.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/status.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/testharness.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/testharness.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/testutil.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/leveldb/util/testutil.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/limitedmap.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/memusage.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/merkleblock.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/merkleblock.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/miner.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/miner.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/net.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/net.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/net_processing.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/net_processing.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/netaddress.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/netaddress.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/netbase.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/netbase.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/netmessagemaker.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/noui.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/noui.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/obj/build.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/policy/fees.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/policy/fees.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/policy/policy.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/policy/policy.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/pow.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/pow.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/prevector.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/primitives/block.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/primitives/block.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/primitives/transaction.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/primitives/transaction.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/protocol.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/protocol.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/pubkey.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/pubkey.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/addressbookpage.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/addressbookpage.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/addresstablemodel.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/addresstablemodel.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/askpassphrasedialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/askpassphrasedialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/bantablemodel.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/bantablemodel.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/bitcoin.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/bitcoinaddressvalidator.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/bitcoinaddressvalidator.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/bitcoinamountfield.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/bitcoinamountfield.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/bitcoingui.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/bitcoingui.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/bitcoinstrings.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/bitcoinunits.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/bitcoinunits.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/clientmodel.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/clientmodel.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/coincontroldialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/coincontroldialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/coincontroltreewidget.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/coincontroltreewidget.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/csvmodelwriter.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/csvmodelwriter.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/editaddressdialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/editaddressdialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/forms/ui_addressbookpage.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/forms/ui_askpassphrasedialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/forms/ui_coincontroldialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/forms/ui_debugwindow.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/forms/ui_editaddressdialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/forms/ui_helpmessagedialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/forms/ui_intro.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/forms/ui_modaloverlay.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/forms/ui_openuridialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/forms/ui_optionsdialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/forms/ui_overviewpage.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/forms/ui_receivecoinsdialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/forms/ui_receiverequestdialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/forms/ui_sendcoinsdialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/forms/ui_sendcoinsentry.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/forms/ui_signverifymessagedialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/forms/ui_transactiondescdialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/guiconstants.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/guiutil.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/guiutil.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/intro.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/intro.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/macdockiconhandler.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/macnotificationhandler.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_addressbookpage.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_addresstablemodel.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_askpassphrasedialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_bantablemodel.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_bitcoinaddressvalidator.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_bitcoinamountfield.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_bitcoingui.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_bitcoinunits.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_clientmodel.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_coincontroldialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_coincontroltreewidget.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_csvmodelwriter.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_editaddressdialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_guiutil.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_intro.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_macdockiconhandler.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_macnotificationhandler.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_modaloverlay.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_notificator.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_openuridialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_optionsdialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_optionsmodel.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_overviewpage.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_paymentserver.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_peertablemodel.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_qvalidatedlineedit.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_qvaluecombobox.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_receivecoinsdialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_receiverequestdialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_recentrequeststablemodel.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_rpcconsole.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_sendcoinsdialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_sendcoinsentry.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_signverifymessagedialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_splashscreen.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_trafficgraphwidget.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_transactiondesc.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_transactiondescdialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_transactionfilterproxy.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_transactiontablemodel.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_transactionview.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_utilitydialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_walletframe.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_walletmodel.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/moc_walletview.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/modaloverlay.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/modaloverlay.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/networkstyle.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/networkstyle.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/notificator.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/notificator.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/openuridialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/openuridialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/optionsdialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/optionsdialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/optionsmodel.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/optionsmodel.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/overviewpage.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/overviewpage.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/paymentrequest.pb.cc">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/paymentrequest.pb.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/paymentrequestplus.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/paymentrequestplus.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/paymentserver.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/paymentserver.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/peertablemodel.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/peertablemodel.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/platformstyle.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/platformstyle.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/qrc_bitcoin.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/qrc_bitcoin_locale.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/qvalidatedlineedit.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/qvalidatedlineedit.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/qvaluecombobox.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/qvaluecombobox.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/receivecoinsdialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/receivecoinsdialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/receiverequestdialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/receiverequestdialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/recentrequeststablemodel.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/recentrequeststablemodel.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/rpcconsole.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/rpcconsole.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/sendcoinsdialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/sendcoinsdialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/sendcoinsentry.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/sendcoinsentry.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/signverifymessagedialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/signverifymessagedialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/splashscreen.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/splashscreen.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/test/compattests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/test/compattests.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/test/moc_bitcoinaddressvalidatortests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/test/moc_compattests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/test/moc_guiutiltests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/test/moc_paymentservertests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/test/moc_rpcnestedtests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/test/moc_uritests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/test/paymentrequestdata.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/test/paymentservertests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/test/paymentservertests.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/test/rpcnestedtests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/test/rpcnestedtests.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/test/test_main.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/test/uritests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/test/uritests.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/trafficgraphwidget.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/trafficgraphwidget.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/transactiondesc.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/transactiondesc.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/transactiondescdialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/transactiondescdialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/transactionfilterproxy.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/transactionfilterproxy.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/transactionrecord.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/transactionrecord.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/transactiontablemodel.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/transactiontablemodel.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/transactionview.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/transactionview.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/utilitydialog.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/utilitydialog.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/walletframe.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/walletframe.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/walletmodel.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/walletmodel.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/walletmodeltransaction.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/walletmodeltransaction.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/walletview.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/walletview.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/winshutdownmonitor.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/qt/winshutdownmonitor.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/random.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/random.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/rest.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/reverselock.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/rpc/abc.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/rpc/blockchain.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/rpc/blockchain.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/rpc/client.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/rpc/client.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/rpc/mining.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/rpc/misc.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/rpc/misc.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/rpc/net.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/rpc/protocol.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/rpc/protocol.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/rpc/rawtransaction.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/rpc/register.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/rpc/server.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/rpc/server.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/scheduler.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/scheduler.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/bitcoinconsensus.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/bitcoinconsensus.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/interpreter.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/interpreter.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/ismine.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/ismine.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/script.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/script.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/script_error.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/script_error.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/scriptcache.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/scriptcache.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/sigcache.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/sigcache.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/sign.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/sign.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/standard.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/script/standard.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/contrib/lax_der_parsing.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/contrib/lax_der_parsing.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/contrib/lax_der_privatekey_parsing.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/contrib/lax_der_privatekey_parsing.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/include/secp256k1.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/include/secp256k1_ecdh.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/include/secp256k1_recovery.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/basic-config.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/bench.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/bench_ecdh.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/bench_internal.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/bench_recover.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/bench_sign.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/bench_verify.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/ecdsa.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/ecdsa_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/eckey.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/eckey_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/ecmult.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/ecmult_const.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/ecmult_const_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/ecmult_gen.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/ecmult_gen_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/ecmult_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/ecmult_static_context.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/field.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/field_10x26.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/field_10x26_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/field_5x52.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/field_5x52_asm_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/field_5x52_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/field_5x52_int128_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/field_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/gen_context.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/group.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/group_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/hash.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/hash_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/java/org_bitcoin_NativeSecp256k1.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/java/org_bitcoin_NativeSecp256k1.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/java/org_bitcoin_Secp256k1Context.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/java/org_bitcoin_Secp256k1Context.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/libsecp256k1-config.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/modules/ecdh/main_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/modules/ecdh/tests_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/modules/recovery/main_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/modules/recovery/tests_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/num.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/num_gmp.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/num_gmp_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/num_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/scalar.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/scalar_4x64.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/scalar_4x64_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/scalar_8x32.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/scalar_8x32_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/scalar_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/scalar_low.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/scalar_low_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/secp256k1.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/testrand.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/testrand_impl.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/tests.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/tests_exhaustive.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/secp256k1/src/util.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/seeder/bitcoin.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/seeder/bitcoin.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/seeder/compat.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/seeder/db.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/seeder/db.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/seeder/dns.c">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/seeder/dns.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/seeder/main.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/seeder/netbase.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/seeder/netbase.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/seeder/protocol.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/seeder/protocol.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/seeder/strlcpy.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/seeder/util.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/seeder/util.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/serialize.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/streams.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/support/allocators/secure.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/support/allocators/zeroafterfree.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/support/cleanse.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/support/cleanse.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/support/events.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/support/lockedpool.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/support/lockedpool.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/sync.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/sync.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/DoS_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/addrman_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/allocator_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/amount_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/arith_uint256_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/base32_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/base58_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/base64_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/bip32_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/blockcheck_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/blockencodings_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/bloom_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/bswap_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/cashaddr_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/coins_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/compress_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/config_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/crypto_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/cuckoocache_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/data/base58_encode_decode.json.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/data/base58_keys_invalid.json.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/data/base58_keys_valid.json.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/data/script_tests.json.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/data/sighash.json.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/data/tx_invalid.json.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/data/tx_valid.json.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/dbwrapper_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/excessiveblock_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/getarg_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/hash_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/inv_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/key_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/limitedmap_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/main_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/mempool_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/merkle_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/miner_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/multisig_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/net_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/netbase_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/pmt_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/policyestimator_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/pow_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/prevector_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/raii_event_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/random_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/reverselock_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/rpc_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/sanity_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/scheduler_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/script_P2SH_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/script_antireplay_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/script_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/scriptflags.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/scriptflags.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/scriptnum10.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/scriptnum_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/serialize_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/sighash_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/sigopcount_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/sigutil.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/sigutil.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/skiplist_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/streams_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/test_bitcoin.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/test_bitcoin.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/test_bitcoin_fuzzy.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/test_random.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/testutil.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/testutil.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/timedata_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/transaction_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/txvalidationcache_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/uint256_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/undo_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/univalue_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/util_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/validation_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/test/versionbits_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/threadinterrupt.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/threadinterrupt.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/threadsafety.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/timedata.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/timedata.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/tinyformat.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/torcontrol.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/torcontrol.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/txdb.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/txdb.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/txmempool.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/txmempool.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/ui_interface.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/ui_interface.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/uint256.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/uint256.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/undo.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/univalue/gen/gen.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/univalue/include/univalue.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/univalue/lib/univalue.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/univalue/lib/univalue_escapes.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/univalue/lib/univalue_read.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/univalue/lib/univalue_utffilter.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/univalue/lib/univalue_write.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/univalue/test/unitester.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/univalue/univalue-config.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/util.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/util.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/utilmoneystr.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/utilmoneystr.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/utilstrencodings.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/utilstrencodings.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/utiltime.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/utiltime.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/validation.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/validation.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/validationinterface.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/validationinterface.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/version.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/versionbits.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/versionbits.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/coincontrol.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/crypter.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/crypter.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/db.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/db.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/finaltx.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/finaltx.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/rpcdump.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/rpcdump.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/rpcwallet.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/rpcwallet.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/test/accounting_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/test/crypto_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/test/wallet_test_fixture.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/test/wallet_test_fixture.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/test/wallet_tests.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/wallet.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/wallet.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/walletdb.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/wallet/walletdb.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/warnings.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/warnings.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/zmq/zmqabstractnotifier.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/zmq/zmqabstractnotifier.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/zmq/zmqconfig.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/zmq/zmqnotificationinterface.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/zmq/zmqnotificationinterface.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/zmq/zmqpublishnotifier.cpp">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/src/zmq/zmqpublishnotifier.h">
+			<Option target="bitcoin_abc"/>
+		</Unit>
+		<Unit filename="/Users/scrapup/cpp/bitcoin-abc/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
