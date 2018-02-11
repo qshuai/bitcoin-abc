@@ -178,8 +178,8 @@ template unsigned int base_uint<256>::bits() const;
 
 // This implementation directly uses shifts instead of going through an
 // intermediate MPI representation.
-arith_uint256 &arith_uint256::SetCompact(uint32_t nCompact, bool *pfNegative,
-                                         bool *pfOverflow) {
+// 工作量证明相关逻辑， 不清楚 todo confirm
+arith_uint256 &arith_uint256::SetCompact(uint32_t nCompact, bool *pfNegative, bool *pfOverflow) {
     int nSize = nCompact >> 24;
     uint32_t nWord = nCompact & 0x007fffff;
     if (nSize <= 3) {

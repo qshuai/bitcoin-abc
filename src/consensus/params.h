@@ -73,7 +73,7 @@ namespace Consensus {
         uint256 powLimit;
         bool fPowAllowMinDifficultyBlocks;
         bool fPowNoRetargeting;
-        int64_t nPowTargetSpacing;
+        int64_t nPowTargetSpacing;          // 两个block之间的时间   以分钟为单位
         int64_t nPowTargetTimespan;
 
         int64_t DifficultyAdjustmentInterval() const {
