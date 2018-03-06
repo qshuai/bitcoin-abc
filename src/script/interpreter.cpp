@@ -3,6 +3,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include <stdint.h>
 #include "interpreter.h"
 
 #include "crypto/ripemd160.h"
@@ -12,6 +13,8 @@
 #include "pubkey.h"
 #include "script/script.h"
 #include "uint256.h"
+#include "../primitives/transaction.h"
+#include "../hash.h"
 
 typedef std::vector<uint8_t> valtype;
 
@@ -294,9 +297,9 @@ static bool CheckMinimalPush(const valtype &data, opcodetype opcode) {
     return true;
 }
 
-bool EvalScript(std::vector<valtype> &stack, const CScript &script,
-                uint32_t flags, const BaseSignatureChecker &checker,
-                ScriptError *serror) {
+bool EvalScript(std::vector<valtype> &stack, const CScript &script, uint32_t flags, const BaseSignatureChecker &checker, ScriptError *serror) {
+
+    // 局部静态变量
     static const CScriptNum bnZero(0);
     static const CScriptNum bnOne(1);
     static const CScriptNum bnFalse(0);

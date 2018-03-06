@@ -8,6 +8,8 @@
 #include <string>
 #include "leveldb/env.h"
 #include "leveldb/status.h"
+#include "status.h"
+#include "env.h"
 
 namespace leveldb {
 

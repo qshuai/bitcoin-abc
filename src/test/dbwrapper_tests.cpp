@@ -6,6 +6,10 @@
 #include "random.h"
 #include "test/test_bitcoin.h"
 #include "uint256.h"
+#include "test_bitcoin.h"
+#include "../dbwrapper.h"
+#include "../uint256.h"
+#include "../random.h"
 
 #include <boost/assert.hpp>
 #include <boost/assign/std/vector.hpp> // for 'operator+=()'

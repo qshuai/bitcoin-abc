@@ -109,8 +109,7 @@ const char *const BITCOIN_PID_FILENAME = "bitcoind.pid";
 CCriticalSection cs_args;
 std::map<std::string, std::string> mapArgs;
 static std::map<std::string, std::vector<std::string>> _mapMultiArgs;
-const std::map<std::string, std::vector<std::string>> &mapMultiArgs =
-    _mapMultiArgs;
+const std::map<std::string, std::vector<std::string>> &mapMultiArgs = _mapMultiArgs;
 bool fDebug = false;
 bool fPrintToConsole = false;
 bool fPrintToDebugLog = true;
@@ -229,7 +228,7 @@ void OpenDebugLog() {
 
 bool LogAcceptCategory(const char *category) {
     if (category != nullptr) {
-        if (!fDebug) return false;
+        if (!fDebug) return false;      // 关闭调试模式
 
         // Give each thread quick access to -debug settings. This helps prevent
         // issues debugging global destructors, where mapMultiArgs might be
@@ -237,8 +236,7 @@ bool LogAcceptCategory(const char *category) {
         static boost::thread_specific_ptr<std::set<std::string>> ptrCategory;
         if (ptrCategory.get() == nullptr) {
             if (mapMultiArgs.count("-debug")) {
-                const std::vector<std::string> &categories =
-                    mapMultiArgs.at("-debug");
+                const std::vector<std::string> &categories = mapMultiArgs.at("-debug");
                 ptrCategory.reset(new std::set<std::string>(categories.begin(),
                                                             categories.end()));
                 // thread_specific_ptr automatically deletes the set when the
@@ -263,8 +261,7 @@ bool LogAcceptCategory(const char *category) {
  * suppress printing of the timestamp when multiple calls are made that don't
  * end in a newline. Initialize it to true, and hold it, in the calling context.
  */
-static std::string LogTimestampStr(const std::string &str,
-                                   std::atomic_bool *fStartedNewLine) {
+static std::string LogTimestampStr(const std::string &str, std::atomic_bool *fStartedNewLine) {    // bool原子 指针
     std::string strStamped;
 
     if (!fLogTimestamps) return str;
@@ -290,7 +287,7 @@ static std::string LogTimestampStr(const std::string &str,
 int LogPrintStr(const std::string &str) {
     // Returns total number of characters written.
     int ret = 0;
-    static std::atomic_bool fStartedNewLine(true);
+    static std::atomic_bool fStartedNewLine(true);      // 原子操作
 
     std::string strTimestamped = LogTimestampStr(str, &fStartedNewLine);
 
@@ -306,7 +303,7 @@ int LogPrintStr(const std::string &str) {
         if (fileout == nullptr) {
             assert(vMsgsBeforeOpenLog);
             ret = strTimestamped.length();
-            vMsgsBeforeOpenLog->push_back(strTimestamped);
+            vMsgsBeforeOpenLog->push_back(strTimestamped);      // log文件还没有被打开，现将log数据填充到string链表
         } else {
             // Reopen the log file, if requested.
             if (fReopenDebugLog) {
@@ -341,6 +338,7 @@ static void InterpretNegativeSetting(std::string &strKey,
     }
 }
 
+// argc参数数量  srgv[]参数值
 void ParseParameters(int argc, const char *const argv[]) {
     LOCK(cs_args);
     mapArgs.clear();
@@ -349,25 +347,25 @@ void ParseParameters(int argc, const char *const argv[]) {
     for (int i = 1; i < argc; i++) {
         std::string str(argv[i]);
         std::string strValue;
-        size_t is_index = str.find('=');
+        size_t is_index = str.find('=');        // 如果argv中含有=号, 找到其位置
         if (is_index != std::string::npos) {
-            strValue = str.substr(is_index + 1);
-            str = str.substr(0, is_index);
+            strValue = str.substr(is_index + 1);    // 参数名称
+            str = str.substr(0, is_index);          // 参数值
         }
 #ifdef WIN32
         boost::to_lower(str);
         if (boost::algorithm::starts_with(str, "/")) str = "-" + str.substr(1);
 #endif
 
-        if (str[0] != '-') break;
+        if (str[0] != '-') break;           // 参数要以-开始
 
         // Interpret --foo as -foo.
         // If both --foo and -foo are set, the last takes effect.
-        if (str.length() > 1 && str[1] == '-') str = str.substr(1);
+        if (str.length() > 1 && str[1] == '-') str = str.substr(1);     // 如果为--形式，则转成-形式
         InterpretNegativeSetting(str, strValue);
 
-        mapArgs[str] = strValue;
-        _mapMultiArgs[str].push_back(strValue);
+        mapArgs[str] = strValue;            // 存储键值对
+        _mapMultiArgs[str].push_back(strValue);     // 这个map的目的是有些参数可能有多个值，把一个参数对应的值存在vector中
     }
 }
 
@@ -376,6 +374,7 @@ bool IsArgSet(const std::string &strArg) {
     return mapArgs.count(strArg);
 }
 
+// 获取参数值后以string对象返回
 std::string GetArg(const std::string &strArg, const std::string &strDefault) {
     LOCK(cs_args);
     if (mapArgs.count(strArg)) return mapArgs[strArg];
@@ -390,7 +389,8 @@ int64_t GetArg(const std::string &strArg, int64_t nDefault) {
 
 bool GetBoolArg(const std::string &strArg, bool fDefault) {
     LOCK(cs_args);
-    if (mapArgs.count(strArg)) return InterpretBool(mapArgs[strArg]);
+    if (mapArgs.count(strArg))
+        return InterpretBool(mapArgs[strArg]);
     return fDefault;
 }
 
@@ -401,6 +401,7 @@ bool SoftSetArg(const std::string &strArg, const std::string &strValue) {
     return true;
 }
 
+// 将参数bool值转换为0或1，并存储在mapArgs map里面
 bool SoftSetBoolArg(const std::string &strArg, bool fValue) {
     if (fValue)
         return SoftSetArg(strArg, std::string("1"));
@@ -642,6 +643,8 @@ bool TruncateFile(FILE *file, unsigned int length) {
  * number. It returns the actual file descriptor limit (which may be more or
  * less than nMinFD)
  */
+
+// 函数获取了不同系统下对每个进程的最大资源限制
 int RaiseFileDescriptorLimit(int nMinFD) {
 #if defined(WIN32)
     return 2048;
@@ -652,6 +655,7 @@ int RaiseFileDescriptorLimit(int nMinFD) {
             limitFD.rlim_cur = nMinFD;
             if (limitFD.rlim_cur > limitFD.rlim_max)
                 limitFD.rlim_cur = limitFD.rlim_max;
+            // getrlimit()、setrlimit()分别获得、设置每个进程能够创建的各种系统资源的限制使用量
             setrlimit(RLIMIT_NOFILE, &limitFD);
             getrlimit(RLIMIT_NOFILE, &limitFD);
         }
@@ -790,7 +794,7 @@ void SetupEnvironment() {
     !defined(__OpenBSD__)
     try {
         // Raises a runtime error if current locale is invalid.
-        std::locale("");
+        std::locale("");            // 本地化设置(对输入和输出有影响)
     } catch (const std::runtime_error &) {
         setenv("LC_ALL", "C", 1);
     }

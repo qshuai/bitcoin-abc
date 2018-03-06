@@ -340,6 +340,7 @@ bool ECC_InitSanityCheck() {
     return key.VerifyPubKey(pubkey);
 }
 
+// 椭圆曲线加密
 void ECC_Start() {
     assert(secp256k1_context_sign == nullptr);
 

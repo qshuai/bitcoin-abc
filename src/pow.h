@@ -24,7 +24,7 @@ uint32_t CalculateNextWorkRequired(const CBlockIndex *pindexPrev,
 
 /**
  * Check whether a block hash satisfies the proof-of-work requirement specified
- * by nBits
+ * by nBits         // 也说明了nBits的作用是指定工作量证明的条件
  */
 bool CheckProofOfWork(uint256 hash, uint32_t nBits, const Consensus::Params &);
 

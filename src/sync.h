@@ -87,7 +87,7 @@ static inline void DeleteLock(void *cs) {}
  */
 class CCriticalSection : public AnnotatedMixin<boost::recursive_mutex> {
 public:
-    ~CCriticalSection() { DeleteLock((void *)this); }
+    ~CCriticalSection() { DeleteLock((void *)this); }           // 这个锁是一个对象，在对象销毁的是否自动释放锁
 };
 
 typedef CCriticalSection CDynamicCriticalSection;

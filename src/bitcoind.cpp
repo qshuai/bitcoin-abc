@@ -19,6 +19,7 @@
 #include "scheduler.h"
 #include "util.h"
 #include "utilstrencodings.h"
+#include "config/bitcoin-config.h"
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/filesystem.hpp>
@@ -47,10 +48,10 @@
  */
 
 void WaitForShutdown(boost::thread_group *threadGroup) {
-    bool fShutdown = ShutdownRequested();
+    bool fShutdown = ShutdownRequested();       // 关闭信号
     // Tell the main threads to shutdown.
     while (!fShutdown) {
-        MilliSleep(200);
+        MilliSleep(200);        // 200ms 检测一次是否请求关闭
         fShutdown = ShutdownRequested();
     }
     if (threadGroup) {
@@ -79,21 +80,17 @@ bool AppInit(int argc, char *argv[]) {
     //
     // If Qt is used, parameters/bitcoin.conf are parsed in qt/bitcoin.cpp's
     // main()
+    // 解析运行输入的参数并将参数放入mapArgs; mapMultiArgs;这两个map对象中。
     ParseParameters(argc, argv);
 
     // Process help and version before taking care about datadir
-    if (IsArgSet("-?") || IsArgSet("-h") || IsArgSet("-help") ||
-        IsArgSet("-version")) {
-        std::string strUsage = strprintf(_("%s Daemon"), _(PACKAGE_NAME)) +
-                               " " + _("version") + " " + FormatFullVersion() +
-                               "\n";
+    if (IsArgSet("-?") || IsArgSet("-h") || IsArgSet("-help") || IsArgSet("-version")) {
+        std::string strUsage = strprintf(_("%s Daemon"), _(PACKAGE_NAME)) + " " + _("version") + " " + FormatFullVersion() + "\n";
 
         if (IsArgSet("-version")) {
             strUsage += FormatParagraph(LicenseInfo());
         } else {
-            strUsage += "\n" + _("Usage:") + "\n" +
-                        "  bitcoind [options]                     " +
-                        strprintf(_("Start %s Daemon"), _(PACKAGE_NAME)) + "\n";
+            strUsage += "\n" + _("Usage:") + "\n" + "  bitcoind [options]                     " + strprintf(_("Start %s Daemon"), _(PACKAGE_NAME)) + "\n";
 
             strUsage += "\n" + HelpMessage(HMM_BITCOIND);
         }
@@ -125,10 +122,11 @@ bool AppInit(int argc, char *argv[]) {
         }
 
         // Command-line RPC
+        // 根据相应的命令得到相应的结果 json格式输出
         bool fCommandLine = false;
         for (int i = 1; i < argc; i++)
-            if (!IsSwitchChar(argv[i][0]) &&
-                !boost::algorithm::istarts_with(argv[i], "bitcoin:"))
+            // 是否以-或/(32bit)开头， 或者以bitcoin:开头
+            if (!IsSwitchChar(argv[i][0]) && !boost::algorithm::istarts_with(argv[i], "bitcoin:"))
                 fCommandLine = true;
 
         if (fCommandLine) {
@@ -158,15 +156,14 @@ bool AppInit(int argc, char *argv[]) {
             // up on console
             exit(1);
         }
-        if (GetBoolArg("-daemon", false)) {
+        if (GetBoolArg("-daemon", false)) {     // 是否后台运行
 #if HAVE_DECL_DAEMON
             fprintf(stdout, "Bitcoin server starting\n");
 
             // Daemonize
             if (daemon(1, 0)) {
                 // don't chdir (1), do close FDs (0)
-                fprintf(stderr, "Error: daemon() failed: %s\n",
-                        strerror(errno));
+                fprintf(stderr, "Error: daemon() failed: %s\n", strerror(errno));
                 return false;
             }
 #else
@@ -191,7 +188,7 @@ bool AppInit(int argc, char *argv[]) {
         // don't result in a hang due to some
         // thread-blocking-waiting-for-another-thread-during-startup case.
     } else {
-        WaitForShutdown(&threadGroup);
+        WaitForShutdown(&threadGroup);          // 启动一个线程监听用户终止程序信号
     }
     Shutdown();
 

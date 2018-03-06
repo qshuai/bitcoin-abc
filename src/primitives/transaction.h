@@ -10,6 +10,8 @@
 #include "script/script.h"
 #include "serialize.h"
 #include "uint256.h"
+#include "../script/script.h"
+#include "../amount.h"
 
 static const int SERIALIZE_TRANSACTION = 0x00;
 

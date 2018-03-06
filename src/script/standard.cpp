@@ -9,6 +9,7 @@
 #include "script/script.h"
 #include "util.h"
 #include "utilstrencodings.h"
+#include "script.h"
 
 typedef std::vector<uint8_t> valtype;
 

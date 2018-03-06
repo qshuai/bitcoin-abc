@@ -8,15 +8,20 @@
 #include "validation.h"
 
 #include "test/test_bitcoin.h"
+#include "../undo.h"
+#include "../chainparams.h"
+#include "../validation.h"
+#include "../consensus/validation.h"
+#include "../random.h"
+#include "test_bitcoin.h"
 
 #include <boost/test/unit_test.hpp>
 
 BOOST_FIXTURE_TEST_SUITE(undo_tests, BasicTestingSetup)
 
-static void UpdateUTXOSet(const CBlock &block, CCoinsViewCache &view,
-                          CBlockUndo &blockundo,
+static void UpdateUTXOSet(const CBlock &block, CCoinsViewCache &view, CBlockUndo &blockundo,
                           const CChainParams &chainparams, uint32_t nHeight) {
-    CValidationState state;
+    CValidationState;
 
     auto &coinbaseTx = *block.vtx[0];
     UpdateCoins(coinbaseTx, view, nHeight);
@@ -85,6 +90,7 @@ BOOST_AUTO_TEST_CASE(connect_utxo_extblock) {
     UpdateUTXOSet(block, view, blockundo, chainparams, 123456);
 
     BOOST_CHECK(view.GetBestBlock() == block.GetHash());
+        std::cout << block.GetHash().ToString() << std::endl;
     BOOST_CHECK(HasSpendableCoin(view, coinbaseTx.GetId()));
     BOOST_CHECK(HasSpendableCoin(view, tx0.GetId()));
     BOOST_CHECK(!HasSpendableCoin(view, prevTx0.GetId()));

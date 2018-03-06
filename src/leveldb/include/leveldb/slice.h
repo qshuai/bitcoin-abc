@@ -20,6 +20,7 @@
 #include <string.h>
 #include <string>
 
+// leveldb 命名空间
 namespace leveldb {
 
 class Slice {

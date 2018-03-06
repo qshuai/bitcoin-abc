@@ -70,11 +70,11 @@ namespace Consensus {
         uint32_t nMinerConfirmationWindow;
         BIP9Deployment vDeployments[MAX_VERSION_BITS_DEPLOYMENTS];
         /** Proof of work parameters */
-        uint256 powLimit;
+        uint256 powLimit;               // 最低工作量   一个较大的hash值
         bool fPowAllowMinDifficultyBlocks;
-        bool fPowNoRetargeting;
+        bool fPowNoRetargeting;         // regtest网络 不调整难度
         int64_t nPowTargetSpacing;          // 两个block之间的时间   以分钟为单位
-        int64_t nPowTargetTimespan;
+        int64_t nPowTargetTimespan;         // 难度调整期间的总跨度
 
         int64_t DifficultyAdjustmentInterval() const {
             return nPowTargetTimespan / nPowTargetSpacing;

@@ -19,6 +19,7 @@
 #include "test/scriptflags.h"
 #include "utilstrencodings.h"
 #include "validation.h" // For CheckRegularTransaction
+#include "../primitives/transaction.h"
 
 #include <map>
 #include <string>

@@ -8,6 +8,12 @@
 #include "random.h"
 #include "test/test_bitcoin.h"
 #include "util.h"
+#include "test_bitcoin.h"
+#include "../pow.h"
+#include "../chainparamsbase.h"
+#include "../chainparams.h"
+#include "../chain.h"
+#include "../random.h"
 
 #include <boost/test/unit_test.hpp>
 
@@ -24,8 +30,7 @@ BOOST_AUTO_TEST_CASE(get_next_work) {
     pindexLast.nTime = 1262152739; // Block #32255
     pindexLast.nBits = 0x1d00ffff;
     BOOST_CHECK_EQUAL(
-        CalculateNextWorkRequired(&pindexLast, nLastRetargetTime, params),
-        0x1d00d86a);
+        CalculateNextWorkRequired(&pindexLast, nLastRetargetTime, params), 0x1d00d86a);
 }
 
 /* Test the constraint on the upper bound for next work */

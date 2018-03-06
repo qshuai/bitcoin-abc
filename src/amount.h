@@ -98,8 +98,8 @@ public:
 /** Amount in satoshis (Can be negative) */
 typedef int64_t CAmount;
 
-static const Amount COIN = 100000000;
-static const Amount CENT = 1000000;
+static const Amount COIN = 100000000;       // 1亿个satoshis
+static const Amount CENT = 1000000;         // 100万个stoshis
 
 extern const std::string CURRENCY_UNIT;
 

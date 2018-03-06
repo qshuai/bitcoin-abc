@@ -35,6 +35,7 @@ int64_t GetTimeMillis() {
     return now;
 }
 
+// 精确度为微秒
 int64_t GetTimeMicros() {
     int64_t now = (boost::posix_time::microsec_clock::universal_time() -
                    boost::posix_time::ptime(boost::gregorian::date(1970, 1, 1)))

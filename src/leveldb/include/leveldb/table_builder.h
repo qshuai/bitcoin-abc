@@ -16,6 +16,9 @@
 #include <stdint.h>
 #include "leveldb/options.h"
 #include "leveldb/status.h"
+#include "options.h"
+#include "status.h"
+#include "slice.h"
 
 namespace leveldb {
 

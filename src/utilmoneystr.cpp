@@ -29,18 +29,19 @@ std::string FormatMoney(const Amount &amt) {
 }
 
 bool ParseMoney(const std::string &str, Amount &nRet) {
-    return ParseMoney(str.c_str(), nRet);
+    return ParseMoney(str.c_str(), nRet);           // 转化成c语言风格字符串，函数重载
 }
 
 bool ParseMoney(const char *pszIn, Amount &nRet) {
     std::string strWhole;
     int64_t nUnits = 0;
     const char *p = pszIn;
-    while (isspace(*p))
+    while (isspace(*p))     // 如果是空格就继续移动指针，目的就是去除数据中的空格
         p++;
+
     for (; *p; p++) {
-        if (*p == '.') {
-            p++;
+        if (*p == '.') {            // 遇到小数点
+            p++;            // 指向下一个字符
             int64_t nMult = 10 * CENT.GetSatoshis();
             while (isdigit(*p) && (nMult > 0)) {
                 nUnits += nMult * (*p++ - '0');
@@ -48,10 +49,11 @@ bool ParseMoney(const char *pszIn, Amount &nRet) {
             }
             break;
         }
-        if (isspace(*p)) break;
-        if (!isdigit(*p)) return false;
-        strWhole.insert(strWhole.end(), *p);
+        if (isspace(*p)) break;     // 如果数字中含有空格则终止for循环
+        if (!isdigit(*p)) return false;         // 不是数字就返回false，解析失败
+        strWhole.insert(strWhole.end(), *p);        // 将数字插入string对象中
     }
+
     for (; *p; p++)
         if (!isspace(*p)) return false;
     // guard against 63 bit overflow

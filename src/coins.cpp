@@ -129,8 +129,7 @@ void AddCoins(CCoinsViewCache &cache, const CTransaction &tx, int nHeight) {
         // Pass fCoinbase as the possible_overwrite flag to AddCoin, in order to
         // correctly deal with the pre-BIP30 occurrances of duplicate coinbase
         // transactions.
-        cache.AddCoin(COutPoint(txid, i), Coin(tx.vout[i], nHeight, fCoinbase),
-                      fCoinbase);
+        cache.AddCoin(COutPoint(txid, i), Coin(tx.vout[i], nHeight, fCoinbase), fCoinbase);
     }
 }
 
@@ -211,8 +210,7 @@ bool CCoinsViewCache::BatchWrite(CCoinsMap &mapCoins,
                 // parent cache entry has unspent outputs. If this ever happens,
                 // it means the FRESH flag was misapplied and there is a logic
                 // error in the calling code.
-                if ((it->second.flags & CCoinsCacheEntry::FRESH) &&
-                    !itUs->second.coin.IsSpent())
+                if ((it->second.flags & CCoinsCacheEntry::FRESH) && !itUs->second.coin.IsSpent())
                     throw std::logic_error("FRESH flag misapplied to cache "
                                            "entry for base transaction with "
                                            "spendable outputs");
@@ -320,8 +318,7 @@ double CCoinsViewCache::GetPriority(const CTransaction &tx, int nHeight,
 }
 
 // TODO: merge with similar definition in undo.h.
-static const size_t MAX_OUTPUTS_PER_TX =
-    MAX_TX_SIZE / ::GetSerializeSize(CTxOut(), SER_NETWORK, PROTOCOL_VERSION);
+static const size_t MAX_OUTPUTS_PER_TX = MAX_TX_SIZE / ::GetSerializeSize(CTxOut(), SER_NETWORK, PROTOCOL_VERSION);
 
 const Coin &AccessByTxid(const CCoinsViewCache &view, const uint256 &txid) {
     COutPoint iter(txid, 0);

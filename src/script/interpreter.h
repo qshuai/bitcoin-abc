@@ -8,6 +8,7 @@
 
 #include "primitives/transaction.h"
 #include "script_error.h"
+#include "../primitives/transaction.h"
 
 #include <cstdint>
 #include <string>

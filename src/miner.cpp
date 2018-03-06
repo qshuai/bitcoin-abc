@@ -144,15 +144,15 @@ BlockAssembler::CreateNewBlock(const CScript &scriptPubKeyIn) {
 
     resetBlock();
 
-    pblocktemplate.reset(new CBlockTemplate());
-    if (!pblocktemplate.get()) {
+    pblocktemplate.reset(new CBlockTemplate());     // 创建block魔板
+    if (!pblocktemplate.get()) {        // 创建失败返回
         return nullptr;
     }
 
     // Pointer for convenience.
     pblock = &pblocktemplate->block;
 
-    // Add dummy coinbase tx as first transaction.
+    // Add dummy coinbase tx as first transaction.       创币交易
     pblock->vtx.emplace_back();
     // updated at end
     pblocktemplate->vTxFees.push_back(-1);
@@ -189,20 +189,18 @@ BlockAssembler::CreateNewBlock(const CScript &scriptPubKeyIn) {
     nLastBlockTx = nBlockTx;
     nLastBlockSize = nBlockSize;
 
-    // Create coinbase transaction.
+    // Create coinbase transaction.     // 创建创币交易
     CMutableTransaction coinbaseTx;
     coinbaseTx.vin.resize(1);
     coinbaseTx.vin[0].prevout.SetNull();
     coinbaseTx.vout.resize(1);
-    coinbaseTx.vout[0].scriptPubKey = scriptPubKeyIn;
-    coinbaseTx.vout[0].nValue =
-        nFees + GetBlockSubsidy(nHeight, chainparams.GetConsensus());
+    coinbaseTx.vout[0].scriptPubKey = scriptPubKeyIn;       // 锁定脚本
+    coinbaseTx.vout[0].nValue = nFees + GetBlockSubsidy(nHeight, chainparams.GetConsensus());
     coinbaseTx.vin[0].scriptSig = CScript() << nHeight << OP_0;
-    pblock->vtx[0] = MakeTransactionRef(coinbaseTx);
+    pblock->vtx[0] = MakeTransactionRef(coinbaseTx);            // 将创币交易加入到区块交易中
     pblocktemplate->vTxFees[0] = -1 * nFees;
 
-    uint64_t nSerializeSize =
-        GetSerializeSize(*pblock, SER_NETWORK, PROTOCOL_VERSION);
+    uint64_t nSerializeSize = GetSerializeSize(*pblock, SER_NETWORK, PROTOCOL_VERSION);
 
     LogPrintf("CreateNewBlock(): total size: %u txs: %u fees: %ld sigops %d\n",
               nSerializeSize, nBlockTx, nFees, nBlockSigOps);
@@ -210,8 +208,7 @@ BlockAssembler::CreateNewBlock(const CScript &scriptPubKeyIn) {
     // Fill in header.
     pblock->hashPrevBlock = pindexPrev->GetBlockHash();
     UpdateTime(pblock, chainparams.GetConsensus(), pindexPrev);
-    pblock->nBits =
-        GetNextWorkRequired(pindexPrev, pblock, chainparams.GetConsensus());
+    pblock->nBits = GetNextWorkRequired(pindexPrev, pblock, chainparams.GetConsensus());
     pblock->nNonce = 0;
     pblocktemplate->vTxSigOpsCount[0] =
         GetSigOpCountWithoutP2SH(*pblock->vtx[0]);

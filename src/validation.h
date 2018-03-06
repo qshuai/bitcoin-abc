@@ -530,7 +530,7 @@ public:
           nIn(nInIn), nFlags(nFlagsIn), cacheStore(cacheIn),
           error(SCRIPT_ERR_UNKNOWN_ERROR), txdata(txdataIn) {}
 
-    bool operator()();
+    bool operator()();      // 重载括号运算符表示可调用
 
     void swap(CScriptCheck &check) {
         scriptPubKey.swap(check.scriptPubKey);

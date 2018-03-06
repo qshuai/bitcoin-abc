@@ -10,6 +10,7 @@
 #include "protocol.h"
 #include "util.h"
 #include "utilstrencodings.h"
+#include "../util.h"
 
 #include <cstdint>
 
@@ -67,26 +68,25 @@ bool CDBEnv::Open(const boost::filesystem::path &pathIn) {
 
     strPath = pathIn.string();
     boost::filesystem::path pathLogDir = pathIn / "database";
-    TryCreateDirectory(pathLogDir);
+    TryCreateDirectory(pathLogDir);         // 创建database目录，这个目录用于输出log
     boost::filesystem::path pathErrorFile = pathIn / "db.log";
-    LogPrintf("CDBEnv::Open: LogDir=%s ErrorFile=%s\n", pathLogDir.string(),
-              pathErrorFile.string());
+    LogPrintf("CDBEnv::Open: LogDir=%s ErrorFile=%s\n", pathLogDir.string(), pathErrorFile.string());
 
     unsigned int nEnvFlags = 0;
     if (GetBoolArg("-privdb", DEFAULT_WALLET_PRIVDB)) nEnvFlags |= DB_PRIVATE;
 
-    dbenv->set_lg_dir(pathLogDir.string().c_str());
+    dbenv->set_lg_dir(pathLogDir.string().c_str());         // 设置log目录
     // 1 MiB should be enough for just the wallet
     dbenv->set_cachesize(0, 0x100000, 1);
     dbenv->set_lg_bsize(0x10000);
-    dbenv->set_lg_max(1048576);
-    dbenv->set_lk_max_locks(40000);
-    dbenv->set_lk_max_objects(40000);
+    dbenv->set_lg_max(1048576);         // 单个log文件最大大小，byte为单位
+    dbenv->set_lk_max_locks(40000);     // 最大锁数量
+    dbenv->set_lk_max_objects(40000);   // 设置由BerkeleyDB锁子系统支持的同时锁定对象的最大数目。
     /// debug
-    dbenv->set_errfile(fopen(pathErrorFile.string().c_str(), "a"));
-    dbenv->set_flags(DB_AUTO_COMMIT, 1);
+    dbenv->set_errfile(fopen(pathErrorFile.string().c_str(), "a"));  // 设置错误信息存储文件路径
+    dbenv->set_flags(DB_AUTO_COMMIT, 1);        // 设置数据库环境的标置值，也可以配置使用环境的db_config文件
     dbenv->set_flags(DB_TXN_WRITE_NOSYNC, 1);
-    dbenv->log_set_config(DB_LOG_AUTO_REMOVE, 1);
+    dbenv->log_set_config(DB_LOG_AUTO_REMOVE, 1);       // 对日志文件的配置设置。DB_LOG_AUTO_REMOVE表示自动删除多余的内容，防止无限增加。
     int ret =
         dbenv->open(strPath.c_str(),
                     DB_CREATE | DB_INIT_LOCK | DB_INIT_LOG | DB_INIT_MPOOL |
@@ -130,8 +130,7 @@ void CDBEnv::MakeMock() {
 }
 
 CDBEnv::VerifyResult
-CDBEnv::Verify(const std::string &strFile,
-               bool (*recoverFunc)(CDBEnv &dbenv, const std::string &strFile)) {
+CDBEnv::Verify(const std::string &strFile, bool (*recoverFunc)(CDBEnv &dbenv, const std::string &strFile)) {
     LOCK(cs_db);
     assert(mapFileUseCount.count(strFile) == 0);
 

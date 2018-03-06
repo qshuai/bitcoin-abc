@@ -20,7 +20,7 @@ public:
     //!< number of blocks stored in file
     unsigned int nBlocks;       // 区块数量
     //!< number of used bytes of block file
-    unsigned int nSize;         // block文件大小
+    unsigned int nSize;             // block文件大小
     //!< number of used bytes in the undo file
     unsigned int nUndoSize;     // undo rev文件大小
 
