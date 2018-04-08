@@ -10,6 +10,9 @@
 #include "util.h"
 #include "utilstrencodings.h"
 #include "script.h"
+#include "standard.h"
+#include "../uint256.h"
+#include "../hash.h"
 
 typedef std::vector<uint8_t> valtype;
 

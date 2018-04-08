@@ -42,6 +42,7 @@ bool CBasicKeyStore::AddCScript(const CScript &redeemScript) {
                      MAX_SCRIPT_ELEMENT_SIZE);
 
     LOCK(cs_KeyStore);
+    // 以两次Hash160的结构作为key，以脚本本身作为值，存储起来
     mapScripts[CScriptID(redeemScript)] = redeemScript;
     return true;
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <config>
     <source_groups>
-        <source_group_4ce9d1e7-a246-489e-bc7a-2b4dac4499d1>
+        <source_group_ee316419-dcec-4aff-bdd6-3f681767d118>
             <build_file_path>
                 <compilation_db_path>compile_commands.json</compilation_db_path>
             </build_file_path>
@@ -11,7 +11,7 @@
                 <source_path>src</source_path>
             </source_paths>
             <type>C/C++ from Compilation Database</type>
-        </source_group_4ce9d1e7-a246-489e-bc7a-2b4dac4499d1>
+        </source_group_ee316419-dcec-4aff-bdd6-3f681767d118>
     </source_groups>
     <version>4</version>
 </config>

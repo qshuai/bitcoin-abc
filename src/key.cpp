@@ -204,8 +204,7 @@ bool CKey::Sign(const uint256 &hash, std::vector<uint8_t> &vchSig,
                                    begin(), secp256k1_nonce_function_rfc6979,
                                    test_case ? extra_entropy : nullptr);
     assert(ret);
-    secp256k1_ecdsa_signature_serialize_der(
-        secp256k1_context_sign, (uint8_t *)&vchSig[0], &nSigLen, &sig);
+    secp256k1_ecdsa_signature_serialize_der(secp256k1_context_sign, (uint8_t *)&vchSig[0], &nSigLen, &sig);
     vchSig.resize(nSigLen);
     return true;
 }

@@ -24,6 +24,20 @@
 #include "uint256.h"
 #include "utilstrencodings.h"
 #include "validation.h"
+#include "../script/sign.h"
+#include "../primitives/transaction.h"
+#include "../script/interpreter.h"
+#include "../policy/policy.h"
+#include "../univalue/include/univalue.h"
+#include "../core_io.h"
+#include "../utilstrencodings.h"
+#include "../config.h"
+#include "server.h"
+#include "../coins.h"
+#include "protocol.h"
+#include "../keystore.h"
+#include "../base58.h"
+
 #ifdef ENABLE_WALLET
 #include "wallet/wallet.h"
 #endif
@@ -963,6 +977,7 @@ static UniValue signrawtransaction(const Config &config,
                 if (!v.isNull()) {
                     std::vector<uint8_t> rsData(ParseHexV(v, "redeemScript"));
                     CScript redeemScript(rsData.begin(), rsData.end());
+                    // 写入赎回脚本
                     tempKeystore.AddCScript(redeemScript);
                 }
             }
@@ -1032,8 +1047,7 @@ static UniValue signrawtransaction(const Config &config,
         SignatureData sigdata;
         // Only sign SIGHASH_SINGLE if there's a corresponding output:
         if (!fHashSingle || (i < mergedTx.vout.size())) {
-            ProduceSignature(MutableTransactionSignatureCreator(
-                                 &keystore, &mergedTx, i, amount, nHashType),
+            ProduceSignature(MutableTransactionSignatureCreator(&keystore, &mergedTx, i, amount, nHashType),
                              prevPubKey, sigdata);
         }
 

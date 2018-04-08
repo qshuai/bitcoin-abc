@@ -130,16 +130,14 @@ void BlockAssembler::resetBlock() {
     blockFinished = false;
 }
 
-static const std::vector<uint8_t>
-getExcessiveBlockSizeSig(const Config &config) {
+static const std::vector<uint8_t> getExcessiveBlockSizeSig(const Config &config) {
     std::string cbmsg = "/EB" + getSubVersionEB(config.GetMaxBlockSize()) + "/";
     const char *cbcstr = cbmsg.c_str();
     std::vector<uint8_t> vec(cbcstr, cbcstr + cbmsg.size());
     return vec;
 }
 
-std::unique_ptr<CBlockTemplate>
-BlockAssembler::CreateNewBlock(const CScript &scriptPubKeyIn) {
+std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript &scriptPubKeyIn) {
     int64_t nTimeStart = GetTimeMicros();
 
     resetBlock();
