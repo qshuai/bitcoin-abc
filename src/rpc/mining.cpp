@@ -24,6 +24,12 @@
 #include "utilstrencodings.h"
 #include "validation.h"
 #include "validationinterface.h"
+#include "../univalue/include/univalue.h"
+#include "server.h"
+#include "../validation.h"
+#include "../chainparams.h"
+#include "../miner.h"
+#include "../utilstrencodings.h"
 
 #include <univalue.h>
 

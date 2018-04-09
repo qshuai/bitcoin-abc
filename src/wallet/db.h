@@ -12,6 +12,7 @@
 #include "streams.h"
 #include "sync.h"
 #include "version.h"
+#include "../sync.h"
 
 #include <map>
 #include <string>
@@ -84,7 +85,7 @@ public:
     }
 };
 
-extern CDBEnv bitdb;
+extern CDBEnv bitdb;            // 可导出字段
 
 /** RAII class that provides access to a Berkeley database */
 class CDB {

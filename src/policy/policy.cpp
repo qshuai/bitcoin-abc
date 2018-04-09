@@ -12,6 +12,11 @@
 #include "util.h"
 #include "utilstrencodings.h"
 #include "validation.h"
+#include "../primitives/transaction.h"
+#include "../coins.h"
+#include "../script/standard.h"
+#include "../script/interpreter.h"
+#include "policy.h"
 
 /**
  * Check transaction inputs to mitigate two potential denial-of-service attacks:
@@ -106,8 +111,7 @@ bool IsStandardTx(const CTransaction &tx, std::string &reason) {
     return true;
 }
 
-bool AreInputsStandard(const CTransaction &tx,
-                       const CCoinsViewCache &mapInputs) {
+bool AreInputsStandard(const CTransaction &tx, const CCoinsViewCache &mapInputs) {
     if (tx.IsCoinBase()) {
         // Coinbases don't use vin normally.
         return true;
@@ -126,8 +130,7 @@ bool AreInputsStandard(const CTransaction &tx,
             std::vector<std::vector<uint8_t>> stack;
             // convert the scriptSig into a stack, so we can inspect the
             // redeemScript
-            if (!EvalScript(stack, tx.vin[i].scriptSig, SCRIPT_VERIFY_NONE,
-                            BaseSignatureChecker()))
+            if (!EvalScript(stack, tx.vin[i].scriptSig, SCRIPT_VERIFY_NONE, BaseSignatureChecker()))
                 return false;
             if (stack.empty()) return false;
             CScript subscript(stack.back().begin(), stack.back().end());

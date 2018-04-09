@@ -774,7 +774,7 @@ void CNode::SetSendVersion(int nVersionIn) {
 int CNode::GetSendVersion() const {
     // The send version should always be explicitly set to INIT_PROTO_VERSION
     // rather than using this value until SetSendVersion has been called.
-    if (nSendVersion == 0) {
+    if (nSendVersion == 0) {            // 判断版本号是否正确
         error("Requesting unset send version for node: %i. Using %i", id,
               INIT_PROTO_VERSION);
         return INIT_PROTO_VERSION;

@@ -7,6 +7,8 @@
 #define BITCOIN_SCRIPT_SIGCACHE_H
 
 #include "script/interpreter.h"
+#include "../uint256.h"
+#include "interpreter.h"
 
 #include <vector>
 

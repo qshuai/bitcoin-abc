@@ -12,6 +12,14 @@
 #include "sync.h"
 #include "util.h"
 #include "validation.h"
+#include "../crypto/sha256.h"
+#include "../uint256.h"
+#include "../util.h"
+#include "../sync.h"
+#include "../random.h"
+#include "sigcache.h"
+#include "../cuckoocache.h"
+#include "../validation.h"
 
 static CuckooCache::cache<uint256, SignatureCacheHasher> scriptExecutionCache;
 static uint256 scriptExecutionCacheNonce(GetRandHash());
@@ -30,12 +38,13 @@ void InitScriptExecutionCache() {
               (nElems * sizeof(uint256)) >> 20, nMaxCacheSize >> 20, nElems);
 }
 
-uint256 GetScriptCacheKey(const CTransaction &tx, uint32_t flags) {
+uint256
+GetScriptCacheKey(const CTransaction &tx, uint32_t flags) {
     uint256 key;
     // We only use the first 19 bytes of nonce to avoid a second SHA round -
     // giving us 19 + 32 + 4 = 55 bytes (+ 8 + 1 = 64)
-    static_assert(55 - sizeof(flags) - 32 >= 128 / 8,
-                  "Want at least 128 bits of nonce for script execution cache");
+    static_assert(55 - sizeof(flags) - 32 >= 128 / 8, "Want at least 128 bits of nonce for script execution cache");
+
     CSHA256()
         .Write(scriptExecutionCacheNonce.begin(), 55 - sizeof(flags) - 32)
         .Write(tx.GetHash().begin(), 32)

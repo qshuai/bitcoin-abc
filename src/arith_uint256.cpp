@@ -47,13 +47,14 @@ base_uint<BITS> &base_uint<BITS>::operator>>=(unsigned int shift) {
     return *this;
 }
 
+// 计算和
 template <unsigned int BITS>
 base_uint<BITS> &base_uint<BITS>::operator*=(uint32_t b32) {
     uint64_t carry = 0;
     for (int i = 0; i < WIDTH; i++) {
         uint64_t n = carry + (uint64_t)b32 * pn[i];
-        pn[i] = n & 0xffffffff;
-        carry = n >> 32;
+        pn[i] = n & 0xffffffff;         // 保留低位
+        carry = n >> 32;                // 高位变低位
     }
     return *this;
 }
@@ -150,14 +151,15 @@ template <unsigned int BITS> std::string base_uint<BITS>::ToString() const {
 
 template <unsigned int BITS> unsigned int base_uint<BITS>::bits() const {
     for (int pos = WIDTH - 1; pos >= 0; pos--) {
-        if (pn[pos]) {
-            for (int bits = 31; bits > 0; bits--) {
-                if (pn[pos] & 1 << bits) return 32 * pos + bits + 1;
+        if (pn[pos]) {          // 找到第一个不为0的数字
+            for (int bits = 31; bits > 0; bits--) { // 条件bits > 0也就可能有了之后的一个return
+                if (pn[pos] & 1 << bits)            // 找到一个不为0的最高位
+                    return 32 * pos + bits + 1;
             }
-            return 32 * pos + 1;
+            return 32 * pos + 1;          // 一个数不为零，但是之后最低比特位上有值，就返回这个
         }
     }
-    return 0;
+    return 0;           // 全部为0
 }
 
 // Explicit instantiations for base_uint<256>
@@ -178,8 +180,8 @@ template unsigned int base_uint<256>::bits() const;
 
 // This implementation directly uses shifts instead of going through an
 // intermediate MPI representation.
-arith_uint256 &arith_uint256::SetCompact(uint32_t nCompact, bool *pfNegative,
-                                         bool *pfOverflow) {
+// 工作量证明相关逻辑， 不清楚 todo confirm
+arith_uint256 &arith_uint256::SetCompact(uint32_t nCompact, bool *pfNegative, bool *pfOverflow) {
     int nSize = nCompact >> 24;
     uint32_t nWord = nCompact & 0x007fffff;
     if (nSize <= 3) {
@@ -226,9 +228,11 @@ uint256 ArithToUint256(const arith_uint256 &a) {
         WriteLE32(b.begin() + x * 4, a.pn[x]);
     return b;
 }
+
+// 将a中data的元素每4字节解释成b中data的一个uint32数值
 arith_uint256 UintToArith256(const uint256 &a) {
     arith_uint256 b;
-    for (int x = 0; x < b.WIDTH; ++x)
-        b.pn[x] = ReadLE32(a.begin() + x * 4);
+    for (int x = 0; x < b.WIDTH; ++x)               // a的data长度为32，b的data长度为8，正好为4的倍数
+        b.pn[x] = ReadLE32(a.begin() + x * 4);      // a.begin()返回data[0]
     return b;
 }

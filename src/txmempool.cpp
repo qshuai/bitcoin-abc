@@ -1054,8 +1054,7 @@ bool CTxMemPool::HasNoInputsOf(const CTransaction &tx) const {
     return true;
 }
 
-CCoinsViewMemPool::CCoinsViewMemPool(CCoinsView *baseIn,
-                                     const CTxMemPool &mempoolIn)
+CCoinsViewMemPool::CCoinsViewMemPool(CCoinsView *baseIn, const CTxMemPool &mempoolIn)
     : CCoinsViewBacked(baseIn), mempool(mempoolIn) {}
 
 bool CCoinsViewMemPool::GetCoin(const COutPoint &outpoint, Coin &coin) const {

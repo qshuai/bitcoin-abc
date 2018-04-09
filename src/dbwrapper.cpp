@@ -6,6 +6,9 @@
 
 #include "random.h"
 #include "util.h"
+#include "leveldb/include/leveldb/cache.h"
+#include "leveldb/include/leveldb/filter_policy.h"
+#include "leveldb/helpers/memenv/memenv.h"
 
 #include <boost/filesystem.hpp>
 
@@ -82,9 +85,13 @@ static leveldb::Options GetOptions(size_t nCacheSize) {
     options.filter_policy = leveldb::NewBloomFilterPolicy(10);
     options.compression = leveldb::kNoCompression;
     options.max_open_files = 64;
+<<<<<<< HEAD
     options.info_log = new CBitcoinLevelDBLogger();
     if (leveldb::kMajorVersion > 1 ||
         (leveldb::kMajorVersion == 1 && leveldb::kMinorVersion >= 16)) {
+=======
+    if (leveldb::kMajorVersion > 1 || (leveldb::kMajorVersion == 1 && leveldb::kMinorVersion >= 16)) {
+>>>>>>> dev
         // LevelDB versions before 1.16 consider short writes to be corruption.
         // Only trigger error on corruption in later versions.
         options.paranoid_checks = true;
@@ -159,8 +166,7 @@ CDBWrapper::~CDBWrapper() {
 }
 
 bool CDBWrapper::WriteBatch(CDBBatch &batch, bool fSync) {
-    leveldb::Status status =
-        pdb->Write(fSync ? syncoptions : writeoptions, &batch.batch);
+    leveldb::Status status = pdb->Write(fSync ? syncoptions : writeoptions, &batch.batch);
     dbwrapper_private::HandleError(status);
     return true;
 }

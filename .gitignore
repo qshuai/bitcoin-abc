@@ -1,4 +1,7 @@
 *.tar.gz
+.idea
+cmake-build-debug/
+CMakeFiles
 
 *.exe
 src/bitcoin

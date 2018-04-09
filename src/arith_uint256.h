@@ -23,8 +23,10 @@ public:
 /** Template base class for unsigned big integers. */
 template <unsigned int BITS> class base_uint {
 protected:
-    enum { WIDTH = BITS / 32 };
-    uint32_t pn[WIDTH];
+    enum { WIDTH = BITS / 32 };     // 以4字节为单位
+
+    // 小端编码，数组前面的元素为数字的低位，后面的元素为数字的高位
+    uint32_t pn[WIDTH];         // 如果BITS为256， 则WIDTH为8
 
 public:
     base_uint() {
@@ -188,7 +190,7 @@ public:
     }
     friend inline const base_uint operator-(const base_uint &a,
                                             const base_uint &b) {
-        return base_uint(a) -= b;
+        return base_uint(a) -= b;       // 同时修改了a的值
     }
     friend inline const base_uint operator*(const base_uint &a,
                                             const base_uint &b) {
@@ -258,8 +260,8 @@ public:
     unsigned int bits() const;
 
     uint64_t GetLow64() const {
-        assert(WIDTH >= 2);
-        return pn[0] | (uint64_t)pn[1] << 32;
+        assert(WIDTH >= 2);     // 至少有两个元素
+        return pn[0] | (uint64_t)pn[1] << 32;       // uint64完全能够覆盖一个uint32的数字左移32位
     }
 };
 

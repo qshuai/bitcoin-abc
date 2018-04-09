@@ -4,6 +4,8 @@
 
 #include "crypto/sha256.h"
 #include "crypto/common.h"
+#include "sha256.h"
+#include "common.h"
 
 #include <atomic>
 #include <cassert>

@@ -6,6 +6,7 @@
 #define BITCOIN_BLOCK_ENCODINGS_H
 
 #include "primitives/block.h"
+#include "serialize.h"
 
 #include <memory>
 
@@ -18,9 +19,7 @@ private:
     CTransactionRef &tx;
 
 public:
-    TransactionCompressor(CTransactionRef &txIn) : tx(txIn) {}
-
-    ADD_SERIALIZE_METHODS;
+    TransactionCompressor(CTransactionRef &txIn) : tx(txIn) {};
 
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream &s, Operation ser_action) {

@@ -13,14 +13,16 @@
 #include <cassert>
 
 #include "chainparamsseeds.h"
+#include "primitives/transaction.h"
+#include "amount.h"
+#include "script/script.h"
 
 // Far into the future.
 static const std::string ANTI_REPLAY_COMMITMENT =
     "Bitcoin: A Peer-to-Peer Electronic Cash System";
 
 static std::vector<uint8_t> GetAntiReplayCommitment() {
-    return std::vector<uint8_t>(std::begin(ANTI_REPLAY_COMMITMENT),
-                                std::end(ANTI_REPLAY_COMMITMENT));
+    return std::vector<uint8_t>(std::begin(ANTI_REPLAY_COMMITMENT), std::end(ANTI_REPLAY_COMMITMENT));
 }
 
 static CBlock CreateGenesisBlock(const char *pszTimestamp,
@@ -46,7 +48,7 @@ static CBlock CreateGenesisBlock(const char *pszTimestamp,
     genesis.nNonce = nNonce;
     genesis.nVersion = nVersion;
     genesis.vtx.push_back(MakeTransactionRef(std::move(txNew)));
-    genesis.hashPrevBlock.SetNull();
+    genesis.hashPrevBlock.SetNull();        // 创世区块的上一个区块hash为null，全为0
     genesis.hashMerkleRoot = BlockMerkleRoot(genesis);
     return genesis;
 }
@@ -200,8 +202,7 @@ public:
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x88, 0xAD, 0xE4};
         cashaddrPrefix = "bitcoincash";
 
-        vFixedSeeds = std::vector<SeedSpec6>(
-            pnSeed6_main, pnSeed6_main + ARRAYLEN(pnSeed6_main));
+        vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_main, pnSeed6_main + ARRAYLEN(pnSeed6_main));
 
         fMiningRequiresPeers = true;
         fDefaultConsistencyChecks = false;

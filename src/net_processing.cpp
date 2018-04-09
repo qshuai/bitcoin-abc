@@ -150,6 +150,8 @@ struct CBlockReject {
  * processing of incoming data is done after the ProcessMessage call returns,
  * and we're no longer holding the node's locks.
  */
+
+    // 节点状态
 struct CNodeState {
     //! The peer's address
     const CService address;
@@ -1396,6 +1398,8 @@ inline static void SendBlockTransactions(const CBlock &block,
                         msgMaker.Make(nSendFlags, NetMsgType::BLOCKTXN, resp));
 }
 
+// 通过这些代码我略微体会到了P2P网络的一些功能,各种结点之间的独立性，
+// 都是通过发送消息进行通信的。ProcessMessages侦听到消息后，通过循环消息队列调用ProcessMessage函数进行不同的消息处理。
 static bool ProcessMessage(const Config &config, CNode *pfrom,
                            const std::string &strCommand, CDataStream &vRecv,
                            int64_t nTimeReceived,
@@ -3105,9 +3109,9 @@ bool ProcessMessages(const Config &config, CNode *pfrom, CConnman &connman,
     //
     bool fMoreWork = false;
 
+    // 通过比较区块的高度进行判断是否要发送相应的消息进行数据的处理。
     if (!pfrom->vRecvGetData.empty()) {
-        ProcessGetData(config, pfrom, chainparams.GetConsensus(), connman,
-                       interruptMsgProc);
+        ProcessGetData(config, pfrom, chainparams.GetConsensus(), connman, interruptMsgProc);
     }
 
     if (pfrom->fDisconnect) {
@@ -3244,6 +3248,7 @@ public:
     }
 };
 
+// 发送消息
 bool SendMessages(const Config &config, CNode *pto, CConnman &connman,
                   const std::atomic<bool> &interruptMsgProc) {
     const Consensus::Params &consensusParams = Params().GetConsensus();

@@ -7,6 +7,8 @@
 #include "sync.h"
 #include "util.h"
 #include "version.h"
+#include "../sync.h"
+#include "../serialize.h"
 
 #include <cmath>
 #include <cstdint>

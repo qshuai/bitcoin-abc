@@ -39,6 +39,7 @@
 #include "validationinterface.h"
 #include "versionbits.h"
 #include "warnings.h"
+#include "script/interpreter.h"
 
 #include <atomic>
 #include <sstream>
@@ -49,6 +50,7 @@
 #include <boost/math/distributions/poisson.hpp>
 #include <boost/range/adaptor/reversed.hpp>
 #include <boost/thread.hpp>
+#include <stdio.h>
 
 #if defined(NDEBUG)
 #error "Bitcoin cannot be compiled without assertions."
@@ -223,8 +225,7 @@ enum FlushStateMode {
 };
 
 // See definition for documentation
-static bool FlushStateToDisk(CValidationState &state, FlushStateMode mode,
-                             int nManualPruneHeight = 0);
+static bool FlushStateToDisk(CValidationState &state, FlushStateMode mode, int nManualPruneHeight = 0);
 static void FindFilesToPruneManual(std::set<int> &setFilesToPrune,
                                    int nManualPruneHeight);
 static uint32_t GetBlockScriptFlags(const CBlockIndex *pindex,
@@ -669,16 +670,17 @@ static bool CheckInputsFromMempoolAndCache(const CTransaction &tx,
         }
     }
 
-    return CheckInputs(tx, state, view, true, flags, cacheSigStore, true,
-                       txdata);
+    return CheckInputs(tx, state, view, true, flags, cacheSigStore, true, txdata);
 }
 
+// 静态方法只能在当前文件中使用
 static bool AcceptToMemoryPoolWorker(
     const Config &config, CTxMemPool &pool, CValidationState &state,
     const CTransactionRef &ptx, bool fLimitFree, bool *pfMissingInputs,
     int64_t nAcceptTime, std::list<CTransactionRef> *plTxnReplaced,
     bool fOverrideMempoolLimit, const Amount nAbsurdFee,
     std::vector<COutPoint> &coins_to_uncache) {
+
     AssertLockHeld(cs_main);
 
     const CTransaction &tx = *ptx;
@@ -714,8 +716,7 @@ static bool AcceptToMemoryPoolWorker(
 
     // Is it already in the memory pool?
     if (pool.exists(txid)) {
-        return state.Invalid(false, REJECT_ALREADY_KNOWN,
-                             "txn-already-in-mempool");
+        return state.Invalid(false, REJECT_ALREADY_KNOWN, "txn-already-in-mempool");
     }
 
     // Check for conflicts with in-memory transactions
@@ -726,8 +727,7 @@ static bool AcceptToMemoryPoolWorker(
             auto itConflicting = pool.mapNextTx.find(txin.prevout);
             if (itConflicting != pool.mapNextTx.end()) {
                 // Disable replacement feature for good
-                return state.Invalid(false, REJECT_CONFLICT,
-                                     "txn-mempool-conflict");
+                return state.Invalid(false, REJECT_CONFLICT, "txn-mempool-conflict");
             }
         }
     }
@@ -1008,7 +1008,12 @@ static bool AcceptToMemoryPoolWithTime(
     const Config &config, CTxMemPool &pool, CValidationState &state,
     const CTransactionRef &tx, bool fLimitFree, bool *pfMissingInputs,
     int64_t nAcceptTime, std::list<CTransactionRef> *plTxnReplaced = nullptr,
+<<<<<<< HEAD
     bool fOverrideMempoolLimit = false, const Amount nAbsurdFee = Amount(0)) {
+=======
+    bool fOverrideMempoolLimit = false, const Amount nAbsurdFee = 0) {
+
+>>>>>>> dev
     std::vector<COutPoint> coins_to_uncache;
     bool res = AcceptToMemoryPoolWorker(
         config, pool, state, tx, fLimitFree, pfMissingInputs, nAcceptTime,
@@ -1330,8 +1335,7 @@ static void InvalidBlockFound(CBlockIndex *pindex,
     }
 }
 
-void UpdateCoins(const CTransaction &tx, CCoinsViewCache &inputs,
-                 CTxUndo &txundo, int nHeight) {
+void UpdateCoins(const CTransaction &tx, CCoinsViewCache &inputs, CTxUndo &txundo, int nHeight) {
     // Mark inputs spent.
     if (!tx.IsCoinBase()) {
         txundo.vprevout.reserve(tx.vin.size());
@@ -1396,8 +1400,7 @@ bool CheckTxInputs(const CTransaction &tx, CValidationState &state,
         // Check for negative or overflow input values
         nValueIn += coin.GetTxOut().nValue;
         if (!MoneyRange(coin.GetTxOut().nValue) || !MoneyRange(nValueIn)) {
-            return state.DoS(100, false, REJECT_INVALID,
-                             "bad-txns-inputvalues-outofrange");
+            return state.DoS(100, false, REJECT_INVALID, "bad-txns-inputvalues-outofrange");
         }
     }
 
@@ -1427,6 +1430,7 @@ bool CheckInputs(const CTransaction &tx, CValidationState &state,
                  uint32_t flags, bool sigCacheStore, bool scriptCacheStore,
                  const PrecomputedTransactionData &txdata,
                  std::vector<CScriptCheck> *pvChecks) {
+
     assert(!tx.IsCoinBase());
 
     if (!Consensus::CheckTxInputs(tx, state, inputs, GetSpendHeight(inputs))) {
@@ -1597,8 +1601,7 @@ bool AbortNode(CValidationState &state, const std::string &strMessage,
 } // namespace
 
 /** Restore the UTXO in a Coin at a given COutPoint. */
-DisconnectResult UndoCoinSpend(const Coin &undo, CCoinsViewCache &view,
-                               const COutPoint &out) {
+DisconnectResult UndoCoinSpend(const Coin &undo, CCoinsViewCache &view, const COutPoint &out) {
     bool fClean = true;
 
     if (view.HaveCoin(out)) {
@@ -1653,9 +1656,7 @@ static DisconnectResult DisconnectBlock(const CBlock &block,
     return ApplyBlockUndo(blockUndo, block, pindex, view);
 }
 
-DisconnectResult ApplyBlockUndo(const CBlockUndo &blockUndo,
-                                const CBlock &block, const CBlockIndex *pindex,
-                                CCoinsViewCache &view) {
+DisconnectResult ApplyBlockUndo(const CBlockUndo &blockUndo, const CBlock &block, const CBlockIndex *pindex, CCoinsViewCache &view) {
     bool fClean = true;
 
     if (blockUndo.vtxundo.size() + 1 != block.vtx.size()) {
@@ -1755,8 +1756,9 @@ int32_t ComputeBlockVersion(const CBlockIndex *pindexPrev,
     int32_t nVersion = VERSIONBITS_TOP_BITS;
 
     for (int i = 0; i < (int)Consensus::MAX_VERSION_BITS_DEPLOYMENTS; i++) {
-        ThresholdState state = VersionBitsState(
-            pindexPrev, params, (Consensus::DeploymentPos)i, versionbitscache);
+
+        ThresholdState state = VersionBitsState(pindexPrev, params, (Consensus::DeploymentPos)i, versionbitscache);
+
         if (state == THRESHOLD_LOCKED_IN || state == THRESHOLD_STARTED) {
             nVersion |= VersionBitsMask(params, (Consensus::DeploymentPos)i);
         }
@@ -1789,12 +1791,15 @@ public:
         return params.nRuleChangeActivationThreshold;
     }
 
+<<<<<<< HEAD
     bool Condition(const CBlockIndex *pindex,
                    const Consensus::Params &params) const override {
+=======
+    bool Condition(const CBlockIndex *pindex, const Consensus::Params &params) const {
+>>>>>>> dev
         return ((pindex->nVersion & VERSIONBITS_TOP_MASK) ==
                 VERSIONBITS_TOP_BITS) &&
-               ((pindex->nVersion >> bit) & 1) != 0 &&
-               ((ComputeBlockVersion(pindex->pprev, params) >> bit) & 1) == 0;
+               ((pindex->nVersion >> bit) & 1) != 0 && ((ComputeBlockVersion(pindex->pprev, params) >> bit) & 1) == 0;
     }
 };
 
@@ -2190,8 +2195,7 @@ static bool ConnectBlock(const Config &config, const CBlock &block,
  * they're too large, if it's been a while since the last write, or always and
  * in all cases if we're in prune mode and are deleting files.
  */
-static bool FlushStateToDisk(CValidationState &state, FlushStateMode mode,
-                             int nManualPruneHeight) {
+static bool FlushStateToDisk(CValidationState &state, FlushStateMode mode, int nManualPruneHeight) {
     int64_t nMempoolUsage = mempool.DynamicMemoryUsage();
     const CChainParams &chainparams = Params();
     LOCK2(cs_main, cs_LastBlockFile);
@@ -2815,7 +2819,7 @@ bool ActivateBestChain(const Config &config, CValidationState &state,
                 // then have it inadvertantly cleared by the notification that
                 // the conflicted transaction was evicted.
                 MemPoolConflictRemovalTracker mrt(mempool);
-                CBlockIndex *pindexOldTip = chainActive.Tip();
+                CBlockIndex *pindexOldTip = chainActive.Tip();      // 获取当前最长链
                 if (pindexMostWork == nullptr) {
                     pindexMostWork = FindMostWorkChain();
                 }
@@ -3467,8 +3471,7 @@ bool ContextualCheckBlock(const Config &config, const CBlock &block,
 
     // Start enforcing BIP113 (Median Time Past) using versionbits logic.
     int nLockTimeFlags = 0;
-    if (VersionBitsState(pindexPrev, consensusParams, Consensus::DEPLOYMENT_CSV,
-                         versionbitscache) == THRESHOLD_ACTIVE) {
+    if (VersionBitsState(pindexPrev, consensusParams, Consensus::DEPLOYMENT_CSV, versionbitscache) == THRESHOLD_ACTIVE) {
         nLockTimeFlags |= LOCKTIME_MEDIAN_TIME_PAST;
     }
 
@@ -3831,9 +3834,7 @@ void PruneOneBlockFile(const int fileNumber) {
             // to be downloaded again in order to consider its chain, at which
             // point it would be considered as a candidate for
             // mapBlocksUnlinked or setBlockIndexCandidates.
-            std::pair<std::multimap<CBlockIndex *, CBlockIndex *>::iterator,
-                      std::multimap<CBlockIndex *, CBlockIndex *>::iterator>
-                range = mapBlocksUnlinked.equal_range(pindex->pprev);
+            std::pair<std::multimap<CBlockIndex *, CBlockIndex *>::iterator, std::multimap<CBlockIndex *, CBlockIndex *>::iterator> range = mapBlocksUnlinked.equal_range(pindex->pprev);
             while (range.first != range.second) {
                 std::multimap<CBlockIndex *, CBlockIndex *>::iterator _it =
                     range.first;
@@ -4417,8 +4418,7 @@ bool InitBlockIndex(const Config &config) {
             const CChainParams &chainparams = config.GetChainParams();
             CBlock &block = const_cast<CBlock &>(chainparams.GenesisBlock());
             // Start new block file
-            unsigned int nBlockSize =
-                ::GetSerializeSize(block, SER_DISK, CLIENT_VERSION);
+            unsigned int nBlockSize = ::GetSerializeSize(block, SER_DISK, CLIENT_VERSION);
             CDiskBlockPos blockPos;
             CValidationState state;
             if (!FindBlockPos(state, blockPos, nBlockSize + 8, 0,
@@ -4446,8 +4446,7 @@ bool InitBlockIndex(const Config &config) {
     return true;
 }
 
-bool LoadExternalBlockFile(const Config &config, FILE *fileIn,
-                           CDiskBlockPos *dbp) {
+bool LoadExternalBlockFile(const Config &config, FILE *fileIn, CDiskBlockPos *dbp) {
     // Map of disk positions for blocks with unknown parent (only used for
     // reindex)
     static std::multimap<uint256, CDiskBlockPos> mapBlocksUnknownParent;
@@ -5045,11 +5044,9 @@ void DumpMempool(void) {
         file << mapDeltas;
         FileCommit(file.Get());
         file.fclose();
-        RenameOver(GetDataDir() / "mempool.dat.new",
-                   GetDataDir() / "mempool.dat");
+        RenameOver(GetDataDir() / "mempool.dat.new", GetDataDir() / "mempool.dat");
         int64_t last = GetTimeMicros();
-        LogPrintf("Dumped mempool: %gs to copy, %gs to dump\n",
-                  (mid - start) * 0.000001, (last - mid) * 0.000001);
+        LogPrintf("Dumped mempool: %gs to copy, %gs to dump\n", (mid - start) * 0.000001, (last - mid) * 0.000001);
     } catch (const std::exception &e) {
         LogPrintf("Failed to dump mempool: %s. Continuing anyway.\n", e.what());
     }

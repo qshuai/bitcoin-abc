@@ -19,10 +19,10 @@
 template <unsigned int BITS> class base_blob {
 protected:
     enum { WIDTH = BITS / 8 };
-    uint8_t data[WIDTH];
+    uint8_t data[WIDTH];        // 如果BITS为256，则WIDTH为32
 
 public:
-    base_blob() { memset(data, 0, sizeof(data)); }
+    base_blob() { memset(data, 0, sizeof(data)); }      // sizeof 为32(因为为uint8类型元素)
 
     explicit base_blob(const std::vector<uint8_t> &vch);
 

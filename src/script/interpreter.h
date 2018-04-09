@@ -8,7 +8,11 @@
 
 #include "primitives/transaction.h"
 #include "script_error.h"
+<<<<<<< HEAD
 #include "sighashtype.h"
+=======
+#include "../primitives/transaction.h"
+>>>>>>> dev
 
 #include <cstdint>
 #include <string>

@@ -46,7 +46,11 @@
 #include "wallet/wallet.h"
 #endif
 #include "warnings.h"
+<<<<<<< HEAD
 
+=======
+#include "consensus/consensus.h"
+>>>>>>> dev
 #include <cstdint>
 #include <cstdio>
 #include <memory>
@@ -1028,7 +1032,7 @@ void ThreadImport(const Config &config, std::vector<fs::path> vImportFiles) {
         // scan for better chains in the block chain database, that are not yet
         // connected in the active best chain
         CValidationState state;
-        if (!ActivateBestChain(config, state)) {
+        if (!ActivateBestChain(config, state)) {        // 查找最长链
             LogPrintf("Failed to connect best block");
             StartShutdown();
         }
@@ -1208,18 +1212,17 @@ ServiceFlags nLocalServices = NODE_NETWORK;
 };
 
 bool AppInitBasicSetup() {
-// Step 1: setup
-#ifdef _MSC_VER
+// Step 1: setup        // 设置第一步
+#ifdef _MSC_VER         // log输出级别为warning
     // Turn off Microsoft heap dump noise
     _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
-    _CrtSetReportFile(_CRT_WARN, CreateFileA("NUL", GENERIC_WRITE, 0, nullptr,
-                                             OPEN_EXISTING, 0, 0));
+    _CrtSetReportFile(_CRT_WARN, CreateFileA("NUL", GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, 0, 0));
 #endif
-#if _MSC_VER >= 1400
+#if _MSC_VER >= 1400        // 中断消息处理
     // Disable confusing "helpful" text message on abort, Ctrl-C
     _set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
 #endif
-#ifdef WIN32
+#ifdef WIN32            // 设置socket连接
 // Enable Data Execution Prevention (DEP)
 // Minimum supported OS versions: WinXP SP3, WinVista >= SP1, Win Server 2008
 // A failure is non-critical and needs no further attention!
@@ -1235,14 +1238,15 @@ bool AppInitBasicSetup() {
     if (setProcDEPPol != nullptr) setProcDEPPol(PROCESS_DEP_ENABLE);
 #endif
 
-    if (!SetupNetworking()) return InitError("Initializing networking failed");
+    if (!SetupNetworking())
+        return InitError("Initializing networking failed");
 
-#ifndef WIN32
+#ifndef WIN32           // 信号处理
     if (!GetBoolArg("-sysperms", false)) {
         umask(077);
     }
 
-    // Clean shutdown on SIGTERM
+    // Clean shutdown on SIGTERM        // 信号终止
     struct sigaction sa;
     sa.sa_handler = HandleSIGTERM;
     sigemptyset(&sa.sa_mask);
@@ -1250,7 +1254,7 @@ bool AppInitBasicSetup() {
     sigaction(SIGTERM, &sa, nullptr);
     sigaction(SIGINT, &sa, nullptr);
 
-    // Reopen debug.log on SIGHUP
+    // Reopen debug.log on SIGHUP       // 信号挂起
     struct sigaction sa_hup;
     sa_hup.sa_handler = HandleSIGHUP;
     sigemptyset(&sa_hup.sa_mask);
@@ -1305,8 +1309,7 @@ bool AppInitParameterInteraction(Config &config) {
                           (int)(FD_SETSIZE - nBind - MIN_CORE_FILEDESCRIPTORS -
                                 MAX_ADDNODE_CONNECTIONS)),
                  0);
-    nFD = RaiseFileDescriptorLimit(nMaxConnections + MIN_CORE_FILEDESCRIPTORS +
-                                   MAX_ADDNODE_CONNECTIONS);
+    nFD = RaiseFileDescriptorLimit(nMaxConnections + MIN_CORE_FILEDESCRIPTORS + MAX_ADDNODE_CONNECTIONS);
     if (nFD < MIN_CORE_FILEDESCRIPTORS)
         return InitError(_("Not enough file descriptors available."));
     nMaxConnections =
@@ -1340,8 +1343,7 @@ bool AppInitParameterInteraction(Config &config) {
 
     // Check for -debugnet
     if (GetBoolArg("-debugnet", false))
-        InitWarning(
-            _("Unsupported argument -debugnet ignored, use -debug=net."));
+        InitWarning(_("Unsupported argument -debugnet ignored, use -debug=net."));      // 提示已经不支持-debugnet参数
     // Check for -socks - as this is a privacy risk to continue, exit here
     if (IsArgSet("-socks"))
         return InitError(
@@ -1391,7 +1393,7 @@ bool AppInitParameterInteraction(Config &config) {
     int64_t nMempoolSizeMin =
         GetArg("-limitdescendantsize", DEFAULT_DESCENDANT_SIZE_LIMIT) * 1000 *
         40;
-    if (nMempoolSizeMax < 0 || nMempoolSizeMax < nMempoolSizeMin)
+    if (nMempoolSizeMax < 0 || nMempoolSizeMax < nMempoolSizeMin)           // nMempoolSizeMax参数错误
         return InitError(strprintf(_("-maxmempool must be at least %d MB"),
                                    std::ceil(nMempoolSizeMin / 1000000.0)));
     // Incremental relay fee sets the minimimum feerate increase necessary for
@@ -1400,8 +1402,7 @@ bool AppInitParameterInteraction(Config &config) {
     if (IsArgSet("-incrementalrelayfee")) {
         Amount n(0);
         if (!ParseMoney(GetArg("-incrementalrelayfee", ""), n))
-            return InitError(AmountErrMsg("incrementalrelayfee",
-                                          GetArg("-incrementalrelayfee", "")));
+            return InitError(AmountErrMsg("incrementalrelayfee", GetArg("-incrementalrelayfee", "")));
         incrementalRelayFee = CFeeRate(n);
     }
 
@@ -1470,10 +1471,16 @@ bool AppInitParameterInteraction(Config &config) {
     // be careful setting this: if you set it to zero then a transaction spammer
     // can cheaply fill blocks using 1-satoshi-fee transactions. It should be
     // set above the real cost to you of processing a transaction.
+<<<<<<< HEAD
     if (IsArgSet("-minrelaytxfee")) {
         Amount n(0);
         auto parsed = ParseMoney(GetArg("-minrelaytxfee", ""), n);
         if (!parsed || Amount(0) == n)
+=======
+    if (IsArgSet("-minrelaytxfee")) {       // 最小中继交易费
+        Amount n = 0;
+        if (!ParseMoney(GetArg("-minrelaytxfee", ""), n) || 0 == n)
+>>>>>>> dev
             return InitError(
                 AmountErrMsg("minrelaytxfee", GetArg("-minrelaytxfee", "")));
         // High fee check is done afterward in CWallet::ParameterInteraction()
@@ -1615,6 +1622,7 @@ static bool LockDataDirectory(bool probeOnly) {
     return true;
 }
 
+// 可用性检测
 bool AppInitSanityChecks() {
     // Step 4: sanity checks
 
@@ -1707,7 +1715,7 @@ bool AppInitMain(Config &config, boost::thread_group &threadGroup,
 
     int64_t nStart;
 
-// Step 5: verify wallet database integrity
+// Step 5: verify wallet database integrity     // 验证钱包数据完整性
 #ifdef ENABLE_WALLET
     if (!CWallet::Verify()) {
         return false;
@@ -1882,11 +1890,40 @@ bool AppInitMain(Config &config, boost::thread_group &threadGroup,
             GetArg("-maxuploadtarget", DEFAULT_MAX_UPLOAD_TARGET) * 1024 * 1024;
     }
 
-    // Step 7: load block chain
+    // Step 7: load block chain     // 加载区块链
 
     fReindex = GetBoolArg("-reindex", false);
     bool fReindexChainState = GetBoolArg("-reindex-chainstate", false);
 
+<<<<<<< HEAD
+=======
+    // Upgrading to 0.8; hard-link the old blknnnn.dat files into /blocks/
+    boost::filesystem::path blocksDir = GetDataDir() / "blocks";
+    if (!boost::filesystem::exists(blocksDir)) {
+        boost::filesystem::create_directories(blocksDir);       // 创建blocks目录
+        bool linked = false;
+        for (unsigned int i = 1; i < 10000; i++) {
+            boost::filesystem::path source = GetDataDir() / strprintf("blk%04u.dat", i);
+            if (!boost::filesystem::exists(source))
+                break;
+            boost::filesystem::path dest = blocksDir / strprintf("blk%05u.dat", i - 1);
+            try {
+                boost::filesystem::create_hard_link(source, dest);      // 创建硬链接
+                LogPrintf("Hardlinked %s -> %s\n", source.string(), dest.string());
+                linked = true;
+            } catch (const boost::filesystem::filesystem_error &e) {
+                // Note: hardlink creation failing is not a disaster, it just
+                // means blocks will get re-downloaded from peers.
+                LogPrintf("Error hardlinking blk%04u.dat: %s\n", i, e.what());
+                break;
+            }
+        }
+        if (linked) {
+            fReindex = true;        // 如果硬链接创建成功，就要对区块重建索引
+        }
+    }
+
+>>>>>>> dev
     // cache size calculations
     int64_t nTotalCache = (GetArg("-dbcache", nDefaultDbCache) << 20);
     // total cache cannot be less than nMinDbCache
@@ -1931,18 +1968,19 @@ bool AppInitMain(Config &config, boost::thread_group &threadGroup,
         do {
             try {
                 UnloadBlockIndex();
+                // 清除之前的区块数据和对象
                 delete pcoinsTip;
                 delete pcoinsdbview;
                 delete pcoinscatcher;
                 delete pblocktree;
 
-                pblocktree =
-                    new CBlockTreeDB(nBlockTreeDBCache, false, fReindex);
-                pcoinsdbview = new CCoinsViewDB(nCoinDBCache, false,
-                                                fReindex || fReindexChainState);
+                // 初始化相应的区块数据对象
+                pblocktree = new CBlockTreeDB(nBlockTreeDBCache, false, fReindex);
+                pcoinsdbview = new CCoinsViewDB(nCoinDBCache, false, fReindex || fReindexChainState);
                 pcoinscatcher = new CCoinsViewErrorCatcher(pcoinsdbview);
                 pcoinsTip = new CCoinsViewCache(pcoinscatcher);
 
+                // 加载区块链数据索引
                 if (fReindex) {
                     pblocktree->WriteReindexing(true);
                     // If we're reindexing in prune mode, wipe away unusable

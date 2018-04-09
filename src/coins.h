@@ -12,6 +12,7 @@
 #include "memusage.h"
 #include "serialize.h"
 #include "uint256.h"
+#include "amount.h"
 
 #include <cassert>
 #include <cstdint>

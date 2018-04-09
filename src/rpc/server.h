@@ -9,6 +9,7 @@
 #include "amount.h"
 #include "rpc/protocol.h"
 #include "uint256.h"
+#include "../univalue/include/univalue.h"
 
 #include <cstdint>
 #include <functional>
@@ -42,7 +43,7 @@ struct UniValueType {
     UniValue::VType type;
 };
 
-class JSONRPCRequest {
+class JSONRPCRequest {      // JSONRPC 请求
 public:
     UniValue id;
     std::string strMethod;

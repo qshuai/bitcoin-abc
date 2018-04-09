@@ -14,6 +14,7 @@
 #include "ui_interface.h"
 #include "util.h"
 #include "utilstrencodings.h"
+#include "../util.h"
 
 #include <univalue.h>
 

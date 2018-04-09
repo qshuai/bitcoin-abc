@@ -11,6 +11,13 @@
 #include "primitives/transaction.h"
 #include "script/standard.h"
 #include "uint256.h"
+#include "sign.h"
+#include "script.h"
+#include "standard.h"
+#include "../policy/policy.h"
+#include "../uint256.h"
+#include "../pubkey.h"
+#include "../key.h"
 
 typedef std::vector<uint8_t> valtype;
 
@@ -140,8 +147,7 @@ static CScript PushAll(const std::vector<valtype> &values) {
     return result;
 }
 
-bool ProduceSignature(const BaseSignatureCreator &creator,
-                      const CScript &fromPubKey, SignatureData &sigdata) {
+bool ProduceSignature(const BaseSignatureCreator &creator, const CScript &fromPubKey, SignatureData &sigdata) {
     CScript script = fromPubKey;
     bool solved = true;
     std::vector<valtype> result;
@@ -163,9 +169,7 @@ bool ProduceSignature(const BaseSignatureCreator &creator,
     sigdata.scriptSig = PushAll(result);
 
     // Test solution
-    return solved &&
-           VerifyScript(sigdata.scriptSig, fromPubKey,
-                        STANDARD_SCRIPT_VERIFY_FLAGS, creator.Checker());
+    return solved && VerifyScript(sigdata.scriptSig, fromPubKey, STANDARD_SCRIPT_VERIFY_FLAGS, creator.Checker());
 }
 
 SignatureData DataFromTransaction(const CMutableTransaction &tx,

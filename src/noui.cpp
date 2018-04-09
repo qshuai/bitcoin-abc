@@ -51,6 +51,7 @@ static void noui_InitMessage(const std::string &message) {
     LogPrintf("init message: %s\n", message);
 }
 
+// 我的理解是这个信号处理程序就是侦听程序的各种消息包括异常消息，也可能是硬件的异常消息或程序的普通信号消息
 void noui_connect() {
     // Connect bitcoind signal handlers
     uiInterface.ThreadSafeMessageBox.connect(noui_ThreadSafeMessageBox);

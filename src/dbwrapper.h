@@ -12,6 +12,13 @@
 #include "util.h"
 #include "utilstrencodings.h"
 #include "version.h"
+#include "leveldb/include/leveldb/slice.h"
+#include "leveldb/include/leveldb/env.h"
+#include "leveldb/include/leveldb/iterator.h"
+#include "leveldb/include/leveldb/options.h"
+#include "leveldb/include/leveldb/status.h"
+#include "leveldb/include/leveldb/db.h"
+#include "leveldb/include/leveldb/write_batch.h"
 
 #include <leveldb/db.h>
 #include <leveldb/write_batch.h>
@@ -88,8 +95,7 @@ public:
         // - varint: value length
         // - byte[]: value
         // The formula below assumes the key and value are both less than 16k.
-        size_estimate += 3 + (slKey.size() > 127) + slKey.size() +
-                         (slValue.size() > 127) + slValue.size();
+        size_estimate += 3 + (slKey.size() > 127) + slKey.size() + (slValue.size() > 127) + slValue.size();
         ssKey.clear();
         ssValue.clear();
     }
@@ -122,8 +128,7 @@ public:
      * @param[in] _parent          Parent CDBWrapper instance.
      * @param[in] _piter           The original leveldb iterator.
      */
-    CDBIterator(const CDBWrapper &_parent, leveldb::Iterator *_piter)
-        : parent(_parent), piter(_piter){};
+    CDBIterator(const CDBWrapper &_parent, leveldb::Iterator *_piter) : parent(_parent), piter(_piter){};
     ~CDBIterator();
 
     bool Valid();
@@ -143,8 +148,7 @@ public:
     template <typename K> bool GetKey(K &key) {
         leveldb::Slice slKey = piter->key();
         try {
-            CDataStream ssKey(slKey.data(), slKey.data() + slKey.size(),
-                              SER_DISK, CLIENT_VERSION);
+            CDataStream ssKey(slKey.data(), slKey.data() + slKey.size(), SER_DISK, CLIENT_VERSION);
             ssKey >> key;
         } catch (const std::exception &) {
             return false;
@@ -157,8 +161,7 @@ public:
     template <typename V> bool GetValue(V &value) {
         leveldb::Slice slValue = piter->value();
         try {
-            CDataStream ssValue(slValue.data(), slValue.data() + slValue.size(),
-                                SER_DISK, CLIENT_VERSION);
+            CDataStream ssValue(slValue.data(), slValue.data() + slValue.size(), SER_DISK, CLIENT_VERSION);
             ssValue.Xor(dbwrapper_private::GetObfuscateKey(parent));
             ssValue >> value;
         } catch (const std::exception &) {
@@ -167,12 +170,15 @@ public:
         return true;
     }
 
-    unsigned int GetValueSize() { return piter->value().size(); }
+    unsigned int GetValueSize() {
+        return piter->value().size();
+    }
 };
 
+
+// 对leveldb操作的封装
 class CDBWrapper {
-    friend const std::vector<uint8_t> &
-    dbwrapper_private::GetObfuscateKey(const CDBWrapper &w);
+    friend const std::vector<uint8_t> &dbwrapper_private::GetObfuscateKey(const CDBWrapper &w);
 
 private:
     //! custom environment this database is using (may be nullptr in case of
@@ -298,8 +304,7 @@ public:
 
     template <typename K>
     size_t EstimateSize(const K &key_begin, const K &key_end) const {
-        CDataStream ssKey1(SER_DISK, CLIENT_VERSION),
-            ssKey2(SER_DISK, CLIENT_VERSION);
+        CDataStream ssKey1(SER_DISK, CLIENT_VERSION), ssKey2(SER_DISK, CLIENT_VERSION);
         ssKey1.reserve(DBWRAPPER_PREALLOC_KEY_SIZE);
         ssKey2.reserve(DBWRAPPER_PREALLOC_KEY_SIZE);
         ssKey1 << key_begin;

@@ -20,10 +20,11 @@ static inline uint16_t ReadLE16(const uint8_t *ptr) {
     return le16toh(x);
 }
 
+// const uint8_t *ptr 参数其实传递的是一个数组，只不过所取得长度一定，故没有传递长度参数
 static inline uint32_t ReadLE32(const uint8_t *ptr) {
     uint32_t x;
     memcpy((char *)&x, ptr, 4);
-    return le32toh(x);
+    return le32toh(x);          // 查看系统编码方式(大端、小端)
 }
 
 static inline uint64_t ReadLE64(const uint8_t *ptr) {

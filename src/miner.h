@@ -22,6 +22,13 @@ class CReserveKey;
 class CScript;
 class CWallet;
 
+<<<<<<< HEAD
+=======
+namespace Consensus {
+    struct Params;
+};
+
+>>>>>>> dev
 static const bool DEFAULT_PRINTPRIORITY = false;
 
 struct CBlockTemplate {
@@ -53,8 +60,7 @@ struct CTxMemPoolModifiedEntry {
  * as key in other indexes.
  */
 struct CompareCTxMemPoolIter {
-    bool operator()(const CTxMemPool::txiter &a,
-                    const CTxMemPool::txiter &b) const {
+    bool operator()(const CTxMemPool::txiter &a, const CTxMemPool::txiter &b) const {
         return &(*a) < &(*b);
     }
 };
@@ -95,23 +101,18 @@ struct CompareTxIterByAncestorCount {
     }
 };
 
-typedef boost::multi_index_container<
-    CTxMemPoolModifiedEntry,
-    boost::multi_index::indexed_by<
-        boost::multi_index::ordered_unique<modifiedentry_iter,
-                                           CompareCTxMemPoolIter>,
+typedef boost::multi_index_container<CTxMemPoolModifiedEntry, boost::multi_index::indexed_by<boost::multi_index::ordered_unique<modifiedentry_iter, CompareCTxMemPoolIter>,
         // sorted by modified ancestor fee rate
         boost::multi_index::ordered_non_unique<
             // Reuse same tag from CTxMemPool's similar index
             boost::multi_index::tag<ancestor_score>,
             boost::multi_index::identity<CTxMemPoolModifiedEntry>,
             CompareModifiedEntry>>>
+
     indexed_modified_transaction_set;
 
-typedef indexed_modified_transaction_set::nth_index<0>::type::iterator
-    modtxiter;
-typedef indexed_modified_transaction_set::index<ancestor_score>::type::iterator
-    modtxscoreiter;
+typedef indexed_modified_transaction_set::nth_index<0>::type::iterator modtxiter;
+typedef indexed_modified_transaction_set::index<ancestor_score>::type::iterator modtxscoreiter;
 
 struct update_for_parent_inclusion {
     update_for_parent_inclusion(CTxMemPool::txiter it) : iter(it) {}

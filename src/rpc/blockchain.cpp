@@ -23,6 +23,11 @@
 #include "util.h"
 #include "utilstrencodings.h"
 #include "validation.h"
+#include "../validation.h"
+#include "server.h"
+#include "../univalue/include/univalue.h"
+#include "../util.h"
+#include "../txmempool.h"
 
 #include <boost/thread/thread.hpp> // boost::thread::interrupt
 

@@ -90,9 +90,15 @@ public:
 protected:
     CChainParams() {}
 
+<<<<<<< HEAD
     Consensus::Params consensus;
     CMessageHeader::MessageMagic diskMagic;
     CMessageHeader::MessageMagic netMagic;
+=======
+    Consensus::Params consensus;        // 包装了param类
+    CMessageHeader::MessageStartChars pchMessageStart;
+    CMessageHeader::MessageStartChars pchCashMessageStart;
+>>>>>>> dev
     int nDefaultPort;
     uint64_t nPruneAfterHeight;
     std::vector<CDNSSeedData> vSeeds;

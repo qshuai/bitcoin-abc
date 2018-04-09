@@ -16,6 +16,13 @@
 #include "test/test_bitcoin.h"
 #include "util.h"
 #include "utilstrencodings.h"
+#include "../script/script_error.h"
+#include "test_bitcoin.h"
+#include "../amount.h"
+#include "../script/script.h"
+#include "../primitives/transaction.h"
+#include "../key.h"
+#include "../univalue/include/univalue.h"
 
 #if defined(HAVE_CONSENSUS_LIB)
 #include "script/bitcoinconsensus.h"

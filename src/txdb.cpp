@@ -26,11 +26,12 @@ static const char DB_FLAG = 'F';
 static const char DB_REINDEX_FLAG = 'R';
 static const char DB_LAST_BLOCK = 'l';
 
-namespace {
+namespace {         // 匿名命名空间，只能在本文件中使用
 
 struct CoinEntry {
     COutPoint *outpoint;
     char key;
+
     CoinEntry(const COutPoint *ptr)
         : outpoint(const_cast<COutPoint *>(ptr)), key(DB_COIN) {}
 
@@ -48,15 +49,17 @@ struct CoinEntry {
 };
 } // namespace
 
-CCoinsViewDB::CCoinsViewDB(size_t nCacheSize, bool fMemory, bool fWipe)
+// utxo数据持久化在chainstate目录
+CCoinsViewDB::CCoinsViewDB(size_t nCacheSize, bool fMemory, bool fWipe)     // 初始化DB
     : db(GetDataDir() / "chainstate", nCacheSize, fMemory, fWipe, true) {}
 
 bool CCoinsViewDB::GetCoin(const COutPoint &outpoint, Coin &coin) const {
-    return db.Read(CoinEntry(&outpoint), coin);
+    // 从后端数据库中读取数据，键为CoinEntry，值为coin
+    return db.Read(CoinEntry(&outpoint), coin);         // Read() -> GetCoin()
 }
 
 bool CCoinsViewDB::HaveCoin(const COutPoint &outpoint) const {
-    return db.Exists(CoinEntry(&outpoint));
+    return db.Exists(CoinEntry(&outpoint));             // Exist() -> HaveCoin()
 }
 
 uint256 CCoinsViewDB::GetBestBlock() const {
@@ -65,32 +68,38 @@ uint256 CCoinsViewDB::GetBestBlock() const {
     return hashBestChain;
 }
 
-bool CCoinsViewDB::BatchWrite(CCoinsMap &mapCoins, const uint256 &hashBlock) {
+bool CCoinsViewDB::BatchWrite(CCoinsMap &mapCoins, const uint256 &hashBlock) {      // 持久化数据
     CDBBatch batch(db);
     size_t count = 0;
     size_t changed = 0;
     for (CCoinsMap::iterator it = mapCoins.begin(); it != mapCoins.end();) {
-        if (it->second.flags & CCoinsCacheEntry::DIRTY) {
+        if (it->second.flags & CCoinsCacheEntry::DIRTY) {       // DIRTY数据
             CoinEntry entry(&it->first);
             if (it->second.coin.IsSpent()) {
-                batch.Erase(entry);
+                batch.Erase(entry);         // 不写入已经花完的钱
             } else {
-                batch.Write(entry, it->second.coin);
+                batch.Write(entry, it->second.coin);         // 写入
             }
             changed++;
         }
         count++;
         CCoinsMap::iterator itOld = it++;
-        mapCoins.erase(itOld);
+        mapCoins.erase(itOld);      // 删除内存数据
     }
     if (!hashBlock.IsNull()) {
         batch.Write(DB_BEST_BLOCK, hashBlock);
     }
 
+    // 先把数据写到CDBBatch中，然后通过CDBWrapper写入到后端数据库
     bool ret = db.WriteBatch(batch);
+<<<<<<< HEAD
     LogPrint(BCLog::COINDB, "Committed %u changed transaction outputs (out of "
                             "%u) to coin database...\n",
              (unsigned int)changed, (unsigned int)count);
+=======
+    LogPrint("coindb", "Committed %u changed transaction outputs (out of %u) "
+                       "to coin database...\n", (unsigned int)changed, (unsigned int)count);
+>>>>>>> dev
     return ret;
 }
 
@@ -99,8 +108,7 @@ size_t CCoinsViewDB::EstimateSize() const {
 }
 
 CBlockTreeDB::CBlockTreeDB(size_t nCacheSize, bool fMemory, bool fWipe)
-    : CDBWrapper(GetDataDir() / "blocks" / "index", nCacheSize, fMemory,
-                 fWipe) {}
+    : CDBWrapper(GetDataDir() / "blocks" / "index", nCacheSize, fMemory, fWipe) {}
 
 bool CBlockTreeDB::ReadBlockFileInfo(int nFile, CBlockFileInfo &info) {
     return Read(std::make_pair(DB_BLOCK_FILES, nFile), info);
@@ -123,8 +131,7 @@ bool CBlockTreeDB::ReadLastBlockFile(int &nFile) {
 }
 
 CCoinsViewCursor *CCoinsViewDB::Cursor() const {
-    CCoinsViewDBCursor *i = new CCoinsViewDBCursor(
-        const_cast<CDBWrapper *>(&db)->NewIterator(), GetBestBlock());
+    CCoinsViewDBCursor *i = new CCoinsViewDBCursor(const_cast<CDBWrapper *>(&db)->NewIterator(), GetBestBlock());
     /**
      * It seems that there are no "const iterators" for LevelDB. Since we only
      * need read operations on it, use a const-cast to get around that
@@ -186,11 +193,8 @@ bool CBlockTreeDB::WriteBatchSync(
         batch.Write(std::make_pair(DB_BLOCK_FILES, it->first), *it->second);
     }
     batch.Write(DB_LAST_BLOCK, nLastFile);
-    for (std::vector<const CBlockIndex *>::const_iterator it =
-             blockinfo.begin();
-         it != blockinfo.end(); it++) {
-        batch.Write(std::make_pair(DB_BLOCK_INDEX, (*it)->GetBlockHash()),
-                    CDiskBlockIndex(*it));
+    for (std::vector<const CBlockIndex *>::const_iterator it = blockinfo.begin(); it != blockinfo.end(); it++) {
+        batch.Write(std::make_pair(DB_BLOCK_INDEX, (*it)->GetBlockHash()), CDiskBlockIndex(*it));
     }
     return WriteBatch(batch, true);
 }
