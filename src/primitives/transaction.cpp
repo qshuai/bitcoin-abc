@@ -30,12 +30,14 @@ std::string CTxIn::ToString() const {
     std::string str;
     str += "CTxIn(";
     str += prevout.ToString();
-    if (prevout.IsNull())
+    if (prevout.IsNull()) {
         str += strprintf(", coinbase %s", HexStr(scriptSig));
-    else
+    } else {
         str += strprintf(", scriptSig=%s", HexStr(scriptSig).substr(0, 24));
-    if (nSequence != SEQUENCE_FINAL)
+    }
+    if (nSequence != SEQUENCE_FINAL) {
         str += strprintf(", nSequence=%u", nSequence);
+    }
     str += ")";
     return str;
 }
@@ -58,16 +60,20 @@ CMutableTransaction::CMutableTransaction(const CTransaction &tx)
     : nVersion(tx.nVersion), vin(tx.vin), vout(tx.vout),
       nLockTime(tx.nLockTime) {}
 
-uint256 CMutableTransaction::GetId() const {
-    return SerializeHash(*this, SER_GETHASH, 0);
+static uint256 ComputeCMutableTransactionHash(const CMutableTransaction &tx) {
+    return SerializeHash(tx, SER_GETHASH, 0);
+}
+
+TxId CMutableTransaction::GetId() const {
+    return TxId(ComputeCMutableTransactionHash(*this));
+}
+
+TxHash CMutableTransaction::GetHash() const {
+    return TxHash(ComputeCMutableTransactionHash(*this));
 }
 
 uint256 CTransaction::ComputeHash() const {
     return SerializeHash(*this, SER_GETHASH, 0);
-}
-
-uint256 CTransaction::GetHash() const {
-    return GetId();
 }
 
 /**
@@ -85,7 +91,7 @@ CTransaction::CTransaction(CMutableTransaction &&tx)
       nLockTime(tx.nLockTime), hash(ComputeHash()) {}
 
 Amount CTransaction::GetValueOut() const {
-    Amount nValueOut = 0;
+    Amount nValueOut(0);
     for (std::vector<CTxOut>::const_iterator it(vout.begin()); it != vout.end();
          ++it) {
         nValueOut += it->nValue;

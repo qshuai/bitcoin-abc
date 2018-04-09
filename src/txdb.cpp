@@ -6,13 +6,14 @@
 #include "txdb.h"
 
 #include "chainparams.h"
+#include "config.h"
 #include "hash.h"
 #include "pow.h"
 #include "uint256.h"
 
-#include <cstdint>
-
 #include <boost/thread.hpp>
+
+#include <cstdint>
 
 static const char DB_COIN = 'C';
 static const char DB_COINS = 'c';
@@ -45,7 +46,7 @@ struct CoinEntry {
         s >> VARINT(outpoint->n);
     }
 };
-}
+} // namespace
 
 CCoinsViewDB::CCoinsViewDB(size_t nCacheSize, bool fMemory, bool fWipe)
     : db(GetDataDir() / "chainstate", nCacheSize, fMemory, fWipe, true) {}
@@ -87,8 +88,8 @@ bool CCoinsViewDB::BatchWrite(CCoinsMap &mapCoins, const uint256 &hashBlock) {
     }
 
     bool ret = db.WriteBatch(batch);
-    LogPrint("coindb", "Committed %u changed transaction outputs (out of %u) "
-                       "to coin database...\n",
+    LogPrint(BCLog::COINDB, "Committed %u changed transaction outputs (out of "
+                            "%u) to coin database...\n",
              (unsigned int)changed, (unsigned int)count);
     return ret;
 }
@@ -221,6 +222,8 @@ bool CBlockTreeDB::ReadFlag(const std::string &name, bool &fValue) {
 
 bool CBlockTreeDB::LoadBlockIndexGuts(
     std::function<CBlockIndex *(const uint256 &)> insertBlockIndex) {
+    const Config &config = GetConfig();
+
     std::unique_ptr<CDBIterator> pcursor(NewIterator());
 
     pcursor->Seek(std::make_pair(DB_BLOCK_INDEX, uint256()));
@@ -254,9 +257,10 @@ bool CBlockTreeDB::LoadBlockIndexGuts(
         pindexNew->nTx = diskindex.nTx;
 
         if (!CheckProofOfWork(pindexNew->GetBlockHash(), pindexNew->nBits,
-                              Params().GetConsensus()))
+                              config)) {
             return error("LoadBlockIndex(): CheckProofOfWork failed: %s",
                          pindexNew->ToString());
+        }
 
         pcursor->Next();
     }
@@ -316,7 +320,7 @@ public:
         ::Unserialize(s, VARINT(nHeight));
     }
 };
-}
+} // namespace
 
 /**
  * Upgrade the database from older formats.

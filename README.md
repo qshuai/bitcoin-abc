@@ -1,38 +1,24 @@
-Bitcoin ABC
-===========
+### TOOL:verify which pubkey keys contribute to multisig
 
-https://bitcoinabc.org
+#### Notice:
 
-What is Bitcoin?
-----------------
+- just support BCH multisig verify
+- you shoud input current rawtx string, reference rawtx string, vin index and the current vin ammount
+- you must ensure your input correctly
 
-Bitcoin is an experimental digital currency that enables instant payments to
-anyone, anywhere in the world. Bitcoin uses peer-to-peer technology to operate
-with no central authority: managing transactions and issuing money are carried
-out collectively by the network.
+#### Usages:
 
-What is Bitcoin ABC?
---------------------
+- install all bitcoin-abc dependencies [official link](https://github.com/Bitcoin-ABC/bitcoin-abc/blob/master/doc/) 
+- cd this repository path
 
-Bitcoin ABC is the name of open source software which enables the use of Bitcoin.
-It is designed to facilite a hard fork to increase Bitcoin's block size limit.
-"ABC" stands for "Adjustable Blocksize Cap".
+```
+	./autogen.sh
+	./configure
+	make
+	cd src/test
+	./test_bitcoin --run_test=transaction_tests/parse_tx
+```
 
-Bitcoin ABC is a fork of the [Bitcoin Core](https://bitcoincore.org) software project.
+#### Bugs:
 
-License
--------
-
-Bitcoin ABC is released under the terms of the MIT license. See [COPYING](COPYING) for more
-information or see https://opensource.org/licenses/MIT.
-
-Development Process
--------------------
-
-This Github repository contains only source code of releases.
-
-Bitcoin ABC development takes place at https://reviews.bitcoinabc.org/
-
-You can clone the active development version from here:
-
-    https://reviews.bitcoinabc.org/source/bitcoin-abc.git
+- There is a bytes length limit(up to 1024 bytes) on macOS platform in command line

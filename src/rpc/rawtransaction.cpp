@@ -9,6 +9,7 @@
 #include "config.h"
 #include "consensus/validation.h"
 #include "core_io.h"
+#include "dstencode.h"
 #include "init.h"
 #include "keystore.h"
 #include "merkleblock.h"
@@ -16,6 +17,7 @@
 #include "policy/policy.h"
 #include "primitives/transaction.h"
 #include "rpc/server.h"
+#include "rpc/tojson.h"
 #include "script/script.h"
 #include "script/script_error.h"
 #include "script/sign.h"
@@ -32,8 +34,8 @@
 
 #include <univalue.h>
 
-void ScriptPubKeyToJSON(const CScript &scriptPubKey, UniValue &out,
-                        bool fIncludeHex) {
+void ScriptPubKeyToJSON(const Config &config, const CScript &scriptPubKey,
+                        UniValue &out, bool fIncludeHex) {
     txnouttype type;
     std::vector<CTxDestination> addresses;
     int nRequired;
@@ -60,8 +62,8 @@ void ScriptPubKeyToJSON(const CScript &scriptPubKey, UniValue &out,
     out.push_back(Pair("addresses", a));
 }
 
-void TxToJSON(const CTransaction &tx, const uint256 hashBlock,
-              UniValue &entry) {
+void TxToJSON(const Config &config, const CTransaction &tx,
+              const uint256 hashBlock, UniValue &entry) {
     entry.push_back(Pair("txid", tx.GetId().GetHex()));
     entry.push_back(Pair("hash", tx.GetHash().GetHex()));
     entry.push_back(Pair(
@@ -98,7 +100,7 @@ void TxToJSON(const CTransaction &tx, const uint256 hashBlock,
         out.push_back(Pair("value", ValueFromAmount(txout.nValue)));
         out.push_back(Pair("n", (int64_t)i));
         UniValue o(UniValue::VOBJ);
-        ScriptPubKeyToJSON(txout.scriptPubKey, o, true);
+        ScriptPubKeyToJSON(config, txout.scriptPubKey, o, true);
         out.push_back(Pair("scriptPubKey", o));
         vout.push_back(out);
     }
@@ -111,8 +113,9 @@ void TxToJSON(const CTransaction &tx, const uint256 hashBlock,
         if (mi != mapBlockIndex.end() && (*mi).second) {
             CBlockIndex *pindex = (*mi).second;
             if (chainActive.Contains(pindex)) {
-                entry.push_back(Pair("confirmations", 1 + chainActive.Height() -
-                                                          pindex->nHeight));
+                entry.push_back(
+                    Pair("confirmations",
+                         1 + chainActive.Height() - pindex->nHeight));
                 entry.push_back(Pair("time", pindex->GetBlockTime()));
                 entry.push_back(Pair("blocktime", pindex->GetBlockTime()));
             } else {
@@ -249,7 +252,7 @@ static UniValue getrawtransaction(const Config &config,
 
     UniValue result(UniValue::VOBJ);
     result.push_back(Pair("hex", strHex));
-    TxToJSON(*tx, hashBlock, result);
+    TxToJSON(config, *tx, hashBlock, result);
     return result;
 }
 
@@ -338,7 +341,7 @@ static UniValue gettxoutproof(const Config &config,
     }
 
     CBlock block;
-    if (!ReadBlockFromDisk(block, pblockindex, Params().GetConsensus())) {
+    if (!ReadBlockFromDisk(block, pblockindex, config)) {
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Can't read block from disk");
     }
 
@@ -537,7 +540,7 @@ static UniValue createrawtransaction(const Config &config,
             std::vector<uint8_t> data =
                 ParseHexV(sendTo[name_].getValStr(), "Data");
 
-            CTxOut out(0, CScript() << OP_RETURN << data);
+            CTxOut out(Amount(0), CScript() << OP_RETURN << data);
             rawTx.vout.push_back(out);
         } else {
             CTxDestination destination = DecodeDestination(name_);
@@ -555,7 +558,7 @@ static UniValue createrawtransaction(const Config &config,
             }
 
             CScript scriptPubKey = GetScriptForDestination(destination);
-            CAmount nAmount = AmountFromValue(sendTo[name_]).GetSatoshis();
+            Amount nAmount = AmountFromValue(sendTo[name_]);
 
             CTxOut out(nAmount, scriptPubKey);
             rawTx.vout.push_back(out);
@@ -635,7 +638,7 @@ static UniValue decoderawtransaction(const Config &config,
     }
 
     UniValue result(UniValue::VOBJ);
-    TxToJSON(CTransaction(std::move(mtx)), uint256(), result);
+    TxToJSON(config, CTransaction(std::move(mtx)), uint256(), result);
 
     return result;
 }
@@ -679,7 +682,7 @@ static UniValue decodescript(const Config &config,
         // Empty scripts are valid.
     }
 
-    ScriptPubKeyToJSON(script, r, false);
+    ScriptPubKeyToJSON(config, script, r, false);
 
     UniValue type;
     type = find_value(r, "type");
@@ -928,7 +931,7 @@ static UniValue signrawtransaction(const Config &config,
 
                 CTxOut txout;
                 txout.scriptPubKey = scriptPubKey;
-                txout.nValue = 0;
+                txout.nValue = Amount(0);
                 if (prevOut.exists("amount")) {
                     txout.nValue =
                         AmountFromValue(find_value(prevOut, "amount"));
@@ -953,12 +956,13 @@ static UniValue signrawtransaction(const Config &config,
             // signed:
             if (fGivenKeys && scriptPubKey.IsPayToScriptHash()) {
                 RPCTypeCheckObj(
-                    prevOut, {
-                                 {"txid", UniValueType(UniValue::VSTR)},
-                                 {"vout", UniValueType(UniValue::VNUM)},
-                                 {"scriptPubKey", UniValueType(UniValue::VSTR)},
-                                 {"redeemScript", UniValueType(UniValue::VSTR)},
-                             });
+                    prevOut,
+                    {
+                        {"txid", UniValueType(UniValue::VSTR)},
+                        {"vout", UniValueType(UniValue::VNUM)},
+                        {"scriptPubKey", UniValueType(UniValue::VSTR)},
+                        {"redeemScript", UniValueType(UniValue::VSTR)},
+                    });
                 UniValue v = find_value(prevOut, "redeemScript");
                 if (!v.isNull()) {
                     std::vector<uint8_t> rsData(ParseHexV(v, "redeemScript"));
@@ -976,7 +980,7 @@ static UniValue signrawtransaction(const Config &config,
     const CKeyStore &keystore = tempKeystore;
 #endif
 
-    int nHashType = SIGHASH_ALL | SIGHASH_FORKID;
+    SigHashType sigHashType = SigHashType().withForkId(true);
     if (request.params.size() > 3 && !request.params[3].isNull()) {
         static std::map<std::string, int> mapSigHashValues = {
             {"ALL", SIGHASH_ALL},
@@ -1000,16 +1004,12 @@ static UniValue signrawtransaction(const Config &config,
             throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid sighash param");
         }
 
-        nHashType = mapSigHashValues[strHashType];
-        if ((nHashType & SIGHASH_FORKID) == 0) {
+        sigHashType = SigHashType(mapSigHashValues[strHashType]);
+        if (!sigHashType.hasForkId()) {
             throw JSONRPCError(RPC_INVALID_PARAMETER,
                                "Signature must use SIGHASH_FORKID");
         }
     }
-
-    bool fHashSingle =
-        ((nHashType & ~(SIGHASH_ANYONECANPAY | SIGHASH_FORKID)) ==
-         SIGHASH_SINGLE);
 
     // Script verification errors.
     UniValue vErrors(UniValue::VARR);
@@ -1027,13 +1027,14 @@ static UniValue signrawtransaction(const Config &config,
         }
 
         const CScript &prevPubKey = coin.GetTxOut().scriptPubKey;
-        const CAmount &amount = coin.GetTxOut().nValue.GetSatoshis();
+        const Amount amount = coin.GetTxOut().nValue;
 
         SignatureData sigdata;
         // Only sign SIGHASH_SINGLE if there's a corresponding output:
-        if (!fHashSingle || (i < mergedTx.vout.size())) {
+        if ((sigHashType.getBaseSigHashType() != BaseSigHashType::SINGLE) ||
+            (i < mergedTx.vout.size())) {
             ProduceSignature(MutableTransactionSignatureCreator(
-                                 &keystore, &mergedTx, i, amount, nHashType),
+                                 &keystore, &mergedTx, i, amount, sigHashType),
                              prevPubKey, sigdata);
         }
 
@@ -1112,9 +1113,9 @@ static UniValue sendrawtransaction(const Config &config,
     const uint256 &txid = tx->GetId();
 
     bool fLimitFree = false;
-    CAmount nMaxRawTxFee = maxTxFee.GetSatoshis();
+    Amount nMaxRawTxFee = maxTxFee;
     if (request.params.size() > 1 && request.params[1].get_bool()) {
-        nMaxRawTxFee = 0;
+        nMaxRawTxFee = Amount(0);
     }
 
     CCoinsViewCache &view = *pcoinsTip;

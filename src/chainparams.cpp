@@ -131,34 +131,34 @@ public:
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork =
-            uint256S("0x000000000000000000000000000000000000000000796b6d5908f8d"
-                     "b26c3cf44");
+            uint256S("0x0000000000000000000000000000000000000000007e5dbf54c7f6b"
+                     "58a6853cd");
 
         // By default assume that the signatures in ancestors of this block are
         // valid.
         consensus.defaultAssumeValid =
-            uint256S("0x000000000000000004694d6c74b532faf99fc072181f870bfb4a6c9"
-                     "930f7440c");
+            uint256S("0x000000000000000005e14d3f9fdfb70745308706615cfa9edca4f45"
+                     "58332b201");
 
         // Aug, 1 hard fork
         consensus.uahfHeight = 478559;
 
         // Nov, 13 hard fork
-        consensus.cashHardForkActivationTime = 1510600000;
+        consensus.daaHeight = 504031;
 
         /**
          * The message start string is designed to be unlikely to occur in
          * normal data. The characters are rarely used upper ASCII, not valid as
          * UTF-8, and produce a large 32-bit integer with any alignment.
          */
-        pchMessageStart[0] = 0xf9;
-        pchMessageStart[1] = 0xbe;
-        pchMessageStart[2] = 0xb4;
-        pchMessageStart[3] = 0xd9;
-        pchCashMessageStart[0] = 0xe3;
-        pchCashMessageStart[1] = 0xe1;
-        pchCashMessageStart[2] = 0xf3;
-        pchCashMessageStart[3] = 0xe8;
+        diskMagic[0] = 0xf9;
+        diskMagic[1] = 0xbe;
+        diskMagic[2] = 0xb4;
+        diskMagic[3] = 0xd9;
+        netMagic[0] = 0xe3;
+        netMagic[1] = 0xe1;
+        netMagic[2] = 0xf3;
+        netMagic[3] = 0xe8;
         nDefaultPort = 8333;
         nPruneAfterHeight = 100000;
 
@@ -236,12 +236,13 @@ public:
                                   "819efa9041e458e9bd7e40")},
                 {295000, uint256S("0x00000000000000004d9b4ef50f0f9d686fd69db2e0"
                                   "3af35a100370c64632a983")},
-                // UAHF fork block
+                // UAHF fork block.
                 {478559, uint256S("0x000000000000000000651ef99cb9fcbe0dadde1d42"
                                   "4bd9f15ff20136191a5eec")},
-                // Sept 30, 2017
-                {490000, uint256S("0x0000000000000000018ade0e75b4c21db72f05db1e"
-                                  "4fffb870c26d6c765dc6d1")}}};
+                // Nov, 13 DAA activation block.
+                {504031, uint256S("0x0000000000000000011ebf65b60d0a3de80b8175be"
+                                  "709d653b4c1a1beeb6ab9c")},
+            }};
 
         // Data as of block
         // 00000000000000000166d612d5595e2b1cd88d71d695fc580af64d8da8658c23
@@ -304,29 +305,29 @@ public:
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork =
-            uint256S("0x0000000000000000000000000000000000000000000000288002666"
-                     "863267524");
+            uint256S("0x00000000000000000000000000000000000000000000002888c34d6"
+                     "1b53a244a");
 
         // By default assume that the signatures in ancestors of this block are
         // valid.
         consensus.defaultAssumeValid =
-            uint256S("0x00000000ba37a638c096da8e1a843df68f4cc9754124f11034a0b61"
-                     "3bbf4ca3e");
+            uint256S("0x000000000000b41f1f2ddf130df8824e2b61c0af809ff86dd5cadb3"
+                     "61d984ca7");
 
         // Aug, 1 hard fork
         consensus.uahfHeight = 1155876;
 
         // Nov, 13 hard fork
-        consensus.cashHardForkActivationTime = 1510600000;
+        consensus.daaHeight = 1188697;
 
-        pchMessageStart[0] = 0x0b;
-        pchMessageStart[1] = 0x11;
-        pchMessageStart[2] = 0x09;
-        pchMessageStart[3] = 0x07;
-        pchCashMessageStart[0] = 0xf4;
-        pchCashMessageStart[1] = 0xe5;
-        pchCashMessageStart[2] = 0xf3;
-        pchCashMessageStart[3] = 0xf4;
+        diskMagic[0] = 0x0b;
+        diskMagic[1] = 0x11;
+        diskMagic[2] = 0x09;
+        diskMagic[3] = 0x07;
+        netMagic[0] = 0xf4;
+        netMagic[1] = 0xe5;
+        netMagic[2] = 0xf3;
+        netMagic[3] = 0xf4;
         nDefaultPort = 18333;
         nPruneAfterHeight = 1000;
 
@@ -364,7 +365,7 @@ public:
         base58Prefixes[SECRET_KEY] = std::vector<uint8_t>(1, 239);
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
-        cashaddrPrefix = "xbctest";
+        cashaddrPrefix = "bchtest";
         vFixedSeeds = std::vector<SeedSpec6>(
             pnSeed6_test, pnSeed6_test + ARRAYLEN(pnSeed6_test));
 
@@ -377,10 +378,12 @@ public:
             .mapCheckpoints = {
                 {546, uint256S("000000002a936ca763904c3c35fce2f3556c559c0214345"
                                "d31b1bcebf76acb70")},
-                // UAHF fork block
-                {1155876,
-                 uint256S("00000000000e38fef93ed9582a7df43815d5c2ba9fd37ef"
-                          "70c9a0ea4a285b8f5")},
+                // UAHF fork block.
+                {1155876, uint256S("00000000000e38fef93ed9582a7df43815d5c2ba9fd"
+                                   "37ef70c9a0ea4a285b8f5")},
+                // Nov, 13. DAA activation block.
+                {1188697, uint256S("0000000000170ed0918077bde7b4d36cc4c91be69fa"
+                                   "09211f748240dabe047fb")},
             }};
 
         // Data as of block
@@ -440,16 +443,16 @@ public:
         consensus.uahfHeight = 0;
 
         // Nov, 13 hard fork is always on on regtest.
-        consensus.cashHardForkActivationTime = 0;
+        consensus.daaHeight = 0;
 
-        pchMessageStart[0] = 0xfa;
-        pchMessageStart[1] = 0xbf;
-        pchMessageStart[2] = 0xb5;
-        pchMessageStart[3] = 0xda;
-        pchCashMessageStart[0] = 0xda;
-        pchCashMessageStart[1] = 0xb5;
-        pchCashMessageStart[2] = 0xbf;
-        pchCashMessageStart[3] = 0xfa;
+        diskMagic[0] = 0xfa;
+        diskMagic[1] = 0xbf;
+        diskMagic[2] = 0xb5;
+        diskMagic[3] = 0xda;
+        netMagic[0] = 0xda;
+        netMagic[1] = 0xb5;
+        netMagic[2] = 0xbf;
+        netMagic[3] = 0xfa;
         nDefaultPort = 18444;
         nPruneAfterHeight = 1000;
 
@@ -484,7 +487,7 @@ public:
         base58Prefixes[SECRET_KEY] = std::vector<uint8_t>(1, 239);
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
-        cashaddrPrefix = "xbcreg";
+        cashaddrPrefix = "bchreg";
     }
 
     void UpdateBIP9Parameters(Consensus::DeploymentPos d, int64_t nStartTime,

@@ -6,20 +6,20 @@
 #include "db.h"
 
 #include "addrman.h"
+#include "fs.h"
 #include "hash.h"
 #include "protocol.h"
 #include "util.h"
 #include "utilstrencodings.h"
+
+#include <boost/thread.hpp>
+#include <boost/version.hpp>
 
 #include <cstdint>
 
 #ifndef WIN32
 #include <sys/stat.h>
 #endif
-
-#include <boost/filesystem.hpp>
-#include <boost/thread.hpp>
-#include <boost/version.hpp>
 
 //
 // CDB
@@ -28,15 +28,21 @@
 CDBEnv bitdb;
 
 void CDBEnv::EnvShutdown() {
-    if (!fDbEnvInit) return;
+    if (!fDbEnvInit) {
+        return;
+    }
 
     fDbEnvInit = false;
     int ret = dbenv->close(0);
-    if (ret != 0)
+    if (ret != 0) {
         LogPrintf("CDBEnv::EnvShutdown: Error %d shutting down database "
                   "environment: %s\n",
                   ret, DbEnv::strerror(ret));
-    if (!fMockDb) DbEnv((u_int32_t)0).remove(strPath.c_str(), 0);
+    }
+
+    if (!fMockDb) {
+        DbEnv(uint32_t(0)).remove(strPath.c_str(), 0);
+    }
 }
 
 void CDBEnv::Reset() {
@@ -60,20 +66,24 @@ void CDBEnv::Close() {
     EnvShutdown();
 }
 
-bool CDBEnv::Open(const boost::filesystem::path &pathIn) {
-    if (fDbEnvInit) return true;
+bool CDBEnv::Open(const fs::path &pathIn) {
+    if (fDbEnvInit) {
+        return true;
+    }
 
     boost::this_thread::interruption_point();
 
     strPath = pathIn.string();
-    boost::filesystem::path pathLogDir = pathIn / "database";
-    TryCreateDirectory(pathLogDir);
-    boost::filesystem::path pathErrorFile = pathIn / "db.log";
+    fs::path pathLogDir = pathIn / "database";
+    TryCreateDirectories(pathLogDir);
+    fs::path pathErrorFile = pathIn / "db.log";
     LogPrintf("CDBEnv::Open: LogDir=%s ErrorFile=%s\n", pathLogDir.string(),
               pathErrorFile.string());
 
     unsigned int nEnvFlags = 0;
-    if (GetBoolArg("-privdb", DEFAULT_WALLET_PRIVDB)) nEnvFlags |= DB_PRIVATE;
+    if (GetBoolArg("-privdb", DEFAULT_WALLET_PRIVDB)) {
+        nEnvFlags |= DB_PRIVATE;
+    }
 
     dbenv->set_lg_dir(pathLogDir.string().c_str());
     // 1 MiB should be enough for just the wallet
@@ -83,7 +93,7 @@ bool CDBEnv::Open(const boost::filesystem::path &pathIn) {
     dbenv->set_lk_max_locks(40000);
     dbenv->set_lk_max_objects(40000);
     /// debug
-    dbenv->set_errfile(fopen(pathErrorFile.string().c_str(), "a"));
+    dbenv->set_errfile(fsbridge::fopen(pathErrorFile, "a"));
     dbenv->set_flags(DB_AUTO_COMMIT, 1);
     dbenv->set_flags(DB_TXN_WRITE_NOSYNC, 1);
     dbenv->log_set_config(DB_LOG_AUTO_REMOVE, 1);
@@ -92,10 +102,11 @@ bool CDBEnv::Open(const boost::filesystem::path &pathIn) {
                     DB_CREATE | DB_INIT_LOCK | DB_INIT_LOG | DB_INIT_MPOOL |
                         DB_INIT_TXN | DB_THREAD | DB_RECOVER | nEnvFlags,
                     S_IRUSR | S_IWUSR);
-    if (ret != 0)
+    if (ret != 0) {
         return error(
             "CDBEnv::Open: Error %d opening database environment: %s\n", ret,
             DbEnv::strerror(ret));
+    }
 
     fDbEnvInit = true;
     fMockDb = false;
@@ -103,12 +114,13 @@ bool CDBEnv::Open(const boost::filesystem::path &pathIn) {
 }
 
 void CDBEnv::MakeMock() {
-    if (fDbEnvInit)
+    if (fDbEnvInit) {
         throw std::runtime_error("CDBEnv::MakeMock: Already initialized");
+    }
 
     boost::this_thread::interruption_point();
 
-    LogPrint("db", "CDBEnv::MakeMock\n");
+    LogPrint(BCLog::DB, "CDBEnv::MakeMock\n");
 
     dbenv->set_cachesize(1, 0, 1);
     dbenv->set_lg_bsize(10485760 * 4);
@@ -117,13 +129,15 @@ void CDBEnv::MakeMock() {
     dbenv->set_lk_max_objects(10000);
     dbenv->set_flags(DB_AUTO_COMMIT, 1);
     dbenv->log_set_config(DB_LOG_IN_MEMORY, 1);
-    int ret = dbenv->open(nullptr, DB_CREATE | DB_INIT_LOCK | DB_INIT_LOG |
-                                       DB_INIT_MPOOL | DB_INIT_TXN | DB_THREAD |
-                                       DB_PRIVATE,
-                          S_IRUSR | S_IWUSR);
-    if (ret > 0)
+    int ret =
+        dbenv->open(nullptr,
+                    DB_CREATE | DB_INIT_LOCK | DB_INIT_LOG | DB_INIT_MPOOL |
+                        DB_INIT_TXN | DB_THREAD | DB_PRIVATE,
+                    S_IRUSR | S_IWUSR);
+    if (ret > 0) {
         throw std::runtime_error(strprintf(
             "CDBEnv::MakeMock: Error %d opening database environment.", ret));
+    }
 
     fDbEnvInit = true;
     fMockDb = true;
@@ -137,10 +151,11 @@ CDBEnv::Verify(const std::string &strFile,
 
     Db db(dbenv, 0);
     int result = db.verify(strFile.c_str(), nullptr, nullptr, 0);
-    if (result == 0)
+    if (result == 0) {
         return VERIFY_OK;
-    else if (recoverFunc == nullptr)
+    } else if (recoverFunc == nullptr) {
         return RECOVER_FAIL;
+    }
 
     // Try to recover:
     bool fRecovered = (*recoverFunc)(*this, strFile);
@@ -158,7 +173,9 @@ bool CDBEnv::Salvage(const std::string &strFile, bool fAggressive,
     assert(mapFileUseCount.count(strFile) == 0);
 
     u_int32_t flags = DB_SALVAGE;
-    if (fAggressive) flags |= DB_AGGRESSIVE;
+    if (fAggressive) {
+        flags |= DB_AGGRESSIVE;
+    }
 
     std::stringstream strDump;
 
@@ -197,7 +214,9 @@ bool CDBEnv::Salvage(const std::string &strFile, bool fAggressive,
     while (!strDump.eof() && keyHex != DATA_END) {
         getline(strDump, keyHex);
         if (keyHex != DATA_END) {
-            if (strDump.eof()) break;
+            if (strDump.eof()) {
+                break;
+            }
             getline(strDump, valueHex);
             if (valueHex == DATA_END) {
                 LogPrintf("CDBEnv::Salvage: WARNING: Number of keys in data "
@@ -219,7 +238,9 @@ bool CDBEnv::Salvage(const std::string &strFile, bool fAggressive,
 
 void CDBEnv::CheckpointLSN(const std::string &strFile) {
     dbenv->txn_checkpoint(0, 0, 0);
-    if (fMockDb) return;
+    if (fMockDb) {
+        return;
+    }
     dbenv->lsn_reset(strFile.c_str(), 0);
 }
 
@@ -229,17 +250,22 @@ CDB::CDB(const std::string &strFilename, const char *pszMode,
     int ret;
     fReadOnly = (!strchr(pszMode, '+') && !strchr(pszMode, 'w'));
     fFlushOnClose = fFlushOnCloseIn;
-    if (strFilename.empty()) return;
+    if (strFilename.empty()) {
+        return;
+    }
 
     bool fCreate = strchr(pszMode, 'c') != nullptr;
     unsigned int nFlags = DB_THREAD;
-    if (fCreate) nFlags |= DB_CREATE;
+    if (fCreate) {
+        nFlags |= DB_CREATE;
+    }
 
     {
         LOCK(bitdb.cs_db);
-        if (!bitdb.Open(GetDataDir()))
+        if (!bitdb.Open(GetDataDir())) {
             throw std::runtime_error(
                 "CDB: Failed to open database environment.");
+        }
 
         strFile = strFilename;
         ++bitdb.mapFileUseCount[strFile];
@@ -251,11 +277,12 @@ CDB::CDB(const std::string &strFilename, const char *pszMode,
             if (fMockDb) {
                 DbMpoolFile *mpf = pdb->get_mpf();
                 ret = mpf->set_flags(DB_MPOOL_NOFILE, 1);
-                if (ret != 0)
+                if (ret != 0) {
                     throw std::runtime_error(
                         strprintf("CDB: Failed to configure for no temp file "
                                   "backing for database %s",
                                   strFile));
+                }
             }
 
             ret =
@@ -288,11 +315,15 @@ CDB::CDB(const std::string &strFilename, const char *pszMode,
 }
 
 void CDB::Flush() {
-    if (activeTxn) return;
+    if (activeTxn) {
+        return;
+    }
 
     // Flush database activity from memory pool to disk log
     unsigned int nMinutes = 0;
-    if (fReadOnly) nMinutes = 1;
+    if (fReadOnly) {
+        nMinutes = 1;
+    }
 
     bitdb.dbenv->txn_checkpoint(
         nMinutes ? GetArg("-dblogsize", DEFAULT_WALLET_DBLOGSIZE) * 1024 : 0,
@@ -300,17 +331,21 @@ void CDB::Flush() {
 }
 
 void CDB::Close() {
-    if (!pdb) return;
-    if (activeTxn) activeTxn->abort();
+    if (!pdb) {
+        return;
+    }
+    if (activeTxn) {
+        activeTxn->abort();
+    }
     activeTxn = nullptr;
     pdb = nullptr;
 
-    if (fFlushOnClose) Flush();
-
-    {
-        LOCK(bitdb.cs_db);
-        --bitdb.mapFileUseCount[strFile];
+    if (fFlushOnClose) {
+        Flush();
     }
+
+    LOCK(bitdb.cs_db);
+    --bitdb.mapFileUseCount[strFile];
 }
 
 void CDBEnv::CloseDb(const std::string &strFile) {
@@ -372,7 +407,8 @@ bool CDB::Rewrite(const std::string &strFile, const char *pszSkip) {
                             if (ret1 == DB_NOTFOUND) {
                                 pcursor->close();
                                 break;
-                            } else if (ret1 != 0) {
+                            }
+                            if (ret1 != 0) {
                                 pcursor->close();
                                 fSuccess = false;
                                 break;
@@ -380,8 +416,9 @@ bool CDB::Rewrite(const std::string &strFile, const char *pszSkip) {
                             if (pszSkip &&
                                 strncmp(ssKey.data(), pszSkip,
                                         std::min(ssKey.size(),
-                                                 strlen(pszSkip))) == 0)
+                                                 strlen(pszSkip))) == 0) {
                                 continue;
+                            }
                             if (strncmp(ssKey.data(), "\x07version", 8) == 0) {
                                 // Update version:
                                 ssValue.clear();
@@ -391,28 +428,35 @@ bool CDB::Rewrite(const std::string &strFile, const char *pszSkip) {
                             Dbt datValue(ssValue.data(), ssValue.size());
                             int ret2 = pdbCopy->put(nullptr, &datKey, &datValue,
                                                     DB_NOOVERWRITE);
-                            if (ret2 > 0) fSuccess = false;
+                            if (ret2 > 0) {
+                                fSuccess = false;
+                            }
                         }
                     if (fSuccess) {
                         db.Close();
                         bitdb.CloseDb(strFile);
-                        if (pdbCopy->close(0)) fSuccess = false;
+                        if (pdbCopy->close(0)) {
+                            fSuccess = false;
+                        }
                         delete pdbCopy;
                     }
                 }
                 if (fSuccess) {
                     Db dbA(bitdb.dbenv, 0);
-                    if (dbA.remove(strFile.c_str(), nullptr, 0))
+                    if (dbA.remove(strFile.c_str(), nullptr, 0)) {
                         fSuccess = false;
+                    }
                     Db dbB(bitdb.dbenv, 0);
                     if (dbB.rename(strFileRes.c_str(), nullptr, strFile.c_str(),
-                                   0))
+                                   0)) {
                         fSuccess = false;
+                    }
                 }
-                if (!fSuccess)
+                if (!fSuccess) {
                     LogPrintf(
                         "CDB::Rewrite: Failed to rewrite database file %s\n",
                         strFileRes);
+                }
                 return fSuccess;
             }
         }
@@ -424,30 +468,37 @@ bool CDB::Rewrite(const std::string &strFile, const char *pszSkip) {
 void CDBEnv::Flush(bool fShutdown) {
     int64_t nStart = GetTimeMillis();
     // Flush log data to the actual data file on all files that are not in use
-    LogPrint("db", "CDBEnv::Flush: Flush(%s)%s\n", fShutdown ? "true" : "false",
+    LogPrint(BCLog::DB, "CDBEnv::Flush: Flush(%s)%s\n",
+             fShutdown ? "true" : "false",
              fDbEnvInit ? "" : " database not started");
-    if (!fDbEnvInit) return;
+    if (!fDbEnvInit) {
+        return;
+    }
     {
         LOCK(cs_db);
         std::map<std::string, int>::iterator mi = mapFileUseCount.begin();
         while (mi != mapFileUseCount.end()) {
             std::string strFile = (*mi).first;
             int nRefCount = (*mi).second;
-            LogPrint("db", "CDBEnv::Flush: Flushing %s (refcount = %d)...\n",
-                     strFile, nRefCount);
+            LogPrint(BCLog::DB,
+                     "CDBEnv::Flush: Flushing %s (refcount = %d)...\n", strFile,
+                     nRefCount);
             if (nRefCount == 0) {
                 // Move log data to the dat file
                 CloseDb(strFile);
-                LogPrint("db", "CDBEnv::Flush: %s checkpoint\n", strFile);
+                LogPrint(BCLog::DB, "CDBEnv::Flush: %s checkpoint\n", strFile);
                 dbenv->txn_checkpoint(0, 0, 0);
-                LogPrint("db", "CDBEnv::Flush: %s detach\n", strFile);
-                if (!fMockDb) dbenv->lsn_reset(strFile.c_str(), 0);
-                LogPrint("db", "CDBEnv::Flush: %s closed\n", strFile);
+                LogPrint(BCLog::DB, "CDBEnv::Flush: %s detach\n", strFile);
+                if (!fMockDb) {
+                    dbenv->lsn_reset(strFile.c_str(), 0);
+                }
+                LogPrint(BCLog::DB, "CDBEnv::Flush: %s closed\n", strFile);
                 mapFileUseCount.erase(mi++);
-            } else
+            } else {
                 mi++;
+            }
         }
-        LogPrint("db", "CDBEnv::Flush: Flush(%s)%s took %15dms\n",
+        LogPrint(BCLog::DB, "CDBEnv::Flush: Flush(%s)%s took %15dms\n",
                  fShutdown ? "true" : "false",
                  fDbEnvInit ? "" : " database not started",
                  GetTimeMillis() - nStart);
@@ -456,9 +507,9 @@ void CDBEnv::Flush(bool fShutdown) {
             if (mapFileUseCount.empty()) {
                 dbenv->log_archive(&listp, DB_ARCH_REMOVE);
                 Close();
-                if (!fMockDb)
-                    boost::filesystem::remove_all(
-                        boost::filesystem::path(strPath) / "database");
+                if (!fMockDb) {
+                    fs::remove_all(fs::path(strPath) / "database");
+                }
             }
         }
     }

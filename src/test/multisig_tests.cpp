@@ -21,8 +21,8 @@ BOOST_FIXTURE_TEST_SUITE(multisig_tests, BasicTestingSetup)
 
 CScript sign_multisig(CScript scriptPubKey, std::vector<CKey> keys,
                       CTransaction transaction, int whichIn) {
-    uint256 hash =
-        SignatureHash(scriptPubKey, transaction, whichIn, SIGHASH_ALL, 0);
+    uint256 hash = SignatureHash(scriptPubKey, transaction, whichIn,
+                                 SIGHASH_ALL, Amount(0));
 
     CScript result;
     // CHECKMULTISIG bug workaround
@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_CASE(multisig_verify) {
 
     ScriptError err;
     CKey key[4];
-    CAmount amount = 0;
+    Amount amount(0);
     for (int i = 0; i < 4; i++)
         key[i].MakeNewKey(true);
 
@@ -72,7 +72,7 @@ BOOST_AUTO_TEST_CASE(multisig_verify) {
         txTo[i].vout.resize(1);
         txTo[i].vin[0].prevout.n = i;
         txTo[i].vin[0].prevout.hash = txFrom.GetId();
-        txTo[i].vout[0].nValue = 1;
+        txTo[i].vout[0].nValue = Amount(1);
     }
 
     std::vector<CKey> keys;
@@ -346,12 +346,12 @@ BOOST_AUTO_TEST_CASE(multisig_Sign) {
         txTo[i].vout.resize(1);
         txTo[i].vin[0].prevout.n = i;
         txTo[i].vin[0].prevout.hash = txFrom.GetId();
-        txTo[i].vout[0].nValue = 1;
+        txTo[i].vout[0].nValue = Amount(1);
     }
 
     for (int i = 0; i < 3; i++) {
         BOOST_CHECK_MESSAGE(SignSignature(keystore, txFrom, txTo[i], 0,
-                                          SIGHASH_ALL | SIGHASH_FORKID),
+                                          SigHashType().withForkId(true)),
                             strprintf("SignSignature %d", i));
     }
 }

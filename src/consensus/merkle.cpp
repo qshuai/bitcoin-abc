@@ -5,6 +5,7 @@
 #include "merkle.h"
 #include "hash.h"
 #include "utilstrencodings.h"
+#include "../uint256.h"
 
 /*     WARNING! If you're reading this because you're learning about crypto
        and/or designing a new system that will use merkle trees, keep in mind

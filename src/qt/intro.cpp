@@ -6,14 +6,11 @@
 #include "config/bitcoin-config.h"
 #endif
 
+#include "fs.h"
+#include "guiutil.h"
 #include "intro.h"
 #include "ui_intro.h"
-
-#include "guiutil.h"
-
 #include "util.h"
-
-#include <boost/filesystem.hpp>
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -68,7 +65,6 @@ FreespaceChecker::FreespaceChecker(Intro *_intro) {
 }
 
 void FreespaceChecker::check() {
-    namespace fs = boost::filesystem;
     QString dataDirStr = intro->getPathToCheck();
     fs::path dataDir = GUIUtil::qstringToBoostPath(dataDirStr);
     uint64_t freeBytesAvailable = 0;
@@ -160,7 +156,6 @@ QString Intro::getDefaultDataDirectory() {
 }
 
 bool Intro::pickDataDirectory() {
-    namespace fs = boost::filesystem;
     QSettings settings;
     /* If data directory provided on command line, no need to look at settings
        or show a picking dialog */
@@ -187,7 +182,7 @@ bool Intro::pickDataDirectory() {
             }
             dataDir = intro.getDataDirectory();
             try {
-                TryCreateDirectory(GUIUtil::qstringToBoostPath(dataDir));
+                TryCreateDirectories(GUIUtil::qstringToBoostPath(dataDir));
                 break;
             } catch (const fs::filesystem_error &) {
                 QMessageBox::critical(0, tr(PACKAGE_NAME),
@@ -206,9 +201,10 @@ bool Intro::pickDataDirectory() {
      * override -datadir in the bitcoin.conf file in the default data directory
      * (to be consistent with bitcoind behavior)
      */
-    if (dataDir != getDefaultDataDirectory())
-        SoftSetArg("-datadir", GUIUtil::qstringToBoostPath(dataDir)
-                                   .string()); // use OS locale for path setting
+    if (dataDir != getDefaultDataDirectory()) {
+        // use OS locale for path setting
+        SoftSetArg("-datadir", GUIUtil::qstringToBoostPath(dataDir).string());
+    }
     return true;
 }
 

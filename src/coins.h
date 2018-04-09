@@ -15,7 +15,6 @@
 
 #include <cassert>
 #include <cstdint>
-
 #include <unordered_map>
 
 /**
@@ -38,9 +37,9 @@ public:
     Coin() : nHeightAndIsCoinBase(0) {}
 
     //! Constructor from a CTxOut and height/coinbase information.
-    Coin(CTxOut outIn, uint32_t nHeightIn, bool IsCoinbase)
-        : out(std::move(outIn)),
-          nHeightAndIsCoinBase((nHeightIn << 1) | IsCoinbase) {}
+    Coin(CTxOut outIn, uint32_t nHeightIn, bool IsCoinbase) :
+            out(std::move(outIn)),
+            nHeightAndIsCoinBase((nHeightIn << 1) | IsCoinbase) {}
 
     uint32_t GetHeight() const { return nHeightAndIsCoinBase >> 1; }
     bool IsCoinBase() const { return nHeightAndIsCoinBase & 0x01; }
@@ -55,7 +54,7 @@ public:
     }
 
     template <typename Stream> void Serialize(Stream &s) const {
-        assert(!IsSpent());
+        assert(!IsSpent());     // 必须为未花费coin
         ::Serialize(s, VARINT(nHeightAndIsCoinBase));
         ::Serialize(s, CTxOutCompressor(REF(out)));
     }
@@ -109,12 +108,10 @@ struct CCoinsCacheEntry {
     };
 
     CCoinsCacheEntry() : flags(0) {}
-    explicit CCoinsCacheEntry(Coin coinIn)
-        : coin(std::move(coinIn)), flags(0) {}
+    explicit CCoinsCacheEntry(Coin coinIn) : coin(std::move(coinIn)), flags(0) {}
 };
 
-typedef std::unordered_map<COutPoint, CCoinsCacheEntry, SaltedOutpointHasher>
-    CCoinsMap;
+typedef std::unordered_map<COutPoint, CCoinsCacheEntry, SaltedOutpointHasher> CCoinsMap;
 
 /** Cursor for iterating over CoinsView state */
 class CCoinsViewCursor {
@@ -140,11 +137,11 @@ private:
 class CCoinsView {
 public:
     //! Retrieve the Coin (unspent transaction output) for a given outpoint.
-    virtual bool GetCoin(const COutPoint &outpoint, Coin &coin) const;
+    virtual bool GetCoin(const COutPoint &outpoint, Coin &coin) const;      // 获取为花费输出
 
     //! Just check whether we have data for a given outpoint.
     //! This may (but cannot always) return true for spent outputs.
-    virtual bool HaveCoin(const COutPoint &outpoint) const;
+    virtual bool HaveCoin(const COutPoint &outpoint) const;                 // 已花费输出也有可能返回true
 
     //! Retrieve the block hash whose state this CCoinsView currently represents
     virtual uint256 GetBestBlock() const;
@@ -154,7 +151,7 @@ public:
     virtual bool BatchWrite(CCoinsMap &mapCoins, const uint256 &hashBlock);
 
     //! Get a cursor to iterate over the whole state
-    virtual CCoinsViewCursor *Cursor() const;
+    virtual CCoinsViewCursor *Cursor() const;               // 在哪里用到了？
 
     //! As we use CCoinsViews polymorphically, have a virtual destructor
     virtual ~CCoinsView() {}
@@ -166,7 +163,7 @@ public:
 /** CCoinsView backed by another CCoinsView */
 class CCoinsViewBacked : public CCoinsView {
 protected:
-    CCoinsView *base;
+    CCoinsView *base;       // 关键点
 
 public:
     CCoinsViewBacked(CCoinsView *viewIn);
@@ -182,55 +179,54 @@ public:
 /**
  * CCoinsView that adds a memory cache for transactions to another CCoinsView
  */
-class CCoinsViewCache : public CCoinsViewBacked {
+class CCoinsViewCache : public CCoinsViewBacked {       // 交易内存缓存
 protected:
     /**
      * Make mutable so that we can "fill the cache" even from Get-methods
      * declared as "const".
      */
-    mutable uint256 hashBlock;
+    mutable uint256 hashBlock;          // mutable修饰，保证可以被修改
     mutable CCoinsMap cacheCoins;
 
     /* Cached dynamic memory usage for the inner Coin objects. */
-    mutable size_t cachedCoinsUsage;
+    mutable size_t cachedCoinsUsage;    // 内部coin的内存使用
 
 public:
     CCoinsViewCache(CCoinsView *baseIn);
 
     // Standard CCoinsView methods
-    bool GetCoin(const COutPoint &outpoint, Coin &coin) const;
-    bool HaveCoin(const COutPoint &outpoint) const;
-    uint256 GetBestBlock() const;
+    bool GetCoin(const COutPoint &outpoint, Coin &coin) const override;
+    bool HaveCoin(const COutPoint &outpoint) const override;
+    uint256 GetBestBlock() const override;
     void SetBestBlock(const uint256 &hashBlock);
-    bool BatchWrite(CCoinsMap &mapCoins, const uint256 &hashBlock);
+    bool BatchWrite(CCoinsMap &mapCoins, const uint256 &hashBlock) override;
 
     /**
      * Check if we have the given utxo already loaded in this cache.
      * The semantics are the same as HaveCoin(), but no calls to the backing
      * CCoinsView are made.
      */
-    bool HaveCoinInCache(const COutPoint &outpoint) const;
+    bool HaveCoinInCache(const COutPoint &outpoint) const;          // 只检测cacheCoins中是否含有，不对后端的数据进行检索
 
     /**
      * Return a reference to a Coin in the cache, or a pruned one if not found.
      * This is more efficient than GetCoin. Modifications to other cache entries
      * are allowed while accessing the returned pointer.
      */
-    const Coin &AccessCoin(const COutPoint &output) const;
+    const Coin &AccessCoin(const COutPoint &output) const;          // 和GetCoin()一样，都是为了获取数据，但是他能修改其中的内容
 
     /**
      * Add a coin. Set potential_overwrite to true if a non-pruned version may
      * already exist.
      */
-    void AddCoin(const COutPoint &outpoint, Coin coin,
-                 bool potential_overwrite);
+    void AddCoin(const COutPoint &outpoint, Coin coin, bool potential_overwrite);
 
     /**
      * Spend a coin. Pass moveto in order to get the deleted data.
      * If no unspent output exists for the passed outpoint, this call has no
      * effect.
      */
-    bool SpendCoin(const COutPoint &outpoint, Coin *moveto = nullptr);
+    bool SpendCoin(const COutPoint &outpoint, Coin *moveto = nullptr);      // 花费未花费输出
 
     /**
      * Push the modifications applied to this cache to its base.
@@ -244,7 +240,7 @@ public:
      * Removes the UTXO with the given outpoint from the cache, if it is not
      * modified.
      */
-    void Uncache(const COutPoint &outpoint);
+    void Uncache(const COutPoint &outpoint);            // 如果没有被修改，则从cache中移除
 
     //! Calculate the size of the cache (in number of transaction outputs)
     unsigned int GetCacheSize() const;
@@ -271,13 +267,12 @@ public:
      * values of the inputs that are already in the chain. These are the inputs
      * that will age and increase priority as new blocks are added to the chain.
      */
-    double GetPriority(const CTransaction &tx, int nHeight,
-                       Amount &inChainInputValue) const;
+    double GetPriority(const CTransaction &tx, int nHeight, Amount &inChainInputValue) const;
 
     const CTxOut &GetOutputFor(const CTxIn &input) const;
 
 private:
-    CCoinsMap::iterator FetchCoin(const COutPoint &outpoint) const;
+    CCoinsMap::iterator FetchCoin(const COutPoint &outpoint) const;     // 派生类不能访问这个私有的成员函数
 
     /**
      * By making the copy constructor private, we prevent accidentally using it

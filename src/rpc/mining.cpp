@@ -4,7 +4,6 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "amount.h"
-#include "base58.h"
 #include "chain.h"
 #include "chainparams.h"
 #include "config.h"
@@ -12,6 +11,7 @@
 #include "consensus/params.h"
 #include "consensus/validation.h"
 #include "core_io.h"
+#include "dstencode.h"
 #include "init.h"
 #include "miner.h"
 #include "net.h"
@@ -132,26 +132,32 @@ static UniValue generateBlocks(const Config &config,
         std::unique_ptr<CBlockTemplate> pblocktemplate(
             BlockAssembler(config, Params())
                 .CreateNewBlock(coinbaseScript->reserveScript));
+
         if (!pblocktemplate.get()) {
             throw JSONRPCError(RPC_INTERNAL_ERROR, "Couldn't create new block");
         }
+
         CBlock *pblock = &pblocktemplate->block;
+
         {
             LOCK(cs_main);
             IncrementExtraNonce(config, pblock, chainActive.Tip(), nExtraNonce);
         }
+
         while (nMaxTries > 0 && pblock->nNonce < nInnerLoopCount &&
-               !CheckProofOfWork(pblock->GetHash(), pblock->nBits,
-                                 Params().GetConsensus())) {
+               !CheckProofOfWork(pblock->GetHash(), pblock->nBits, config)) {
             ++pblock->nNonce;
             --nMaxTries;
         }
+
         if (nMaxTries == 0) {
             break;
         }
+
         if (pblock->nNonce == nInnerLoopCount) {
             continue;
         }
+
         std::shared_ptr<const CBlock> shared_pblock =
             std::make_shared<const CBlock>(*pblock);
         if (!ProcessNewBlock(config, shared_pblock, true, nullptr)) {
@@ -250,7 +256,8 @@ static UniValue generatetoaddress(const Config &config,
                            "Error: Invalid address");
     }
 
-    std::shared_ptr<CReserveScript> coinbaseScript(new CReserveScript());
+    std::shared_ptr<CReserveScript> coinbaseScript =
+        std::make_shared<CReserveScript>();
     coinbaseScript->reserveScript = GetScriptForDestination(destination);
 
     return generateBlocks(config, coinbaseScript, nGenerate, nMaxTries, false);
@@ -298,7 +305,7 @@ static UniValue getmininginfo(const Config &config,
     return obj;
 }
 
-// NOTE: Unlike wallet RPC (which use BCC values), mining RPCs follow GBT (BIP
+// NOTE: Unlike wallet RPC (which use BCH values), mining RPCs follow GBT (BIP
 // 22) in using satoshi amounts
 static UniValue prioritisetransaction(const Config &config,
                                       const JSONRPCRequest &request) {
@@ -331,7 +338,7 @@ static UniValue prioritisetransaction(const Config &config,
     LOCK(cs_main);
 
     uint256 hash = ParseHashStr(request.params[0].get_str(), "txid");
-    CAmount nAmount = request.params[2].get_int64();
+    Amount nAmount(request.params[2].get_int64());
 
     mempool.PrioritiseTransaction(hash, request.params[0].get_str(),
                                   request.params[1].get_real(), nAmount);
@@ -552,8 +559,7 @@ static UniValue getblocktemplate(const Config &config,
                 return "inconclusive-not-best-prevblk";
             }
             CValidationState state;
-            TestBlockValidity(config, state, Params(), block, pindexPrev, false,
-                              true);
+            TestBlockValidity(config, state, block, pindexPrev, false, true);
             return BIP22ValidationResult(config, state);
         }
 
@@ -670,11 +676,14 @@ static UniValue getblocktemplate(const Config &config,
         // Need to update only after we know CreateNewBlock succeeded
         pindexPrev = pindexPrevNew;
     }
-    CBlock *pblock = &pblocktemplate->block; // pointer for convenience
-    const Consensus::Params &consensusParams = Params().GetConsensus();
+
+    // pointer for convenience
+    CBlock *pblock = &pblocktemplate->block;
+    const Consensus::Params &consensusParams =
+        config.GetChainParams().GetConsensus();
 
     // Update nTime
-    UpdateTime(pblock, consensusParams, pindexPrev);
+    UpdateTime(pblock, config, pindexPrev);
     pblock->nNonce = 0;
 
     UniValue aCaps(UniValue::VARR);
@@ -739,11 +748,12 @@ static UniValue getblocktemplate(const Config &config,
             case THRESHOLD_FAILED:
                 // Not exposed to GBT at all
                 break;
-            case THRESHOLD_LOCKED_IN:
-                // Ensure bit is set in block version
+            case THRESHOLD_LOCKED_IN: {
+                // Ensure bit is set in block version, then fallthrough to get
+                // vbavailable set.
                 pblock->nVersion |= VersionBitsMask(consensusParams, pos);
-
-            // FALLTHROUGH to get vbavailable set...
+            }
+            // FALLTHROUGH
             case THRESHOLD_STARTED: {
                 const struct BIP9DeploymentInfo &vbinfo =
                     VersionBitsDeploymentInfo[pos];
@@ -803,9 +813,9 @@ static UniValue getblocktemplate(const Config &config,
     result.push_back(
         Pair("coinbasevalue",
              (int64_t)pblock->vtx[0]->vout[0].nValue.GetSatoshis()));
-    result.push_back(
-        Pair("longpollid", chainActive.Tip()->GetBlockHash().GetHex() +
-                               i64tostr(nTransactionsUpdatedLast)));
+    result.push_back(Pair("longpollid",
+                          chainActive.Tip()->GetBlockHash().GetHex() +
+                              i64tostr(nTransactionsUpdatedLast)));
     result.push_back(Pair("target", hashTarget.GetHex()));
     result.push_back(
         Pair("mintime", (int64_t)pindexPrev->GetMedianTimePast() + 1));
@@ -832,8 +842,8 @@ public:
         : hash(hashIn), found(false), state() {}
 
 protected:
-    virtual void BlockChecked(const CBlock &block,
-                              const CValidationState &stateIn) {
+    void BlockChecked(const CBlock &block,
+                      const CValidationState &stateIn) override {
         if (block.GetHash() != hash) {
             return;
         }
@@ -948,7 +958,7 @@ static UniValue estimatefee(const Config &config,
     }
 
     CFeeRate feeRate = mempool.estimateFee(nBlocks);
-    if (feeRate == CFeeRate(0)) {
+    if (feeRate == CFeeRate(Amount(0))) {
         return -1.0;
     }
 
@@ -1002,7 +1012,7 @@ static UniValue estimatesmartfee(const Config &config,
             "\nResult:\n"
             "{\n"
             "  \"feerate\" : x.x,     (numeric) estimate fee-per-kilobyte (in "
-            "BCC)\n"
+            "BCH)\n"
             "  \"blocks\" : n         (numeric) block number where estimate "
             "was found\n"
             "}\n"
@@ -1022,9 +1032,10 @@ static UniValue estimatesmartfee(const Config &config,
     UniValue result(UniValue::VOBJ);
     int answerFound;
     CFeeRate feeRate = mempool.estimateSmartFee(nBlocks, &answerFound);
-    result.push_back(Pair(
-        "feerate",
-        feeRate == CFeeRate(0) ? -1.0 : ValueFromAmount(feeRate.GetFeePerK())));
+    result.push_back(Pair("feerate",
+                          feeRate == CFeeRate(Amount(0))
+                              ? -1.0
+                              : ValueFromAmount(feeRate.GetFeePerK())));
     result.push_back(Pair("blocks", answerFound));
     return result;
 }

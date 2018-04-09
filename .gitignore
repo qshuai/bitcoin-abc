@@ -102,8 +102,8 @@ coverage_percent.txt
 linux-coverage-build
 linux-build
 win32-build
-qa/pull-tester/tests_config.py
-qa/cache/*
+test/functional/config.ini
+test/cache/*
 
 !src/leveldb*/Makefile
 
@@ -111,3 +111,17 @@ qa/cache/*
 
 libbitcoinconsensus.pc
 contrib/devtools/split-debug.sh
+
+# vagrant
+.vagrant
+
+split_words.md
+.cproject
+.idea/
+.project
+.settings/
+cmake-build-debug/
+compile_commands.json
+src/parseTx.cpp
+src/test/data/findPubKey.json
+rc/test/data/split_words.md

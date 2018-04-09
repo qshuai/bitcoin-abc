@@ -395,7 +395,7 @@ public:
     }
 
     size_t capacity() const {
-        if (is_direct()) {
+        if (is_direct()) {      // 栈上分配
             return N;
         } else {
             return _union.capacity;

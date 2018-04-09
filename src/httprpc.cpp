@@ -16,11 +16,10 @@
 #include "ui_interface.h"
 #include "util.h"
 #include "utilstrencodings.h"
-#include "utilstrencodings.h"
-
-#include <cstdio>
 
 #include <boost/algorithm/string.hpp> // boost::trim
+
+#include <cstdio>
 
 /** WWW-Authenticate to present with 401 Unauthorized response */
 static const char *WWW_AUTH_HEADER_DATA = "Basic realm=\"jsonrpc\"";
@@ -46,8 +45,9 @@ private:
 class HTTPRPCTimerInterface : public RPCTimerInterface {
 public:
     HTTPRPCTimerInterface(struct event_base *_base) : base(_base) {}
-    const char *Name() { return "HTTP"; }
-    RPCTimerBase *NewTimer(std::function<void(void)> &func, int64_t millis) {
+    const char *Name() override { return "HTTP"; }
+    RPCTimerBase *NewTimer(std::function<void(void)> &func,
+                           int64_t millis) override {
         return new HTTPRPCTimer(base, func, millis);
     }
 
@@ -241,7 +241,7 @@ static bool InitRPCAuthentication() {
 }
 
 bool StartHTTPRPC() {
-    LogPrint("rpc", "Starting HTTP RPC server\n");
+    LogPrint(BCLog::RPC, "Starting HTTP RPC server\n");
     if (!InitRPCAuthentication()) return false;
 
     RegisterHTTPHandler("/", true, HTTPReq_JSONRPC);
@@ -253,11 +253,11 @@ bool StartHTTPRPC() {
 }
 
 void InterruptHTTPRPC() {
-    LogPrint("rpc", "Interrupting HTTP RPC server\n");
+    LogPrint(BCLog::RPC, "Interrupting HTTP RPC server\n");
 }
 
 void StopHTTPRPC() {
-    LogPrint("rpc", "Stopping HTTP RPC server\n");
+    LogPrint(BCLog::RPC, "Stopping HTTP RPC server\n");
     UnregisterHTTPHandler("/", true);
     if (httpRPCTimerInterface) {
         RPCUnsetTimerInterface(httpRPCTimerInterface);

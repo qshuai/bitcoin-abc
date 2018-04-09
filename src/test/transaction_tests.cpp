@@ -27,6 +27,8 @@
 #include <boost/test/unit_test.hpp>
 
 #include <univalue.h>
+#include <iostream>
+#include "utilstrencodings.h"
 
 typedef std::vector<uint8_t> valtype;
 
@@ -60,7 +62,7 @@ BOOST_AUTO_TEST_CASE(tx_valid) {
             }
 
             std::map<COutPoint, CScript> mapprevOutScriptPubKeys;
-            std::map<COutPoint, int64_t> mapprevOutValues;
+            std::map<COutPoint, Amount> mapprevOutValues;
             UniValue inputs = test[0].get_array();
             bool fValid = true;
             for (size_t inpIdx = 0; inpIdx < inputs.size(); inpIdx++) {
@@ -77,9 +79,9 @@ BOOST_AUTO_TEST_CASE(tx_valid) {
                 COutPoint outpoint(uint256S(vinput[0].get_str()),
                                    vinput[1].get_int());
                 mapprevOutScriptPubKeys[outpoint] =
-                    ParseScript(vinput[2].get_str());
+                    ParseScript(vinput[2].get_str());	//生成script_PubKey
                 if (vinput.size() >= 4) {
-                    mapprevOutValues[outpoint] = vinput[3].get_int64();
+                    mapprevOutValues[outpoint] = Amount(vinput[3].get_int64());
                 }
             }
             if (!fValid) {
@@ -106,9 +108,9 @@ BOOST_AUTO_TEST_CASE(tx_valid) {
                     break;
                 }
 
-                CAmount amount = 0;
+                Amount amount(0);
                 if (mapprevOutValues.count(tx.vin[i].prevout)) {
-                    amount = mapprevOutValues[tx.vin[i].prevout];
+                    amount = Amount(mapprevOutValues[tx.vin[i].prevout]);
                 }
 
                 uint32_t verify_flags = ParseScriptFlags(test[2].get_str());
@@ -119,11 +121,59 @@ BOOST_AUTO_TEST_CASE(tx_valid) {
                                                    &tx, i, amount, txdata),
                                  &err),
                     strTest);
-                BOOST_CHECK_MESSAGE(err == SCRIPT_ERR_OK,
-                                    ScriptErrorString(err));
+                BOOST_CHECK_MESSAGE(err == SCRIPT_ERR_OK, ScriptErrorString(err));
             }
         }
     }
+}
+
+//current txid: 71dd6047c68781b9369ba6fb7a29883cc2445b928abfad78e21036c79e41d6cf
+//refrence txid: 0723ee63b7e038a81ba1df18634f3b46a02b53071deb7f8fbffecfcb87c8d01f
+BOOST_AUTO_TEST_CASE(parse_tx) {
+	std::string input_rawtx;
+	std::string refreInput_rawtx;
+	int idx;
+	int64_t amount;
+	std::cout << "Please input the raw tx string to be inspected:" << std::endl;
+	std::cin >> input_rawtx;
+	std::cout << "Please input the reference raw tx string to be inspected:" << std::endl;
+	std::cin >> refreInput_rawtx;
+	std::cout << "Please input the input index value to be inspected:" << std::endl;
+	std::cin >> idx;
+	std::cout << "Please input the input amount value to be inspected:" << std::endl;
+	std::cin >> amount;
+	//自定义测试
+	//当前交易解析交易
+	ScriptError err;
+	const std::string& rawtx = input_rawtx;
+	CDataStream stream(ParseHex(rawtx), SER_NETWORK, PROTOCOL_VERSION);
+	CTransaction tx(deserialize, stream);
+	CValidationState state;
+	bool fValid = true;
+	fValid = CheckRegularTransaction(tx, state) && state.IsValid();
+	PrecomputedTransactionData txdata(tx);
+
+	//引用交易解析
+	//第一种方式:通过对引用交易的解析过得Script_PubKey
+	const std::string& referrawtx = refreInput_rawtx;
+	CDataStream referstream(ParseHex(referrawtx), SER_NETWORK, PROTOCOL_VERSION);
+	CTransaction refertx(deserialize, referstream);
+	CValidationState referstate;
+	bool referfValid = true;
+	referfValid = CheckRegularTransaction(refertx, referstate) && referstate.IsValid();
+	PrecomputedTransactionData refertxdata(refertx);
+
+	//第二种方式:直接通过字符串解析出script_PubKey
+	//CScript Script_PubKey =	ParseScript("HASH160 0x14 0xf19a487553904aa48b3c826b8345a1c14f16eab6 EQUAL");
+
+	//std::cout << (SCRIPT_ENABLE_SIGHASH_FORKID | STANDARD_SCRIPT_VERIFY_FLAGS) << std::endl;		//88031
+	//签名验证
+	//1
+	BOOST_CHECK_MESSAGE(VerifyScript(tx.vin[idx].scriptSig, refertx.vout[idx].scriptPubKey, SCRIPT_ENABLE_SIGHASH_FORKID | STANDARD_SCRIPT_VERIFY_FLAGS, TransactionSignatureChecker(&tx, 0, Amount(amount), txdata), &err), "error");
+
+	//2
+	//BOOST_CHECK_MESSAGE(VerifyScript(tx.vin[0].scriptSig, Script_PubKey, SCRIPT_ENABLE_SIGHASH_FORKID | STANDARD_SCRIPT_VERIFY_FLAGS, TransactionSignatureChecker(&tx, 0, Amount(100000), txdata), &err), "error");
+	BOOST_CHECK_MESSAGE(err == SCRIPT_ERR_OK, ScriptErrorString(err));
 }
 
 BOOST_AUTO_TEST_CASE(tx_invalid) {
@@ -151,7 +201,7 @@ BOOST_AUTO_TEST_CASE(tx_invalid) {
             }
 
             std::map<COutPoint, CScript> mapprevOutScriptPubKeys;
-            std::map<COutPoint, int64_t> mapprevOutValues;
+            std::map<COutPoint, Amount> mapprevOutValues;
             UniValue inputs = test[0].get_array();
             bool fValid = true;
             for (size_t inpIdx = 0; inpIdx < inputs.size(); inpIdx++) {
@@ -170,7 +220,7 @@ BOOST_AUTO_TEST_CASE(tx_invalid) {
                 mapprevOutScriptPubKeys[outpoint] =
                     ParseScript(vinput[2].get_str());
                 if (vinput.size() >= 4) {
-                    mapprevOutValues[outpoint] = vinput[3].get_int64();
+                    mapprevOutValues[outpoint] = Amount(vinput[3].get_int64());
                 }
             }
             if (!fValid) {
@@ -193,8 +243,8 @@ BOOST_AUTO_TEST_CASE(tx_invalid) {
                     break;
                 }
 
-                CAmount amount = 0;
-                if (mapprevOutValues.count(tx.vin[i].prevout)) {
+                Amount amount(0);
+                if (0 != mapprevOutValues.count(tx.vin[i].prevout)) {
                     amount = mapprevOutValues[tx.vin[i].prevout];
                 }
 
@@ -205,7 +255,7 @@ BOOST_AUTO_TEST_CASE(tx_invalid) {
                     TransactionSignatureChecker(&tx, i, amount, txdata), &err);
             }
             BOOST_CHECK_MESSAGE(!fValid, strTest);
-            BOOST_CHECK_MESSAGE(err != SCRIPT_ERR_OK, ScriptErrorString(err));
+            BOOST_CHECK_MESSAGE(err == SCRIPT_ERR_OK, ScriptErrorString(err));
         }
     }
 }
@@ -213,6 +263,7 @@ BOOST_AUTO_TEST_CASE(tx_invalid) {
 BOOST_AUTO_TEST_CASE(basic_transaction_tests) {
     // Random real transaction
     // (e2769b09e784f32f62ef849763d4f45b98e07ba658647343b915ff832b110436)
+	//一个字节的16进制，故使用uint8_t
     uint8_t ch[] = {
         0x01, 0x00, 0x00, 0x00, 0x01, 0x6b, 0xff, 0x7f, 0xcd, 0x4f, 0x85, 0x65,
         0xef, 0x40, 0x6d, 0xd5, 0xd6, 0x3d, 0x4f, 0xf9, 0x4f, 0x31, 0x8f, 0xe8,
@@ -246,6 +297,7 @@ BOOST_AUTO_TEST_CASE(basic_transaction_tests) {
 
     // Check that duplicate txins fail
     tx.vin.push_back(tx.vin[0]);
+    std::cout<< tx.vin[0].ToString();
     BOOST_CHECK_MESSAGE(!CheckRegularTransaction(tx, state) || !state.IsValid(),
                         "Transaction with duplicate txins should be invalid.");
 }
@@ -270,19 +322,19 @@ SetupDummyInputs(CBasicKeyStore &keystoreRet, CCoinsViewCache &coinsRet) {
 
     // Create some dummy input transactions
     dummyTransactions[0].vout.resize(2);
-    dummyTransactions[0].vout[0].nValue = 11 * CENT.GetSatoshis();
+    dummyTransactions[0].vout[0].nValue = 11 * CENT;	//CENT: 1/100
     dummyTransactions[0].vout[0].scriptPubKey
         << ToByteVector(key[0].GetPubKey()) << OP_CHECKSIG;
-    dummyTransactions[0].vout[1].nValue = 50 * CENT.GetSatoshis();
+    dummyTransactions[0].vout[1].nValue = 50 * CENT;
     dummyTransactions[0].vout[1].scriptPubKey
         << ToByteVector(key[1].GetPubKey()) << OP_CHECKSIG;
     AddCoins(coinsRet, dummyTransactions[0], 0);
 
     dummyTransactions[1].vout.resize(2);
-    dummyTransactions[1].vout[0].nValue = 21 * CENT.GetSatoshis();
+    dummyTransactions[1].vout[0].nValue = 21 * CENT;
     dummyTransactions[1].vout[0].scriptPubKey =
         GetScriptForDestination(key[2].GetPubKey().GetID());
-    dummyTransactions[1].vout[1].nValue = 22 * CENT.GetSatoshis();
+    dummyTransactions[1].vout[1].nValue = 22 * CENT;
     dummyTransactions[1].vout[1].scriptPubKey =
         GetScriptForDestination(key[3].GetPubKey().GetID());
     AddCoins(coinsRet, dummyTransactions[1], 0);
@@ -311,12 +363,11 @@ BOOST_AUTO_TEST_CASE(test_Get) {
     t1.vin[2].scriptSig << std::vector<uint8_t>(65, 0)
                         << std::vector<uint8_t>(33, 4);
     t1.vout.resize(2);
-    t1.vout[0].nValue = 90 * CENT.GetSatoshis();
+    t1.vout[0].nValue = 90 * CENT;
     t1.vout[0].scriptPubKey << OP_1;
 
     BOOST_CHECK(AreInputsStandard(t1, coins));
-    BOOST_CHECK_EQUAL(coins.GetValueIn(t1),
-                      (50 + 21 + 22) * CENT.GetSatoshis());
+    BOOST_CHECK_EQUAL(coins.GetValueIn(t1), (50 + 21 + 22) * CENT);
 }
 
 void CreateCreditAndSpend(const CKeyStore &keystore, const CScript &outscript,
@@ -328,14 +379,14 @@ void CreateCreditAndSpend(const CKeyStore &keystore, const CScript &outscript,
     outputm.vin[0].prevout.SetNull();
     outputm.vin[0].scriptSig = CScript();
     outputm.vout.resize(1);
-    outputm.vout[0].nValue = 1;
+    outputm.vout[0].nValue = Amount(1);
     outputm.vout[0].scriptPubKey = outscript;
     CDataStream ssout(SER_NETWORK, PROTOCOL_VERSION);
     ssout << outputm;
     ssout >> output;
-    BOOST_CHECK_EQUAL(output->vin.size(), 1);
+    BOOST_CHECK_EQUAL(output->vin.size(), 1UL);
     BOOST_CHECK(output->vin[0] == outputm.vin[0]);
-    BOOST_CHECK_EQUAL(output->vout.size(), 1);
+    BOOST_CHECK_EQUAL(output->vout.size(), 1UL);
     BOOST_CHECK(output->vout[0] == outputm.vout[0]);
 
     CMutableTransaction inputm;
@@ -344,17 +395,17 @@ void CreateCreditAndSpend(const CKeyStore &keystore, const CScript &outscript,
     inputm.vin[0].prevout.hash = output->GetId();
     inputm.vin[0].prevout.n = 0;
     inputm.vout.resize(1);
-    inputm.vout[0].nValue = 1;
+    inputm.vout[0].nValue = Amount(1);
     inputm.vout[0].scriptPubKey = CScript();
     bool ret = SignSignature(keystore, *output, inputm, 0,
-                             SIGHASH_ALL | SIGHASH_FORKID);
+                             SigHashType().withForkId(true));
     BOOST_CHECK_EQUAL(ret, success);
     CDataStream ssin(SER_NETWORK, PROTOCOL_VERSION);
     ssin << inputm;
     ssin >> input;
-    BOOST_CHECK_EQUAL(input.vin.size(), 1);
+    BOOST_CHECK_EQUAL(input.vin.size(), 1UL);
     BOOST_CHECK(input.vin[0] == inputm.vin[0]);
-    BOOST_CHECK_EQUAL(input.vout.size(), 1);
+    BOOST_CHECK_EQUAL(input.vout.size(), 1UL);
     BOOST_CHECK(input.vout[0] == inputm.vout[0]);
 }
 
@@ -533,7 +584,7 @@ BOOST_AUTO_TEST_CASE(test_IsStandard) {
     t.vin[0].prevout.n = 1;
     t.vin[0].scriptSig << std::vector<uint8_t>(65, 0);
     t.vout.resize(1);
-    t.vout[0].nValue = 90 * CENT.GetSatoshis();
+    t.vout[0].nValue = 90 * CENT;
     CKey key;
     key.MakeNewKey(true);
     t.vout[0].scriptPubKey = GetScriptForDestination(key.GetPubKey().GetID());
@@ -545,7 +596,7 @@ BOOST_AUTO_TEST_CASE(test_IsStandard) {
     Amount nDustThreshold = 3 * 182 * dustRelayFee.GetFeePerK() / 1000;
     BOOST_CHECK_EQUAL(nDustThreshold, Amount(546));
     // dust:
-    t.vout[0].nValue = nDustThreshold - 1;
+    t.vout[0].nValue = nDustThreshold - Amount(1);
     BOOST_CHECK(!IsStandardTx(t, reason));
     // not dust:
     t.vout[0].nValue = nDustThreshold;
@@ -553,12 +604,12 @@ BOOST_AUTO_TEST_CASE(test_IsStandard) {
 
     // Check dust with odd relay fee to verify rounding:
     // nDustThreshold = 182 * 1234 / 1000 * 3
-    dustRelayFee = CFeeRate(1234);
+    dustRelayFee = CFeeRate(Amount(1234));
     // dust:
-    t.vout[0].nValue = 672 - 1;
+    t.vout[0].nValue = Amount(672 - 1);
     BOOST_CHECK(!IsStandardTx(t, reason));
     // not dust:
-    t.vout[0].nValue = 672;
+    t.vout[0].nValue = Amount(672);
     BOOST_CHECK(IsStandardTx(t, reason));
     dustRelayFee = CFeeRate(DUST_RELAY_TX_FEE);
 
@@ -588,8 +639,8 @@ BOOST_AUTO_TEST_CASE(test_IsStandard) {
     // Data payload can be encoded in any way...
     t.vout[0].scriptPubKey = CScript() << OP_RETURN << ParseHex("");
     BOOST_CHECK(IsStandardTx(t, reason));
-    t.vout[0].scriptPubKey = CScript() << OP_RETURN << ParseHex("00")
-                                       << ParseHex("01");
+    t.vout[0].scriptPubKey = CScript()
+                             << OP_RETURN << ParseHex("00") << ParseHex("01");
     BOOST_CHECK(IsStandardTx(t, reason));
     // OP_RESERVED *is* considered to be a PUSHDATA type opcode by IsPushOnly()!
     t.vout[0].scriptPubKey = CScript() << OP_RETURN << OP_RESERVED << -1 << 0

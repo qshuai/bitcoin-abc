@@ -39,10 +39,11 @@ const char *SENDCMPCT = "sendcmpct";
 const char *CMPCTBLOCK = "cmpctblock";
 const char *GETBLOCKTXN = "getblocktxn";
 const char *BLOCKTXN = "blocktxn";
-};
+}; // namespace NetMsgType
 
-/** All known message types. Keep this in the same order as the list of
- * messages above and in protocol.h.
+/**
+ * All known message types. Keep this in the same order as the list of messages
+ * above and in protocol.h.
  */
 static const std::string allNetMessageTypes[] = {
     NetMsgType::VERSION,     NetMsgType::VERACK,     NetMsgType::ADDR,
@@ -59,17 +60,19 @@ static const std::vector<std::string>
     allNetMessageTypesVec(allNetMessageTypes,
                           allNetMessageTypes + ARRAYLEN(allNetMessageTypes));
 
-CMessageHeader::CMessageHeader(const MessageStartChars &pchMessageStartIn) {
-    memcpy(pchMessageStart, pchMessageStartIn, MESSAGE_START_SIZE);
+CMessageHeader::CMessageHeader(const MessageMagic &pchMessageStartIn) {
+    memcpy(std::begin(pchMessageStart), std::begin(pchMessageStartIn),
+           MESSAGE_START_SIZE);
     memset(pchCommand, 0, sizeof(pchCommand));
     nMessageSize = -1;
     memset(pchChecksum, 0, CHECKSUM_SIZE);
 }
 
-CMessageHeader::CMessageHeader(const MessageStartChars &pchMessageStartIn,
+CMessageHeader::CMessageHeader(const MessageMagic &pchMessageStartIn,
                                const char *pszCommand,
                                unsigned int nMessageSizeIn) {
-    memcpy(pchMessageStart, pchMessageStartIn, MESSAGE_START_SIZE);
+    memcpy(std::begin(pchMessageStart), std::begin(pchMessageStartIn),
+           MESSAGE_START_SIZE);
     memset(pchCommand, 0, sizeof(pchCommand));
     strncpy(pchCommand, pszCommand, COMMAND_SIZE);
     nMessageSize = nMessageSizeIn;
@@ -81,19 +84,25 @@ std::string CMessageHeader::GetCommand() const {
                        pchCommand + strnlen(pchCommand, COMMAND_SIZE));
 }
 
-bool CMessageHeader::IsValid(const MessageStartChars &pchMessageStartIn) const {
+bool CMessageHeader::IsValid(const MessageMagic &pchMessageStartIn) const {
     // Check start string
-    if (memcmp(pchMessageStart, pchMessageStartIn, MESSAGE_START_SIZE) != 0)
+    if (memcmp(std::begin(pchMessageStart), std::begin(pchMessageStartIn),
+               MESSAGE_START_SIZE) != 0) {
         return false;
+    }
 
     // Check the command string for errors
     for (const char *p1 = pchCommand; p1 < pchCommand + COMMAND_SIZE; p1++) {
         if (*p1 == 0) {
             // Must be all zeros after the first zero
-            for (; p1 < pchCommand + COMMAND_SIZE; p1++)
-                if (*p1 != 0) return false;
-        } else if (*p1 < ' ' || *p1 > 0x7E)
+            for (; p1 < pchCommand + COMMAND_SIZE; p1++) {
+                if (*p1 != 0) {
+                    return false;
+                }
+            }
+        } else if (*p1 < ' ' || *p1 > 0x7E) {
             return false;
+        }
     }
 
     // Message size

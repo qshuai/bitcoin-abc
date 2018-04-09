@@ -16,6 +16,7 @@
 #include "policy/policy.h"
 #include "primitives/transaction.h"
 #include "rpc/server.h"
+#include "rpc/tojson.h"
 #include "streams.h"
 #include "sync.h"
 #include "txmempool.h"
@@ -23,11 +24,10 @@
 #include "utilstrencodings.h"
 #include "validation.h"
 
-#include <cstdint>
-
 #include <boost/thread/thread.hpp> // boost::thread::interrupt
 
 #include <condition_variable>
+#include <cstdint>
 #include <mutex>
 
 struct CUpdatedBlock {
@@ -38,11 +38,6 @@ struct CUpdatedBlock {
 static std::mutex cs_blockchange;
 static std::condition_variable cond_blockchange;
 static CUpdatedBlock latestblock;
-
-extern void TxToJSON(const CTransaction &tx, const uint256 hashBlock,
-                     UniValue &entry);
-void ScriptPubKeyToJSON(const CScript &scriptPubKey, UniValue &out,
-                        bool fIncludeHex);
 
 static double GetDifficultyFromBits(uint32_t nBits) {
     int nShift = (nBits >> 24) & 0xff;
@@ -104,8 +99,8 @@ UniValue blockheaderToJSON(const CBlockIndex *blockindex) {
     return result;
 }
 
-UniValue blockToJSON(const CBlock &block, const CBlockIndex *blockindex,
-                     bool txDetails = false) {
+UniValue blockToJSON(const Config &config, const CBlock &block,
+                     const CBlockIndex *blockindex, bool txDetails) {
     UniValue result(UniValue::VOBJ);
     result.push_back(Pair("hash", blockindex->GetBlockHash().GetHex()));
     int confirmations = -1;
@@ -124,10 +119,11 @@ UniValue blockToJSON(const CBlock &block, const CBlockIndex *blockindex,
     for (const auto &tx : block.vtx) {
         if (txDetails) {
             UniValue objTx(UniValue::VOBJ);
-            TxToJSON(*tx, uint256(), objTx);
+            TxToJSON(config, *tx, uint256(), objTx);
             txs.push_back(objTx);
-        } else
+        } else {
             txs.push_back(tx->GetId().GetHex());
+        }
     }
     result.push_back(Pair("tx", txs));
     result.push_back(Pair("time", block.GetBlockTime()));
@@ -835,7 +831,7 @@ UniValue getblock(const Config &config, const JSONRPCRequest &request) {
         throw JSONRPCError(RPC_MISC_ERROR, "Block not available (pruned data)");
     }
 
-    if (!ReadBlockFromDisk(block, pblockindex, Params().GetConsensus())) {
+    if (!ReadBlockFromDisk(block, pblockindex, config)) {
         // Block not found on disk. This could be because we have the block
         // header in our index but don't have the block (for example if a
         // non-whitelisted node sends us an unrequested long chain of valid
@@ -851,7 +847,7 @@ UniValue getblock(const Config &config, const JSONRPCRequest &request) {
         return strHex;
     }
 
-    return blockToJSON(block, pblockindex);
+    return blockToJSON(config, block, pblockindex);
 }
 
 struct CCoinsStats {
@@ -862,7 +858,7 @@ struct CCoinsStats {
     uint64_t nBogoSize;
     uint256 hashSerialized;
     uint64_t nDiskSize;
-    CAmount nTotalAmount;
+    Amount nTotalAmount;
 
     CCoinsStats()
         : nHeight(0), nTransactions(0), nTransactionOutputs(0), nBogoSize(0),
@@ -881,7 +877,7 @@ static void ApplyStats(CCoinsStats &stats, CHashWriter &ss, const uint256 &hash,
         ss << *(const CScriptBase *)(&output.second.GetTxOut().scriptPubKey);
         ss << VARINT(output.second.GetTxOut().nValue.GetSatoshis());
         stats.nTransactionOutputs++;
-        stats.nTotalAmount += output.second.GetTxOut().nValue.GetSatoshis();
+        stats.nTotalAmount += output.second.GetTxOut().nValue;
         stats.nBogoSize +=
             32 /* txid */ + 4 /* vout index */ + 4 /* height + coinbase */ +
             8 /* amount */ + 2 /* scriptPubKey len */ +
@@ -981,8 +977,8 @@ UniValue pruneblockchain(const Config &config, const JSONRPCRequest &request) {
             RPC_INVALID_PARAMETER,
             "Blockchain is shorter than the attempted prune height.");
     } else if (height > chainHeight - MIN_BLOCKS_TO_KEEP) {
-        LogPrint("rpc", "Attempt to prune blocks close to the tip.  Retaining "
-                        "the minimum number of blocks.");
+        LogPrint(BCLog::RPC, "Attempt to prune blocks close to the tip. "
+                             "Retaining the minimum number of blocks.");
         height = chainHeight - MIN_BLOCKS_TO_KEEP;
     }
 
@@ -1116,7 +1112,7 @@ UniValue gettxout(const Config &config, const JSONRPCRequest &request) {
     }
     ret.push_back(Pair("value", ValueFromAmount(coin.GetTxOut().nValue)));
     UniValue o(UniValue::VOBJ);
-    ScriptPubKeyToJSON(coin.GetTxOut().scriptPubKey, o, true);
+    ScriptPubKeyToJSON(config, coin.GetTxOut().scriptPubKey, o, true);
     ret.push_back(Pair("scriptPubKey", o));
     ret.push_back(Pair("coinbase", coin.IsCoinBase()));
 
@@ -1153,8 +1149,7 @@ UniValue verifychain(const Config &config, const JSONRPCRequest &request) {
         nCheckDepth = request.params[1].get_int();
     }
 
-    return CVerifyDB().VerifyDB(config, Params(), pcoinsTip, nCheckLevel,
-                                nCheckDepth);
+    return CVerifyDB().VerifyDB(config, pcoinsTip, nCheckLevel, nCheckDepth);
 }
 
 /** Implementation of IsSuperMajority with better feedback */

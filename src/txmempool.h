@@ -6,13 +6,6 @@
 #ifndef BITCOIN_TXMEMPOOL_H
 #define BITCOIN_TXMEMPOOL_H
 
-#include <map>
-#include <memory>
-#include <set>
-#include <string>
-#include <utility>
-#include <vector>
-
 #include "amount.h"
 #include "coins.h"
 #include "indirectmap.h"
@@ -20,18 +13,24 @@
 #include "random.h"
 #include "sync.h"
 
-#undef foreach
-#include "boost/multi_index/hashed_index.hpp"
-#include "boost/multi_index/ordered_index.hpp"
-#include "boost/multi_index_container.hpp"
-
+#include <boost/multi_index/hashed_index.hpp>
+#include <boost/multi_index/ordered_index.hpp>
+#include <boost/multi_index_container.hpp>
 #include <boost/signals2/signal.hpp>
+
+#include <map>
+#include <memory>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
 
 class CAutoFile;
 class CBlockIndex;
+class Config;
 
 inline double AllowFreeThreshold() {
-    return COIN.GetSatoshis() * 144 / 250;
+    return COIN.GetSatoshis() * 144 / 250;		// 144和250代表什么？
 }
 
 inline bool AllowFree(double dPriority) {
@@ -40,7 +39,8 @@ inline bool AllowFree(double dPriority) {
 }
 
 /**
- * Fake height value used in Coins to signify they are only in the memory
+ * Fake height value used in Coins to signify they are only in the me
+ * mory
  * pool(since 0.8)
  */
 static const uint32_t MEMPOOL_HEIGHT = 0x7FFFFFFF;
@@ -246,7 +246,7 @@ struct mempoolentry_txid {
  */
 class CompareTxMemPoolEntryByDescendantScore {
 public:
-    bool operator()(const CTxMemPoolEntry &a, const CTxMemPoolEntry &b) {
+    bool operator()(const CTxMemPoolEntry &a, const CTxMemPoolEntry &b) const {
         bool fUseADescendants = UseDescendantScore(a);
         bool fUseBDescendants = UseDescendantScore(b);
 
@@ -273,7 +273,7 @@ public:
     }
 
     // Calculate which score to use for an entry (avoiding division).
-    bool UseDescendantScore(const CTxMemPoolEntry &a) {
+    bool UseDescendantScore(const CTxMemPoolEntry &a) const {
         double f1 = double(a.GetSizeWithDescendants() *
                            a.GetModifiedFee().GetSatoshis());
         double f2 =
@@ -288,7 +288,7 @@ public:
  */
 class CompareTxMemPoolEntryByScore {
 public:
-    bool operator()(const CTxMemPoolEntry &a, const CTxMemPoolEntry &b) {
+    bool operator()(const CTxMemPoolEntry &a, const CTxMemPoolEntry &b) const {
         double f1 = double(b.GetTxSize() * a.GetModifiedFee().GetSatoshis());
         double f2 = double(a.GetTxSize() * b.GetModifiedFee().GetSatoshis());
         if (f1 == f2) {
@@ -300,14 +300,14 @@ public:
 
 class CompareTxMemPoolEntryByEntryTime {
 public:
-    bool operator()(const CTxMemPoolEntry &a, const CTxMemPoolEntry &b) {
+    bool operator()(const CTxMemPoolEntry &a, const CTxMemPoolEntry &b) const {
         return a.GetTime() < b.GetTime();
     }
 };
 
 class CompareTxMemPoolEntryByAncestorFee {
 public:
-    bool operator()(const CTxMemPoolEntry &a, const CTxMemPoolEntry &b) {
+    bool operator()(const CTxMemPoolEntry &a, const CTxMemPoolEntry &b) const {
         double aFees = double(a.GetModFeesWithAncestors().GetSatoshis());
         double aSize = a.GetSizeWithAncestors();
 
@@ -582,7 +582,7 @@ public:
     void removeRecursive(
         const CTransaction &tx,
         MemPoolRemovalReason reason = MemPoolRemovalReason::UNKNOWN);
-    void removeForReorg(const CCoinsViewCache *pcoins,
+    void removeForReorg(const Config &config, const CCoinsViewCache *pcoins,
                         unsigned int nMemPoolHeight, int flags);
     void removeConflicts(const CTransaction &tx);
     void removeForBlock(const std::vector<CTransactionRef> &vtx,
@@ -782,8 +782,9 @@ private:
      * transaction that is removed, so we can't remove intermediate transactions
      * in a chain before we've updated all the state for the removal.
      */
-    void removeUnchecked(txiter entry, MemPoolRemovalReason reason =
-                                           MemPoolRemovalReason::UNKNOWN);
+    void removeUnchecked(
+        txiter entry,
+        MemPoolRemovalReason reason = MemPoolRemovalReason::UNKNOWN);
 };
 
 /**
@@ -796,8 +797,8 @@ protected:
 
 public:
     CCoinsViewMemPool(CCoinsView *baseIn, const CTxMemPool &mempoolIn);
-    bool GetCoin(const COutPoint &outpoint, Coin &coin) const;
-    bool HaveCoin(const COutPoint &outpoint) const;
+    bool GetCoin(const COutPoint &outpoint, Coin &coin) const override;
+    bool HaveCoin(const COutPoint &outpoint) const override;
 };
 
 // We want to sort transactions by coin age priority

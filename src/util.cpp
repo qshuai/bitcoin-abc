@@ -10,6 +10,7 @@
 #include "util.h"
 
 #include "chainparamsbase.h"
+#include "fs.h"
 #include "random.h"
 #include "serialize.h"
 #include "sync.h"
@@ -79,29 +80,13 @@
 #include <boost/algorithm/string/case_conv.hpp> // for to_lower()
 #include <boost/algorithm/string/join.hpp>
 #include <boost/algorithm/string/predicate.hpp> // for startswith() and endswith()
-#include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/program_options/detail/config_file.hpp>
 #include <boost/program_options/parsers.hpp>
 #include <boost/thread.hpp>
+
 #include <openssl/conf.h>
-#include <openssl/crypto.h>
 #include <openssl/rand.h>
-
-// Work around clang compilation problem in Boost 1.46:
-// /usr/include/boost/program_options/detail/config_file.hpp:163:17: error: call
-// to function 'to_internal' that is neither visible in the template definition
-// nor found by argument-dependent lookup.
-// See also:
-// http://stackoverflow.com/questions/10020179/compilation-fail-in-boost-librairies-program-options
-//           http://clang.debian.net/status.php?version=3.0&key=CANNOT_FIND_FUNCTION
-namespace boost {
-
-namespace program_options {
-    std::string to_internal(const std::string &);
-}
-
-} // namespace boost
 
 const char *const BITCOIN_CONF_FILENAME = "bitcoin.conf";
 const char *const BITCOIN_PID_FILENAME = "bitcoind.pid";
@@ -111,7 +96,6 @@ std::map<std::string, std::string> mapArgs;
 static std::map<std::string, std::vector<std::string>> _mapMultiArgs;
 const std::map<std::string, std::vector<std::string>> &mapMultiArgs =
     _mapMultiArgs;
-bool fDebug = false;
 bool fPrintToConsole = false;
 bool fPrintToDebugLog = true;
 
@@ -120,6 +104,12 @@ bool fLogTimeMicros = DEFAULT_LOGTIMEMICROS;
 bool fLogIPs = DEFAULT_LOGIPS;
 std::atomic<bool> fReopenDebugLog(false);
 CTranslationInterface translationInterface;
+
+/**
+ * Log categories bitfield. Leveldb/libevent need special handling if their
+ * flags are changed at runtime.
+ */
+std::atomic<uint32_t> logCategories(0);
 
 /** Init OpenSSL library multithreading support */
 static CCriticalSection **ppmutexOpenSSL;
@@ -211,8 +201,8 @@ void OpenDebugLog() {
 
     assert(fileout == nullptr);
     assert(vMsgsBeforeOpenLog);
-    boost::filesystem::path pathDebug = GetDataDir() / "debug.log";
-    fileout = fopen(pathDebug.string().c_str(), "a");
+    fs::path pathDebug = GetDataDir() / "debug.log";
+    fileout = fsbridge::fopen(pathDebug, "a");
     if (fileout) {
         // Unbuffered.
         setbuf(fileout, nullptr);
@@ -227,35 +217,67 @@ void OpenDebugLog() {
     vMsgsBeforeOpenLog = nullptr;
 }
 
-bool LogAcceptCategory(const char *category) {
-    if (category != nullptr) {
-        if (!fDebug) return false;
+struct CLogCategoryDesc {
+    uint32_t flag;
+    std::string category;
+};
 
-        // Give each thread quick access to -debug settings. This helps prevent
-        // issues debugging global destructors, where mapMultiArgs might be
-        // deleted before another global destructor calls LogPrint()
-        static boost::thread_specific_ptr<std::set<std::string>> ptrCategory;
-        if (ptrCategory.get() == nullptr) {
-            if (mapMultiArgs.count("-debug")) {
-                const std::vector<std::string> &categories =
-                    mapMultiArgs.at("-debug");
-                ptrCategory.reset(new std::set<std::string>(categories.begin(),
-                                                            categories.end()));
-                // thread_specific_ptr automatically deletes the set when the
-                // thread ends.
-            } else
-                ptrCategory.reset(new std::set<std::string>());
+const CLogCategoryDesc LogCategories[] = {
+    {BCLog::NONE, "0"},
+    {BCLog::NET, "net"},
+    {BCLog::TOR, "tor"},
+    {BCLog::MEMPOOL, "mempool"},
+    {BCLog::HTTP, "http"},
+    {BCLog::BENCH, "bench"},
+    {BCLog::ZMQ, "zmq"},
+    {BCLog::DB, "db"},
+    {BCLog::RPC, "rpc"},
+    {BCLog::ESTIMATEFEE, "estimatefee"},
+    {BCLog::ADDRMAN, "addrman"},
+    {BCLog::SELECTCOINS, "selectcoins"},
+    {BCLog::REINDEX, "reindex"},
+    {BCLog::CMPCTBLOCK, "cmpctblock"},
+    {BCLog::RAND, "rand"},
+    {BCLog::PRUNE, "prune"},
+    {BCLog::PROXY, "proxy"},
+    {BCLog::MEMPOOLREJ, "mempoolrej"},
+    {BCLog::LIBEVENT, "libevent"},
+    {BCLog::COINDB, "coindb"},
+    {BCLog::QT, "qt"},
+    {BCLog::LEVELDB, "leveldb"},
+    {BCLog::ALL, "1"},
+    {BCLog::ALL, "all"},
+};
+
+bool GetLogCategory(uint32_t *f, const std::string *str) {
+    if (f && str) {
+        if (*str == "") {
+            *f = BCLog::ALL;
+            return true;
         }
-        const std::set<std::string> &setCategories = *ptrCategory.get();
-
-        // If not debugging everything and not debugging specific category,
-        // LogPrint does nothing.
-        if (setCategories.count(std::string("")) == 0 &&
-            setCategories.count(std::string("1")) == 0 &&
-            setCategories.count(std::string(category)) == 0)
-            return false;
+        for (unsigned int i = 0; i < ARRAYLEN(LogCategories); i++) {
+            if (LogCategories[i].category == *str) {
+                *f = LogCategories[i].flag;
+                return true;
+            }
+        }
     }
-    return true;
+    return false;
+}
+
+std::string ListLogCategories() {
+    std::string ret;
+    int outcount = 0;
+    for (unsigned int i = 0; i < ARRAYLEN(LogCategories); i++) {
+        // Omit the special cases.
+        if (LogCategories[i].flag != BCLog::NONE &&
+            LogCategories[i].flag != BCLog::ALL) {
+            if (outcount != 0) ret += ", ";
+            ret += LogCategories[i].category;
+            outcount++;
+        }
+    }
+    return ret;
 }
 
 /**
@@ -311,9 +333,8 @@ int LogPrintStr(const std::string &str) {
             // Reopen the log file, if requested.
             if (fReopenDebugLog) {
                 fReopenDebugLog = false;
-                boost::filesystem::path pathDebug = GetDataDir() / "debug.log";
-                if (freopen(pathDebug.string().c_str(), "a", fileout) !=
-                    nullptr) {
+                fs::path pathDebug = GetDataDir() / "debug.log";
+                if (fsbridge::freopen(pathDebug, "a", fileout) != nullptr) {
                     // unbuffered.
                     setbuf(fileout, nullptr);
                 }
@@ -467,8 +488,7 @@ void PrintExceptionContinue(const std::exception *pex, const char *pszThread) {
     fprintf(stderr, "\n\n************************\n%s\n", message.c_str());
 }
 
-boost::filesystem::path GetDefaultDataDir() {
-    namespace fs = boost::filesystem;
+fs::path GetDefaultDataDir() {
 // Windows < Vista: C:\Documents and Settings\Username\Application Data\Bitcoin
 // Windows >= Vista: C:\Users\Username\AppData\Roaming\Bitcoin
 // Mac: ~/Library/Application Support/Bitcoin
@@ -493,13 +513,11 @@ boost::filesystem::path GetDefaultDataDir() {
 #endif
 }
 
-static boost::filesystem::path pathCached;
-static boost::filesystem::path pathCachedNetSpecific;
+static fs::path pathCached;
+static fs::path pathCachedNetSpecific;
 static CCriticalSection csPathCached;
 
-const boost::filesystem::path &GetDataDir(bool fNetSpecific) {
-    namespace fs = boost::filesystem;
-
+const fs::path &GetDataDir(bool fNetSpecific) {
     LOCK(csPathCached);
 
     fs::path &path = fNetSpecific ? pathCachedNetSpecific : pathCached;
@@ -527,12 +545,12 @@ const boost::filesystem::path &GetDataDir(bool fNetSpecific) {
 void ClearDatadirCache() {
     LOCK(csPathCached);
 
-    pathCached = boost::filesystem::path();
-    pathCachedNetSpecific = boost::filesystem::path();
+    pathCached = fs::path();
+    pathCachedNetSpecific = fs::path();
 }
 
-boost::filesystem::path GetConfigFile(const std::string &confPath) {
-    boost::filesystem::path pathConfigFile(confPath);
+fs::path GetConfigFile(const std::string &confPath) {
+    fs::path pathConfigFile(confPath);
     if (!pathConfigFile.is_complete())
         pathConfigFile = GetDataDir(false) / pathConfigFile;
 
@@ -540,7 +558,7 @@ boost::filesystem::path GetConfigFile(const std::string &confPath) {
 }
 
 void ReadConfigFile(const std::string &confPath) {
-    boost::filesystem::ifstream streamConfig(GetConfigFile(confPath));
+    fs::ifstream streamConfig(GetConfigFile(confPath));
 
     // No bitcoin.conf file is OK
     if (!streamConfig.good()) return;
@@ -568,14 +586,14 @@ void ReadConfigFile(const std::string &confPath) {
 }
 
 #ifndef WIN32
-boost::filesystem::path GetPidFile() {
-    boost::filesystem::path pathPidFile(GetArg("-pid", BITCOIN_PID_FILENAME));
+fs::path GetPidFile() {
+    fs::path pathPidFile(GetArg("-pid", BITCOIN_PID_FILENAME));
     if (!pathPidFile.is_complete()) pathPidFile = GetDataDir() / pathPidFile;
     return pathPidFile;
 }
 
-void CreatePidFile(const boost::filesystem::path &path, pid_t pid) {
-    FILE *file = fopen(path.string().c_str(), "w");
+void CreatePidFile(const fs::path &path, pid_t pid) {
+    FILE *file = fsbridge::fopen(path, "w");
     if (file) {
         fprintf(file, "%d\n", pid);
         fclose(file);
@@ -583,7 +601,7 @@ void CreatePidFile(const boost::filesystem::path &path, pid_t pid) {
 }
 #endif
 
-bool RenameOver(boost::filesystem::path src, boost::filesystem::path dest) {
+bool RenameOver(fs::path src, fs::path dest) {
 #ifdef WIN32
     return MoveFileExA(src.string().c_str(), dest.string().c_str(),
                        MOVEFILE_REPLACE_EXISTING) != 0;
@@ -594,17 +612,17 @@ bool RenameOver(boost::filesystem::path src, boost::filesystem::path dest) {
 }
 
 /**
- * Ignores exceptions thrown by Boost's create_directory if the requested
+ * Ignores exceptions thrown by Boost's create_directories if the requested
  * directory exists. Specifically handles case where path p exists, but it
  * wasn't possible for the user to write to the parent directory.
  */
-bool TryCreateDirectory(const boost::filesystem::path &p) {
+bool TryCreateDirectories(const fs::path &p) {
     try {
-        return boost::filesystem::create_directory(p);
-    } catch (const boost::filesystem::filesystem_error &) {
-        if (!boost::filesystem::exists(p) ||
-            !boost::filesystem::is_directory(p))
+        return fs::create_directories(p);
+    } catch (const fs::filesystem_error &) {
+        if (!fs::exists(p) || !fs::is_directory(p)) {
             throw;
+        }
     }
 
     // create_directory didn't create the directory, it had to have existed
@@ -713,20 +731,19 @@ void ShrinkDebugFile() {
     // Amount of debug.log to save at end when shrinking (must fit in memory)
     constexpr size_t RECENT_DEBUG_HISTORY_SIZE = 10 * 1000000;
     // Scroll debug.log if it's getting too big.
-    boost::filesystem::path pathLog = GetDataDir() / "debug.log";
-    FILE *file = fopen(pathLog.string().c_str(), "r");
+    fs::path pathLog = GetDataDir() / "debug.log";
+    FILE *file = fsbridge::fopen(pathLog, "r");
     // If debug.log file is more than 10% bigger the RECENT_DEBUG_HISTORY_SIZE
     // trim it down by saving only the last RECENT_DEBUG_HISTORY_SIZE bytes.
     if (file &&
-        boost::filesystem::file_size(pathLog) >
-            11 * (RECENT_DEBUG_HISTORY_SIZE / 10)) {
+        fs::file_size(pathLog) > 11 * (RECENT_DEBUG_HISTORY_SIZE / 10)) {
         // Restart the file with some of the end.
         std::vector<char> vch(RECENT_DEBUG_HISTORY_SIZE, 0);
         fseek(file, -((long)vch.size()), SEEK_END);
         int nBytes = fread(vch.data(), 1, vch.size(), file);
         fclose(file);
 
-        file = fopen(pathLog.string().c_str(), "w");
+        file = fsbridge::fopen(pathLog, "w");
         if (file) {
             fwrite(vch.data(), 1, nBytes, file);
             fclose(file);
@@ -736,9 +753,7 @@ void ShrinkDebugFile() {
 }
 
 #ifdef WIN32
-boost::filesystem::path GetSpecialFolderPath(int nFolder, bool fCreate) {
-    namespace fs = boost::filesystem;
-
+fs::path GetSpecialFolderPath(int nFolder, bool fCreate) {
     char pszPath[MAX_PATH] = "";
 
     if (SHGetSpecialFolderPathA(nullptr, pszPath, nFolder, fCreate)) {
@@ -798,9 +813,9 @@ void SetupEnvironment() {
     // The path locale is lazy initialized and to avoid deinitialization errors
     // in multithreading environments, it is set explicitly by the main thread.
     // A dummy locale is used to extract the internal default locale, used by
-    // boost::filesystem::path, which is then used to explicitly imbue the path.
-    std::locale loc = boost::filesystem::path::imbue(std::locale::classic());
-    boost::filesystem::path::imbue(loc);
+    // fs::path, which is then used to explicitly imbue the path.
+    std::locale loc = fs::path::imbue(std::locale::classic());
+    fs::path::imbue(loc);
 }
 
 bool SetupNetworking() {
@@ -830,11 +845,11 @@ std::string CopyrightHolders(const std::string &strPrefix) {
         strPrefix +
         strprintf(_(COPYRIGHT_HOLDERS), _(COPYRIGHT_HOLDERS_SUBSTITUTION));
 
-    // Check for untranslated substitution to make sure Bitcoin Core copyright
+    // Check for untranslated substitution to make sure Bitcoin ABC copyright
     // is not removed by accident.
     if (strprintf(COPYRIGHT_HOLDERS, COPYRIGHT_HOLDERS_SUBSTITUTION)
-            .find("Bitcoin Core") == std::string::npos) {
-        strCopyrightHolders += "\n" + strPrefix + "The Bitcoin Core developers";
+            .find("Bitcoin ABC") == std::string::npos) {
+        strCopyrightHolders += "\n" + strPrefix + "The Bitcoin ABC developers";
     }
     return strCopyrightHolders;
 }

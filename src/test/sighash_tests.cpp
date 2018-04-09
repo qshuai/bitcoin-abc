@@ -10,7 +10,6 @@
 #include "serialize.h"
 #include "streams.h"
 #include "test/test_bitcoin.h"
-#include "test/test_random.h"
 #include "util.h"
 #include "utilstrencodings.h"
 #include "validation.h" // For CheckRegularTransaction
@@ -86,27 +85,26 @@ static void RandomScript(CScript &script) {
         OP_3,     OP_CHECKSIG, OP_IF,
         OP_VERIF, OP_RETURN,   OP_CODESEPARATOR};
     script = CScript();
-    int ops = (insecure_rand() % 10);
+    int ops = (InsecureRandRange(10));
     for (int i = 0; i < ops; i++)
-        script
-            << oplist[insecure_rand() % (sizeof(oplist) / sizeof(oplist[0]))];
+        script << oplist[InsecureRandRange(sizeof(oplist) / sizeof(oplist[0]))];
 }
 
 static void RandomTransaction(CMutableTransaction &tx, bool fSingle) {
     tx.nVersion = insecure_rand();
     tx.vin.clear();
     tx.vout.clear();
-    tx.nLockTime = (insecure_rand() % 2) ? insecure_rand() : 0;
-    int ins = (insecure_rand() % 4) + 1;
-    int outs = fSingle ? ins : (insecure_rand() % 4) + 1;
+    tx.nLockTime = (InsecureRandBool()) ? insecure_rand() : 0;
+    int ins = (InsecureRandBits(2)) + 1;
+    int outs = fSingle ? ins : (InsecureRandBits(2)) + 1;
     for (int in = 0; in < ins; in++) {
         tx.vin.push_back(CTxIn());
         CTxIn &txin = tx.vin.back();
-        txin.prevout.hash = GetRandHash();
-        txin.prevout.n = insecure_rand() % 4;
+        txin.prevout.hash = InsecureRand256();
+        txin.prevout.n = InsecureRandBits(2);
         RandomScript(txin.scriptSig);
         txin.nSequence =
-            (insecure_rand() % 2) ? insecure_rand() : (unsigned int)-1;
+            (InsecureRandBool()) ? insecure_rand() : (unsigned int)-1;
     }
     for (int out = 0; out < outs; out++) {
         tx.vout.push_back(CTxOut());
@@ -119,7 +117,7 @@ static void RandomTransaction(CMutableTransaction &tx, bool fSingle) {
 BOOST_FIXTURE_TEST_SUITE(sighash_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(sighash_test) {
-    seed_insecure_rand(false);
+    SeedInsecureRand(false);
 
 #if defined(PRINT_SIGHASH_JSON)
     std::cout << "[\n";
@@ -141,11 +139,11 @@ BOOST_AUTO_TEST_CASE(sighash_test) {
         RandomTransaction(txTo, (nHashType & 0x1f) == SIGHASH_SINGLE);
         CScript scriptCode;
         RandomScript(scriptCode);
-        int nIn = insecure_rand() % txTo.vin.size();
+        int nIn = InsecureRandRange(txTo.vin.size());
 
         uint256 sh, sho;
         sho = SignatureHashOld(scriptCode, txTo, nIn, nHashType);
-        sh = SignatureHash(scriptCode, txTo, nIn, nHashType, 0);
+        sh = SignatureHash(scriptCode, txTo, nIn, nHashType, Amount(0));
 #if defined(PRINT_SIGHASH_JSON)
         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
         ss << txTo;
@@ -212,7 +210,7 @@ BOOST_AUTO_TEST_CASE(sighash_from_data) {
             continue;
         }
 
-        sh = SignatureHash(scriptCode, *tx, nIn, nHashType, 0);
+        sh = SignatureHash(scriptCode, *tx, nIn, nHashType, Amount(0));
         BOOST_CHECK_MESSAGE(sh.GetHex() == sigHashHex, strTest);
     }
 }
